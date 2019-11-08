@@ -1,0 +1,434 @@
+﻿@using Microsoft.AspNet.Identity
+@using BugTracker.Models
+@{
+    ApplicationUser user = null;
+    var userId = User.Identity.GetUserId();
+    var db = new ApplicationDbContext();
+    if (!string.IsNullOrEmpty(userId))
+    {
+        user = db.Users.Find(userId);
+    }
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>BugTracker | Dashboard</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+
+    <link href="~/Content/all.min.css" rel="stylesheet" />
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bbootstrap 4 -->
+
+    <link href="~/Content/dataTables.bootstrap4.css" rel="stylesheet" />
+
+    <link href="~/Content/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <!-- iCheck -->
+
+    <link href="~/Content/icheck-bootstrap.min.css" rel="stylesheet" />
+    <!-- JQVMap -->
+
+    <link href="~/Content/jqvmap.min.css" rel="stylesheet" />
+    <!-- Theme style -->
+
+    <link href="~/Content/adminlte.min.css" rel="stylesheet" />
+    <!-- overlayScrollbars -->
+
+    <link href="~/Content/OverlayScrollbars.min.css" rel="stylesheet" />
+    <!-- Daterange picker -->
+
+    <link href="~/Content/daterangepicker.css" rel="stylesheet" />
+    <!-- summernote -->
+    <link rel="stylesheet" href="plugins/summernote/summernote-bs4.css">
+    <link href="~/Content/summernote-bs4.css" rel="stylesheet" />
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link href="~/Content/semantic.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+
+</head>
+
+<!--  Toaster for Modelas  -->
+<div class="toast2" style="position: absolute; top: 150px; right: 420px; z-index:25">
+    <div class="toast-header" style="background-color:dimgray">
+
+        <strong class="mr-auto">Bootstrap</strong>
+        <small>11 mins ago</small>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="toast-body">
+        Hello, world! This is a toast message. dfgdfgsdfgsdf dfgsdfg
+        dsfgdsfgdsfgdfgdfg
+        dfgdsfgdfgdfg
+        <p>dsfhkjhdsfljahsdfjh;kasdjfkasdjfk asdkfjkajsdfkjas;lkdjflksd</p>
+    </div>
+</div>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-primary navbar-gray-dark">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="index3.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="#" class="nav-link">Contact</a>
+                </li>
+            </ul>
+
+            <!-- SEARCH FORM -->
+            <form class="form-inline ml-3">
+                <div class="input-group input-group-sm">
+                    <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-navbar" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <!-- Messages Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-comments"></i>
+                        <span class="badge badge-danger navbar-badge">3</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <a href="#" class="dropdown-item">
+                            <!-- Message Start -->
+                            <div class="media">
+                                <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        Brad Diesel
+                                        <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                                    </h3>
+                                    <p class="text-sm">Call me whenever you can...</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <!-- Message Start -->
+                            <div class="media">
+                                <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        John Pierce
+                                        <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                                    </h3>
+                                    <p class="text-sm">I got your message bro</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <!-- Message Start -->
+                            <div class="media">
+                                <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        Nora Silvester
+                                        <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                                    </h3>
+                                    <p class="text-sm">The subject goes here</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                    </div>
+                </li>
+                <!-- Notifications Dropdown Menu  MENU TOP RIGHT -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="@Url.Action("LogOff", "Account")">
+                        <i class="fa fa-sign-out-alt"></i>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <span class="dropdown-item dropdown-header">15 Notifications</span>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-envelope mr-2"></i> sdfasfdsd asdfasdfsadfsdFERRERERER4 new messages
+                            <span class="float-right text-muted text-sm">3 mins</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-users mr-2"></i> 8 friend requests
+                            <span class="float-right text-muted text-sm">12 hours</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-file mr-2"></i> 3 new reports
+                            <span class="float-right text-muted text-sm">2 days</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
+                        <i class="fas fa-th-large"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="index3.html" class="brand-link">
+                @*<img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+                     style="opacity: .8">*@
+                <span class="brand-text font-weight-light">BugTraker</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar user panel (optional) -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    @*<div class="image">
+                            <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                        </div>*@
+                    <div class="info">
+                        <a href="#" class="d-block">
+                            <img src="@user.AvatarUrl" alt="@user.FullName" class="img-circle" data-lock-picture="@user.AvatarUrl" />
+                            @user.FirstName @user.LastName  @if (User.IsInRole("Admin"))
+                            {
+                                <b>- Admin </b>
+                            }
+                        
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+    with font-awesome or any other icon font library -->
+                        <li class="nav-header h3">GENERAL</li> <!--          PROJECT SECTION                   -->
+                        <li class="nav-item">
+                            <a href="@Url.Action("Dashboard", "Home")" class="nav-link">
+                                <i class="nav-icon fas fa-book"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("EditProfile", "Members")" class="nav-link">
+                                <i class="nav-icon fas fa-book"></i>
+                                <p>Edit Profile</p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-header h3">PROJECTS MANAGEMENT</li> <!--          PROJECT SECTION                   -->
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index", "Projects")" class="nav-link">
+                                <i class="nav-icon fas fa-book"></i>
+                                <p>View Projects</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("Create", "Projects")" class="nav-link">
+                                <i class="nav-icon fas fa-book"></i>
+                                <p>Create a Project</p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-header h3">USERS MANAGEMENT</li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("UsersIndex", "Admin")" class="nav-link">
+                                <i class="nav-icon fas fa-user-tag"></i>
+                                <p>Users Index</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("ManageRoles", "Admin")" class="nav-link">
+                                <i class="nav-icon fas fa-user-tag"></i>
+                                <p>Assign Roles to Users</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("UsersAndProjects", "Admin")" class="nav-link">
+                                <i class="nav-icon fas fa-user-cog"></i>
+                                <p>Assign Users to Projects</p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-header h3">TICKETS MANAGEMENT</li> <!--          Ticket SECTION                   -->
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index", "Tickets")" class="nav-link">
+                                <i class="nav-icon fas fa-book"></i>
+                                <p>View All Tickets</p>
+                            </a>
+                        </li>
+
+                        @if (User.IsInRole("Submitter"))
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Create", "Tickets")" class="nav-link">
+                                    <i class="nav-icon fas fa-book"></i>
+                                    <p>Create a Ticket</p>
+                                </a>
+                            </li>
+                        }
+
+
+
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0 text-dark"></h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active"></li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
+            <!-- Main content -->
+
+
+            @RenderBody()
+
+
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2019 <a href="http://adminlte.io">BugTracker</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 1.0.0
+            </div>
+        </footer>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+    <!-- jQuery -->
+
+    <script src="~/Scripts/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Bootstrap 4 -->
+
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <!-- ChartJS -->
+
+    <script src="~/Scripts/Chart.min.js"></script>
+    <!-- Sparkline -->
+
+    <script src="~/Scripts/sparkline.js"></script>
+    <!-- JQVMap -->
+
+    <script src="~/Scripts/jquery.vmap.min.js"></script>
+
+    <script src="~/Scripts/jquery.vmap.usa.js"></script>
+    <!-- jQuery Knob Chart -->
+
+    <script src="~/Scripts/jquery.knob.min.js"></script>
+    <!-- daterangepicker -->
+
+    <script src="~/Scripts/moment.min.js"></script>
+
+    <script src="~/Scripts/daterangepicker.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+
+    <script src="~/Scripts/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Summernote -->
+
+    <script src="~/Scripts/summernote-bs4.min.js"></script>
+    <!-- overlayScrollbars -->
+
+    <script src="~/Scripts/jquery.overlayScrollbars.min.js"></script>
+    <!-- AdminLTE App -->
+
+    <script src="~/Scripts/adminlte.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="dist/js/pages/dashboard.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+
+    <script src="~/Scripts/jquery.dataTables.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap4.js"></script>
+    <script src="~/Scripts/jquery.dataTables.js"></script>
+    <script src="~/Scripts/dataTables.select.min.js"></script>
+    @RenderSection("scripts", required: false)
+    <!-- AdminLTE for demo purposes -->
+    @*<script src="dist/js/demo.js"></script>*@
+    <script src="~/Scripts/semantic.min.js"></script>
+    <script src="~/Scripts/sweetalert2.min.js"></script>
+
+    <script>
+        $(function () {
+            $("#ticketsTable, #UsersIndex").DataTable();
+            //$('#ticketsTable').DataTable({
+            //    "retrieve": true,
+            //    "paging": true,
+            //    "lengthChange": false,
+            //    "searching": true,
+            //    "ordering": true,
+            //    "info": true,
+            //    "autoWidth": false,
+            //});
+        });
+
+
+ 
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+﻿
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.modal-open {
+    overflow: scroll; /* KEEPS THE SCROLL BAR WHEN THE MODAL IS OPENED */
+    padding-right: 0 !important;  /* PREVENT THE MODAL FORM TO SHIFT THE BODY TO THE LEFT */
+}
+
+
+
+.dpass{
+    display: none;
+}
+
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+
+.ticket_open_and_urgent
+{
+    background-color: #ffe1e1;
+}
+
+.ticket_resolved {
+    background-color: #e3fbe3;
+}
+

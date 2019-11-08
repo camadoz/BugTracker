@@ -1,0 +1,59 @@
+﻿@model BugTracker.Models.Project
+
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="offset-2 col-md-6">
+            <div class="card card-primary">
+                <div class="card-header">
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <h3 class="card-title">Create Project</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        <button type="submit" class="ui blue button">Submit</button>
+
+                        @Html.ActionLink("Back to Dashboard", "Dashboard", "Home", null, new { @class = "ui  orange  button" })
+                    </div>
+
+
+                }
+            </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+
+
+
+

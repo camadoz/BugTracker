@@ -1,0 +1,56 @@
+﻿@model IEnumerable<BugTracker.Models.Project>
+
+
+
+<div class="card">
+    <h2>Index</h2>
+    <div class="card-header">
+        <h3 class="card-title">List of all projects.</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example2" class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td> @Html.DisplayFor(model => item.Name)</td>
+                        <td> @Html.DisplayFor(model => item.Description)</td>
+                        <td> @Html.DisplayFor(model => item.Created)</td>
+                        <td> @Html.DisplayFor(model => item.Updated)</td>
+                        <td>
+
+                            <a href="@Url.Action("Edit", "Projects",new { id = item.Id },null)"> <i class="ui mini blue button" >Edit</i></a>
+                            <a href="@Url.Action("Details", "Projects",new { id = item.Id },null)"> <i class="ui mini orange button" >Details</i></a>
+                            <a href=""> <i class="ui mini green button">Archive</i></a>
+
+                            
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                    <th>Actions</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
+

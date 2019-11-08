@@ -1,0 +1,178 @@
+﻿@model IEnumerable<BugTracker.Models.ManageProjecstUsersViewModel>
+
+<div class="container">
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-md-6">
+                @Html.ListBox("UsersIds", null, new { style = "width: 268px;height:221px" })
+            </div>
+
+
+            <div class="col-md-6">
+                @Html.ListBox("ProjecstIds", null, new { style = "width: 268px;height:221px" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+
+        </div>
+    }
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <tr>
+                    <th>@Html.DisplayName("Full Name")</th>
+                    <th>@Html.DisplayName("Role")</th>
+                    <th>@Html.DisplayName("Email")</th>
+                    <th>@Html.DisplayName("Project")</th>
+                </tr>
+
+
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => user.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => user.RoleName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => user.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => user.ProjectName)
+                        </td>
+                    </tr>
+
+                }
+
+
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-hover" id="userTable">
+                <thead>
+                    <tr>
+                        <th scope="col">UserName</th>
+                        <th scope="col">RoleName</th>
+                        <th scope="col">Active</th>
+
+                    </tr>
+                </thead>
+
+
+
+
+
+               
+            </table>
+        </div>
+
+        <div class="col-md-6">
+
+
+            <table class="table table-bordered" id="userInProject">
+                <thead>
+                    <tr>
+
+                        <th scope="col">User Name</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Active</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+
+                    <tr>
+                        <td></td>
+                        <td>Bootstrap 4 CDN and Starter Template</td>
+                        <td>Cristina</td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+</div>
+@section Scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+           // var table = $("#userTable").DataTable();
+            $("#userTable").DataTable({
+
+                "ajax": {
+                    "url": "/Admin/GetUsers",
+                    "type": "GET",
+                    "datatype": "json"
+
+                },
+                "columns": [
+                    { "data": "UserName" },
+                    { "data": "RoleName" },
+                    {
+                        data:   "active",
+                        render: function ( data, type, row ) {
+                            if ( type === 'display' ) {
+                                return '<input type="checkbox" class="editor-active">';
+                             }
+                            return data;
+                },
+                className: "dt-body-center"
+
+                    }
+                ]
+            });
+
+          
+            var table = $("#userTable").DataTable();
+            $("#userTable tbody").on('click', 'tr', function () {
+
+                console.log(table.row(this).data());
+                $.ajax({  
+                    type: "POST",  
+                    url: "/Home/JqAJAX",  
+                    data: JSON.stringify(Student),  
+                    dataType: "json", 
+                    contentType: 'application/json; charset=utf-8',  
+                    success: function(data) {  
+                        alert(data.msg);  
+                    },  
+                    error: function() {  
+                        alert("Error occured!!")  
+                    }  
+                });  
+            });
+
+        });
+    </script>
+
+}

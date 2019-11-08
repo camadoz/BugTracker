@@ -1,0 +1,39 @@
+﻿@using BugTracker.Models
+@model AssignTicketUserViewModel
+
+
+
+    <div class="container">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+           
+            @Html.HiddenFor(model => model.ticket.Id)
+            <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
+                <h3 class="text-primary"><i class="fas fa-paint-brush"></i> Assign ticket to User</h3>
+
+                <br>
+                <div class="text-muted">
+                    <p class="text-sm">
+                        Project Description
+                        <b class="d-block"> @Html.DisplayFor(model => Model.projectDescription)</b>
+                    </p>
+                    <p class="text-sm">
+                        Ticket Description
+                        <b class="d-block"> @Html.DisplayFor(model => Model.ticket.Description)</b>
+                    </p>
+
+                    <p class="text-sm">
+                        Select a developer:
+
+                        <b class="d-block">@Html.DropDownList("developers", null, "-- Select a Developer --", new { @class = "" })</b>
+                    </p>
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">Assign Ticket</button>
+
+            </div>
+
+        }
+    </div>

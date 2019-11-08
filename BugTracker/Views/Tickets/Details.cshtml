@@ -1,0 +1,373 @@
+﻿@model BugTracker.Models.Ticket
+
+<div class="row">
+    <div class="col-md-6 ml-5">
+        <div class="card card-primary ">
+            <div class="card-header">
+                <h3 class="card-title">General Information</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="ui cards">
+                            <div class="card " style="width:600px;">
+
+                                <div class="content">
+                                    <h3>Ticket Information</h3>
+                                    <hr />
+                                    <img class="right floated mini ui image" src="~/images/ticket.png">
+                                    <div class="header">
+                                        @Html.DisplayFor(model => model.Title)
+                                    </div>
+                                    <div class="meta">
+                                        Created on @Html.DisplayFor(model => model.Created) for project @Html.DisplayFor(model => model.Project.Name)
+                                    </div>
+
+                                    <div class="description mb-2">
+                                        <b>Ticket assigned to :</b> @if (Model.AssignedToUser != null)
+                                        {
+                                            @Html.DisplayFor(model => model.AssignedToUser.FullName)
+                                        }
+                                        else
+                                        {
+                                            <b>Nobody Assigned</b>
+                                        }
+
+                                    </div>
+                                    <div class="description mb-2">
+                                        <b>Description:</b> @Html.DisplayFor(model => model.Description)
+                                    </div>
+
+                                    <div class="description mb-2">
+                                        <b>Ticket Description:</b> @Html.DisplayFor(model => model.Description)
+                                    </div>
+                                    <div class="description mb-2">
+                                        <b>Ticket status:</b> @Html.DisplayFor(model => model.TIcketStatus.Name)
+                                    </div>
+                                    <div class="description mb-2">
+                                        <b>Ticket priority:</b> @Html.DisplayFor(model => model.TicketPriority.Name)
+                                    </div>
+
+                                    <div class="description">
+                                        <b>Ticket type:</b> @Html.DisplayFor(model => model.TicketType.Name)
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        @Html.ActionLink("Edit Ticket", "Edit", new { id = Model.Id }, new { @class = "ui  blue button desktop icon mt-3 mb-3" })
+                        @Html.ActionLink("Back to Ticket List", "Index", null, new { @class = "ui  orange button desktop icon" })
+
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="ui cards">
+                            <div class="card " style="width:600px;">
+
+                                <div class="content">
+                                    <h3>Project Information</h3>
+                                    <hr />
+                                    <img class="right floated mini ui image" src="~/images/business-presentation.png">
+                                    <div class="header">
+                                        @Html.DisplayFor(model => model.Title)
+                                    </div>
+                                    <div class="meta">
+                                        Created on @Html.DisplayFor(model => model.Created) for project @Html.DisplayFor(model => model.Project.Name)
+                                    </div>
+
+                                    <div class="description mb-2">
+                                        <b>Ticket assigned to :</b> @if (Model.AssignedToUser != null)
+                                        {
+                                            @Html.DisplayFor(model => model.AssignedToUser.FullName)
+                                        }
+                                        else
+                                        {
+                                            <b>Nobody Assigned</b>
+                                        }
+
+                                    </div>
+                                    <div class="description mb-2">
+                                        <b>Description:</b> @Html.DisplayFor(model => model.Description)
+                                    </div>
+
+                                    <div class="description mb-2">
+                                        <b>Ticket Description:</b> @Html.DisplayFor(model => model.Description)
+                                    </div>
+                                    <div class="description mb-2">
+                                        <b>Ticket status:</b> @Html.DisplayFor(model => model.TIcketStatus.Name)
+                                    </div>
+                                    <div class="description mb-2">
+                                        <b>Ticket priority:</b> @Html.DisplayFor(model => model.TicketPriority.Name)
+                                    </div>
+
+                                    <div class="description">
+                                        <b>Ticket type:</b> @Html.DisplayFor(model => model.TicketType.Name)
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        @Html.ActionLink("Edit Ticket", "Edit", new { id = Model.Id }, new { @class = "ui  blue button desktop icon mt-3 mb-3" })
+                        @Html.ActionLink("Back to Project List", "Index", null, new { @class = "ui  orange button desktop icon" })
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card card-warning">
+            <div class="card-header">
+                <h3 class="card-title">@Model.TicketAttachments.Count() Attachments</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+                <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                @foreach (var attachment in Model.TicketAttachments)
+                {
+                    <a href="@Url.Content("~/uploads/" + attachment.FilePath)" download>
+                        <div class="info-box mb-3 bg-success">
+                            <span class="info-box-icon"><i class="fas fa-tag"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">@Html.Raw(attachment.Description)</span>
+                                <span class="info-box-number">@attachment.FilePath</span>
+                                <span class="info-box-number">Created on @attachment.Created</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </a>
+                }
+
+
+
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div id="addAttachment" class="pb-2" style="border-bottom:2px solid red;">
+                        @using (Html.BeginForm("Create", "TicketAttachments", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("TicketId", Model.Id)
+                            <span>Add a statement to the attachment</span>
+                            <div class="row mb-3">
+                                <div class=" col-md-12">
+                                    @Html.TextArea("Description", new { rows = 10, cols = 150, placeholder = "Add Description" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <input type="file" class="" id="inputfile" name="inputfile">
+                            </div>
+
+                            <button type="submit" class="ui blue button"> <i class="icon edit"></i>Add Attachement</button>
+                        }
+                    </div>
+                }
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-6 ml-5">
+        <div class="card card-success" id="comments-card">
+            <div class="card-header">
+                <h3 class="card-title">@Model.TicketComments.Count() Comments</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+                <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div id="addComment" class="pb-2" style="border-bottom:2px solid red;">
+                        @using (Html.BeginForm("Create", "TicketComments", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("TicketId", Model.Id)
+
+                            <div class="row mb-3">
+                                <div class=" col-md-12">
+                                    @Html.TextArea("CommentBody", new { rows = 10, cols = 150, placeholder = "Add Comment" })
+                                </div>
+                            </div>
+
+
+                            <button type="submit" class="ui blue button"> <i class="icon edit"></i>Add Comment</button>
+                        }
+                    </div>
+                }
+
+
+                @foreach (var ticketComment in Model.TicketComments.OrderByDescending(c => c.Created))
+                {
+
+                    <div class="ui comments" style="background-color:white; padding:10px;border:1px solid #F8F8F8;border-radius:5px;box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.30);">
+                        <div class="comment">
+                            <a class="avatar">
+                                <i class="fas fa-comment"></i>
+                            </a>
+                            <div class="content">
+                                <a class="author"></a>
+                                <div class="metadata">
+                                    <div class="date">
+                                        Comment created on @ticketComment.Created.ToString("MMM dd, yyyy")
+
+
+                                    </div>
+
+                                </div>
+                                <div class="text col-md-5">
+                                    @Html.Raw(ticketComment.CommentBody)
+                                </div>
+
+                            </div>
+                            <hr />
+                        </div>
+
+                    </div>
+
+                }
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<div class="row">
+    <div class="col-md-6 ml-5">
+        <div class="card card-success" id="histories-card">
+            <div class="card-header">
+                <h3 class="card-title">@Model.TicketHistories.Count() Histories</h3>  <!--  THIS IS THE COUNT   -->
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+                <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+
+
+
+                <table id="historiesTable" class="table table-bordered table-hover table-striped" style="width:100%">
+
+                    <thead>
+                        <tr>
+                            <th>Property Name</th>
+                            <th>Old Value</th>
+                            <th>New Value</th>
+                            <th>Updated</th>
+                            <th>Developer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.TicketHistories)
+                        {
+
+                            <tr>
+                                <td class="target_id">
+                                    @Html.DisplayFor(modelItem => item.PropertyName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.OldValue)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NewValue)
+                                </td>
+                                <td class="target_project_name">
+                                    @Html.Raw( item.Updated.ToString("MMM dd,yyyy"))
+                                </td>
+                                <td class="target_ticket_priority">
+                                    @Html.DisplayFor(modelItem => item.User.FullName)
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                    <thead>
+                        <tr>
+                            <th>Property Name</th>
+                            <th>Old Value</th>
+                            <th>New Value</th>
+                            <th>Updated</th>
+                            <th>Developer</th>
+                        </tr>
+                    </thead>
+                </table>
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+
+
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script src="~/Scripts/tinymce/jquery.tinymce.min.j"></script>
+    <script type="text/javascript">
+        $(function () {
+            tinymce.init({ selector: 'textarea' });
+        });
+
+
+        $('#histories-card,#comments-card').CardWidget('toggle')
+
+
+    </script>
+}

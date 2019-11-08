@@ -1,0 +1,544 @@
+﻿@model BugTracker.ViewModels.IndexTicketViewModel
+@using Microsoft.AspNet.Identity;
+
+
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+
+
+
+
+
+
+
+
+
+<!-- Button trigger modal -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Assign User To Ticket</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="form-group hidden">
+                            <input id="HiddenField" type="text" style="display:none" class="hidden" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                            <div class="ui message">
+                                <div class="header">
+                                   Project Name: <span id="project_name"></span>
+                                </div>
+                                <hr />
+                                <p>Ticket Information</p>
+                                
+                                <ul class="list">
+                                    <li><b>Priority:</b>  <span id="project_priority"></span></li>
+                                    <li><b>Status:</b> <span id="project_status"></span></li>
+                                    <li><b>Type:</b> <span id="project_type"></span></li>
+                                    <li><b> Description:</b> <span id="project_description"></span></li>
+                                    <li><b>Created on:</b> <span id="project_created"></span></li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="row mt-4">
+
+                        
+                        
+                        <div class="col-md-3">
+                           <h4>Select a user:</h4>
+                        </div>
+ 
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.DropDownList("AssignUsers", null, "-- Users Available --", new { @class = "h5" })
+                                  
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 hidden" style="display:none">
+                                <input name="FirstName" type="text" class="form-control" id="FirstName" />
+                            </div>
+
+                        </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="assignUser" disabled data-dismiss="modal" class="btn btn-primary">Assign User</button>
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="card-body">
+    <table id="ticketsTable" class="table table-bordered table-hover table-striped" style="width:100%">
+
+        <thead>
+            <tr>
+                <th class="hide">Ticket ID</th>
+                <th>Summitter</th>
+                <th width="5%">
+                   User Assigned
+                </th>
+                <th>
+                   Project Name
+                </th>
+                <th width="5%">
+                   Ticket Priority
+                </th>
+                <th>
+                   Ticket Status
+                </th>
+                <th>
+                   Ticket Type
+                </th>
+                <th>
+                   Ticket Title
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                   Created
+                </th>
+                <th>
+                    Updated
+                </th>
+                <th width="15%">Actions</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Tickets)
+            {
+                if (item.TIcketStatus.Name == "open" && item.TicketPriority.Name == "Urgent")
+                {
+
+                    <tr style="background-color: #ffe1e1;">
+                        <td class="target_id">
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OwnerUser.FirstName)
+                            @Html.DisplayFor(modelItem => item.OwnerUser.LastName)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AssignedToUser.FirstName)
+                            @Html.DisplayFor(modelItem => item.AssignedToUser.LastName)
+                        </td>
+                        <td class="target_project_name">
+                            @Html.DisplayFor(modelItem => item.Project.Name)
+                        </td>
+                        <td class="target_ticket_priority">
+                            @if (item.TicketPriority.Name == "High")
+                            {
+
+                                <span class="badge badge-warning" style="font-size:1.2rem;">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</span>
+
+
+
+                            }
+                            else if (item.TicketPriority.Name == "Urgent")
+                            {
+                                <span class="badge badge-danger" style="font-size:1.2rem;">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</span>
+
+                            }
+                            else if (item.TicketPriority.Name == "Low")
+                            {
+                                <span class="badge badge-info" style="font-size:1.2rem;">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</span>
+
+                            }
+                            else
+                            {
+
+                                <span class="badge badge-primary" style="font-size:1.2rem;">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</span>
+                            }
+
+                        </td>
+                        <td class="target_ticket_status">
+                            @Html.DisplayFor(modelItem => item.TIcketStatus.Name)
+                        </td>
+                        <td class="target_ticket_type">
+                            @Html.DisplayFor(modelItem => item.TicketType.Name)
+                        </td>
+                        <td class="target_ticket_title">
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td class="target_ticket_description">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td class="target_ticket_created">
+                            @*@Html.DisplayFor(modelItem => item.Created)*@
+                            @Html.Raw(item.Created.ToString("MMM dd,yyyy"))
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Updated)
+                        </td>
+
+                        <td>
+                            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                            {
+                                @Html.ActionLink("Edit", "Edit", "Tickets", new { id = item.Id }, new { @class = "ui mini orange  button" })
+                                @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
+
+
+                                <button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#exampleModal">
+                                    Assign
+                                </button>
+
+                            }
+
+                        </td>
+                    </tr>
+                }
+                else if (item.TIcketStatus.Name == "Resolved")
+                {
+                    <tr style=" background-color: #e3fbe3;">
+                        <td class="target_id ">
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OwnerUser.FirstName)
+                            @Html.DisplayFor(modelItem => item.OwnerUser.LastName)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AssignedToUser.FirstName)
+                            @Html.DisplayFor(modelItem => item.AssignedToUser.LastName)
+                        </td>
+                        <td class="target_project_name">
+                            @Html.DisplayFor(modelItem => item.Project.Name)
+                        </td>
+                        <td class="target_ticket_priority">
+                            @if (item.TicketPriority.Name == "High")
+                            {
+
+                                <span class="badge badge-warning" style="font-size:1.2rem;">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</span>
+
+
+
+                            }
+                            else if (item.TicketPriority.Name == "Urgent")
+                            {
+                                <span class="badge badge-danger" style="font-size:1.2rem;">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</span>
+
+                            }
+                            else if (item.TicketPriority.Name == "Low")
+                            {
+                                <span class="badge badge-info" style="font-size:1.2rem;">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</span>
+
+                            }
+                            else
+                            {
+
+                                <span class="badge badge-primary" style="font-size:1.2rem;">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</span>
+                            }
+
+                        </td>
+                        <td class="target_ticket_status">
+                            @Html.DisplayFor(modelItem => item.TIcketStatus.Name)
+                        </td>
+                        <td class="target_ticket_type">
+                            @Html.DisplayFor(modelItem => item.TicketType.Name)
+                        </td>
+                        <td class="target_ticket_title">
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td class="target_ticket_description">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td class="target_ticket_created">
+                            @*@Html.DisplayFor(modelItem => item.Created)*@
+                            @Html.Raw(item.Created.ToString("MMM dd,yyyy"))
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Updated)
+                        </td>
+
+                        <td>
+                            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                            {
+                                @Html.ActionLink("Edit", "Edit", "Tickets", new { id = item.Id }, new { @class = "ui mini orange  button" })
+                                @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
+
+
+                                <button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#exampleModal">
+                                    Assign
+                                </button>
+
+                            }
+
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr >
+                        <td class="target_id">
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OwnerUser.FirstName)
+                            @Html.DisplayFor(modelItem => item.OwnerUser.LastName)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AssignedToUser.FirstName)
+                            @Html.DisplayFor(modelItem => item.AssignedToUser.LastName)
+                        </td>
+                        <td class="target_project_name">
+                            @Html.DisplayFor(modelItem => item.Project.Name)
+                        </td>
+                        <td class="target_ticket_priority">
+                            @if (item.TicketPriority.Name == "High")
+                            {
+
+                                <span class="badge badge-warning" style="font-size:1.2rem;">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</span>
+
+
+
+                            }
+                            else if (item.TicketPriority.Name == "Urgent")
+                            {
+                                <span class="badge badge-danger" style="font-size:1.2rem;">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</span>
+
+                            }
+                            else if (item.TicketPriority.Name == "Low")
+                            {
+                                <span class="badge badge-info" style="font-size:1.2rem;">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</span>
+
+                            }
+                            else
+                            {
+
+                                <span class="badge badge-primary" style="font-size:1.2rem;">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</span>
+                            }
+
+                        </td>
+                        <td class="target_ticket_status">
+                            @Html.DisplayFor(modelItem => item.TIcketStatus.Name)
+                        </td>
+                        <td class="target_ticket_type">
+                            @Html.DisplayFor(modelItem => item.TicketType.Name)
+                        </td>
+                        <td class="target_ticket_title">
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td class="target_ticket_description">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td class="target_ticket_created">
+                            @*@Html.DisplayFor(modelItem => item.Created)*@
+                            @Html.Raw(item.Created.ToString("MMM dd,yyyy"))
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Updated)
+                        </td>
+
+                        <td>
+                            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                            {
+                                @Html.ActionLink("Edit", "Edit", "Tickets", new { id = item.Id }, new { @class = "ui mini orange  button" })
+                                @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
+
+
+                                <button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#exampleModal">
+                                    Assign
+                                </button>
+
+                            }
+
+                        </td>
+                    </tr>
+                }
+
+
+            }
+        </tbody>
+        <thead>
+            <tr>
+
+
+                <th>
+                    Ticket ID
+                </th>
+                <th>Summitter</th>
+                <th width="5%">
+                    User Assigned
+                </th>
+                <th>
+                    Project Name
+                </th>
+                <th>
+                    Ticket Priority
+                </th>
+                <th>
+                    Ticket Status
+                </th>
+                <th>
+                    Ticket Type
+                </th>
+                <th>
+                    Ticket Title
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Created
+                </th>
+                <th>
+                    Updated
+                </th>
+
+                <th width="15%">Actions</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section scripts    {
+
+    <script>
+         //$('td:nth-child(2)').hide();
+        
+        $('#AssignUsers').change(function () {
+       selectVal = $('#AssignUsers').val();
+   
+            if (selectVal == 0)
+            {
+               $('#assignUser').prop("disabled", true);
+            }
+            else
+            {
+              $('#assignUser').prop("disabled", false);
+            }
+        })
+
+
+
+              $('.toast').toast({ 
+                   
+                    delay: 3000 
+                });   
+
+        $(".btnClickable").click(function () {
+
+            var name = $(this).closest("tr").find("td.target_id").text();
+            
+            var project_name = $(this).closest("tr").find("td.target_project_name").text();
+            var ticket_priority = $(this).closest("tr").find("td.target_ticket_priority").text();
+            var ticket_status = $(this).closest("tr").find("td.target_ticket_status").text();
+            var ticket_type = $(this).closest("tr").find("td.target_ticket_type").text();
+            var ticket_description = $(this).closest("tr").find("td.target_ticket_description").text();
+            var ticket_created = $(this).closest("tr").find("td.target_ticket_created").text();
+            $("#test").text(project_name);
+            $("#project_name").text(project_name);
+          
+             $("#project_description").text(ticket_description);
+             $("#project_status").text(ticket_status);
+            $("#project_priority").text(ticket_priority);
+            
+             $("#project_type").text(ticket_type);
+             $("#project_created").text(ticket_created);
+            project_name
+            name = name.replace(/ +/g, " ").trim();
+            $("#HiddenField").val(name);
+            
+        });
+
+
+        $("#btnToast").click(function () {
+
+
+        $('.toast').toast('show');
+          
+        });
+
+   
+
+
+
+        var arr;
+
+        $('#userTable tr').click(function (event)
+        {
+
+            if (event.target.type !== 'checkbox')
+            {
+                $(':checkbox', this).trigger('click');
+            }
+           
+            if ($(':checkbox', this).is(":checked"))
+            {
+                arr = $(this).closest("tr").find("#item_Id").val();
+               
+            }
+
+           
+
+        });
+
+
+
+
+        $('#assignUser').click(function () {
+
+           var userID = $("#AssignUsers option:selected").val()
+            
+
+               $.ajax({  
+                    type: "POST",  
+                    url: "/Tickets/AssignTicketToUser",  
+                    data: JSON.stringify({
+                        ticketId: Number( $("#HiddenField").val() ),
+                        userId: userID
+                    }), 
+                    dataType: "json",  
+                    contentType: 'application/json; charset=utf-8',  
+              success: function (data) {
+                   $('.toast').toast('show');
+                    },  
+                    error: function(xhr, status, error) {  
+                      
+                    }  
+                }); 
+
+
+});
+
+
+    </script>
+
+
+}
