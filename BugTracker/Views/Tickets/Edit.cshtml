@@ -52,7 +52,7 @@
 
                         <div class="form-group">
                             <label class="form-check-label" for="exampleCheck1">User Assigned</label>
-                            @Html.DropDownList("AssignedToUserId", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.DropDownList("AssignedToUserId",null,"-- Select A Developer --", htmlAttributes: new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.AssignedToUserId, "", new { @class = "text-danger" })
                         </div>
 

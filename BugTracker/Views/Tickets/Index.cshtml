@@ -100,7 +100,7 @@
 
 
 <div class="card-body">
-    <table id="ticketsTable" class="table table-bordered table-hover table-striped" style="width:100%">
+    <table id="ticketsTable" class=" ui table table-bordered table-hover table-striped" style="width:100%">
 
         <thead>
             <tr>
@@ -217,6 +217,10 @@
                                 </button>
 
                             }
+                                                        else
+                            {
+                                @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
+                            }
 
                         </td>
                     </tr>
@@ -292,10 +296,14 @@
                                 @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
 
 
-                                <button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#exampleModal">
-                                    Assign
-                                </button>
+                                @*<button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#exampleModal">
+                Assign
+            </button>*@
 
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
                             }
 
                         </td>
@@ -369,14 +377,19 @@
                             @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
                             {
                                 @Html.ActionLink("Edit", "Edit", "Tickets", new { id = item.Id }, new { @class = "ui mini orange  button" })
-                                @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
 
+                                @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
 
                                 <button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#exampleModal">
                                     Assign
                                 </button>
 
                             }
+                            else
+                            {
+                                @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
+                            }
+
 
                         </td>
                     </tr>

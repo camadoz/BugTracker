@@ -18,7 +18,7 @@ namespace BugTracker.Helpers
         }
 
         #region Assignment notification management
-        private void CreateAssignmentNotification(Ticket oldTicket, Ticket newTicket)
+        public void CreateAssignmentNotification(Ticket oldTicket, Ticket newTicket)
         {
             var noChange = (oldTicket.AssignedToUserId == newTicket.AssignedToUserId);
             var assignment = (string.IsNullOrEmpty(oldTicket.AssignedToUserId));
@@ -33,12 +33,12 @@ namespace BugTracker.Helpers
                 GenerateUnAssignmentNotification(oldTicket, newTicket);
             else
             {
-                GenerateAssignmentNotification(oldTicket, newTicket);
-                GenerateUnAssignmentNotification(oldTicket, newTicket);
+                //GenerateAssignmentNotification(oldTicket, newTicket);
+                //GenerateUnAssignmentNotification(oldTicket, newTicket);
             }
         }
 
-        private void GenerateUnAssignmentNotification(Ticket oldTicket, Ticket newTicket)
+        public void GenerateUnAssignmentNotification(Ticket oldTicket,Ticket newTicket)
         {
             var notification = new TicketNotification
             {
@@ -55,7 +55,7 @@ namespace BugTracker.Helpers
             db.SaveChanges();
         }
 
-        private void GenerateAssignmentNotification(Ticket oldTicket, Ticket newTicket)
+        public void GenerateAssignmentNotification(Ticket oldTicket, Ticket newTicket)
         {
             var senderId = HttpContext.Current.User.Identity.GetUserId();
             var notification = new TicketNotification
@@ -75,20 +75,20 @@ namespace BugTracker.Helpers
         #endregion
 
         #region Change notification management
-        private void CreateChangeNotification(Ticket oldTicket, Ticket newTicket)
+        public void CreateChangeNotification(Ticket oldTicket, Ticket newTicket)
         {
             var messageBody = new StringBuilder();
 
             foreach (var property in WebConfigurationManager.AppSettings["TrackedTicketProperties"].Split(','))
             {
-                var oldValue = Utilities.MakeReadable(property, oldTicket.GetType().GetProperty(property).GetValue(oldTicket, null).ToString());
+                var oldValue = Utilities.MakeReadable(property, oldTicket.GetType().GetProperty(property).GetValue(oldTicket, null)?.ToString());
                 var newValue = Utilities.MakeReadable(property, newTicket.GetType().GetProperty(property).GetValue(newTicket, null).ToString());
 
                 if (oldValue != newValue)
                 {
                     messageBody.AppendLine(new String('-', 45));
                     messageBody.AppendLine($"A change was made to Property: {property}.");
-                    messageBody.AppendLine($"The old value was: {oldValue.ToString()}");
+                    messageBody.AppendLine($"The old value was: {oldValue?.ToString()}");
                     messageBody.AppendLine($"The new value is: {newValue.ToString()}");
                 }
             }

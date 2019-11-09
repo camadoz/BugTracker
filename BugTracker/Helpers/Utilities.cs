@@ -22,7 +22,7 @@ namespace BugTracker.Helpers
                     return db.TicketTypes.Find(Convert.ToInt32(value)).Name;
                 case "AssignedToUserId":
                 case "OwnerUserId":
-                    return db.Users.Find(value).FullName;
+                    return db.Users.Find(value)?.FullName;
                 default:
                     return value;
 

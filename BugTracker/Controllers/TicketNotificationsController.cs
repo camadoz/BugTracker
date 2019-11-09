@@ -21,6 +21,16 @@ namespace BugTracker.Controllers
             return View(ticketNotifications.ToList());
         }
 
+        public ActionResult Dismiss(int id)
+        {
+
+            var notification = db.TicketNotifications.Find(id);
+            notification.isRead = true;
+            db.SaveChanges();
+            return RedirectToAction("Dashboard", "Home");
+                                 
+        }
+
         // GET: TicketNotifications/Details/5
         public ActionResult Details(int? id)
         {

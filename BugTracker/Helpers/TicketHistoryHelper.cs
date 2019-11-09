@@ -103,8 +103,8 @@ namespace BugTracker.Helpers
                 {
 
                     PropertyName = "AssignedToUserId",
-                    OldValue = oldTicket.AssignedToUser.FullName == null ? "UnAssigned" : oldTicket.AssignedToUser.FullName,
-                    NewValue = newTicket.AssignedToUser.FullName == null ? "UnAssigned" : newTicket.AssignedToUser.FullName,
+                    OldValue = oldTicket.AssignedToUser?.FullName == null ? "UnAssigned" : oldTicket.AssignedToUser.FullName,
+                    NewValue = newTicket.AssignedToUser?.FullName == null ? "UnAssigned" : newTicket.AssignedToUser.FullName,
                     Updated = (DateTime)newTicket.Updated,
                     UserId = HttpContext.Current.User.Identity.GetUserId(),
                     TicketId = newTicket.Id

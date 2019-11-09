@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNet.Identity
 @using BugTracker.Models
+@using BugTracker.Helpers
 @{
     ApplicationUser user = null;
     var userId = User.Identity.GetUserId();
@@ -8,6 +9,8 @@
     {
         user = db.Users.Find(userId);
     }
+
+    NotificationHelper notificatinHelper = new NotificationHelper();
 }
 
 
@@ -58,7 +61,7 @@
 </head>
 
 <!--  Toaster for Modelas  -->
-<div class="toast2" style="position: absolute; top: 150px; right: 420px; z-index:25">
+@*<div class="toast2" style="position: absolute; top: 150px; right: 420px; z-index:25">
     <div class="toast-header" style="background-color:dimgray">
 
         <strong class="mr-auto">Bootstrap</strong>
@@ -73,7 +76,7 @@
         dfgdsfgdfgdfg
         <p>dsfhkjhdsfljahsdfjh;kasdjfkasdjfk asdkfjkajsdfkjas;lkdjflksd</p>
     </div>
-</div>
+</div>*@
 
 <body class="hold-transition sidebar-mini layout-fixed">
 
@@ -111,61 +114,57 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-comments"></i>
-                        <span class="badge badge-danger navbar-badge">3</span>
+                        <span class="badge badge-danger navbar-badge">@notificatinHelper.GetUnreadUserNotifications().Count()</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Brad Diesel
-                                        <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">Call me whenever you can...</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        John Pierce
-                                        <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">I got your message bro</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Nora Silvester
-                                        <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">The subject goes here</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
+
+
+                        @foreach (var notification in notificatinHelper.GetUnreadUserNotifications())
+                        {
+                            using (Html.BeginForm("Dismiss", "TicketNotifications", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("id", notification.Id)
+
+
+                                <a href="#" class="dropdown-item">
+                                    <!-- Message Start -->
+                                    <div class="media">
+                                        <img src="@notification.Sender.AvatarUrl" alt="@notification.Sender.FullName" class="img-size-50 mr-3 img-circle">
+                                        <div class="media-body">
+                                            <h3 class="dropdown-item-title">
+                                                @notification.Sender.FullName
+                                                <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                                            </h3>
+                                            <p class="text-sm"> @notification.NotificationBody</p>
+                                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> @notification.Created.ToString("MMM dd, yyyy")</p>
+                                        </div>
+                                    </div>
+                                    <!-- Message End -->
+                                </a>
+
+                                <button type="submit" class="ui btn-block mb-1">Dismmiss</button>
+                                <div class="dropdown-divider"></div>
+
+                            }
+
+
+                        }
+
+
                         <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+
+
                     </div>
                 </li>
                 <!-- Notifications Dropdown Menu  MENU TOP RIGHT -->
+
+
+
+
+
+
+
                 <li class="nav-item dropdown">
                     <a class="nav-link" href="@Url.Action("LogOff", "Account")">
                         <i class="fa fa-sign-out-alt"></i>
@@ -223,7 +222,34 @@
                             {
                                 <b>- Admin </b>
                             }
-                        
+                            else if (User.IsInRole("Developer"))
+                            {
+                                <b>- Developer</b>
+                            }
+                            else if (User.IsInRole("Sumitter"))
+                            {
+                                <b>Submitter</b>
+                            }
+                            else if (User.IsInRole("Project Manager"))
+                            {
+                                <b>Project Manager</b>
+                            }
+                            else if (User.IsInRole("DemoAdmin"))
+                            {
+                                <b>Demo Admin</b>
+                            }
+                            else if (User.IsInRole("DemoDeveloper Manager"))
+                            { 
+                            <b>Demo Developer</b>
+                            }
+                            else if (User.IsInRole("DemoPM"))
+                            {
+                                <b>Demo Project Manager</b>
+                            }
+                            else if (User.IsInRole("DemoSubmitter"))
+                            {
+                                <b>Demo Submitter</b>
+                            }
                         </a>
                     </div>
                 </div>
@@ -322,7 +348,7 @@
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                
                                 <li class="breadcrumb-item active"></li>
                             </ol>
                         </div><!-- /.col -->
@@ -411,7 +437,8 @@
     @*<script src="dist/js/demo.js"></script>*@
     <script src="~/Scripts/semantic.min.js"></script>
     <script src="~/Scripts/sweetalert2.min.js"></script>
-
+    
+   
     <script>
         $(function () {
             $("#ticketsTable, #UsersIndex").DataTable();

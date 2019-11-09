@@ -1,5 +1,9 @@
 ﻿@model BugTracker.Models.DetailProjectViewModel
+@using BugTracker.Helpers       
 
+@{ 
+    var roleHelper = new UserRolesHelper();
+}
 
 
 
@@ -59,6 +63,7 @@
 
                     <div class="card-body">
                         <h3><i class="fas fa-user-tie fa-2x">&nbsp;</i>Users Assigned to project</h3>
+                        <hr />
                         <div class="callout callout-success">
                             @foreach (var user in Model.users)
                             {
@@ -70,8 +75,8 @@
 
                                     </div>
                                     <div class="col-md-8 text-left">
-                                        <h4>@user.FullName </h4>
-                                        sdfsadfasdfasdf
+                                        <h3>@user.FullName</h3>
+                                        @roleHelper.ListUserRoles(user.Id).FirstOrDefault()
                                     </div>
                                 </div>
 
@@ -87,7 +92,7 @@
                         @Html.ActionLink("Edit", "Edit", new { id = Model.projectDetail.Id }, new { @class = "ui orange button" })
                     </div>
 
-
+                    <hr />
                     <div class="card-body">
                         <h3> <i class="fas fa-ticket-alt fa-2x"></i> &nbsp;  Tickets</h3>
                        

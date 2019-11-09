@@ -20,6 +20,7 @@ namespace BugTracker.Controllers
         private UserRolesHelper roleHelper = new UserRolesHelper();
         ProjectsHelper projectHelper = new ProjectsHelper();
         private TicketHistoryHelper ticketHistoryHeler = new TicketHistoryHelper();
+        private NotificationHelper notificationHelper = new NotificationHelper();
 
 
         // GET: Tickets
@@ -100,40 +101,20 @@ namespace BugTracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,ProjectId,TicketTypeId,TicketStatusId,TicketPriorityId,Title,Description,Created,Updated,OwnerUserId,AssignedToUserId")] Ticket ticket, HttpPostedFileBase inputfile)
+        public ActionResult Create([Bind(Include = "Id,ProjectId,TicketTypeId,TicketStatusId,TicketPriorityId,Title,Description,Created,Updated,OwnerUserId,AssignedToUserId")] Ticket ticket)
         {
 
             if (ModelState.IsValid)
             {
 
-                // db.Entry(ticket).State = EntityState.Modified;
-
-
-                if (inputfile != null && inputfile.ContentLength > 0)
-                {
-                    TicketAttachment ticketAttchment = new TicketAttachment();
-                    ticketAttchment.TicketId = ticket.Id;
-                    ticketAttchment.Created = DateTime.Now;
-
-
-                    var fileName = Path.GetFileName(inputfile.FileName);
-                    var extension = Path.GetExtension(inputfile.FileName);
-                    var newFileName = Path.GetFileNameWithoutExtension(inputfile.FileName) + DateTime.Now.Ticks + extension;
-
-
-                    var path = Path.Combine(Server.MapPath("~/Uploads"), newFileName);
-                    inputfile.SaveAs(path);
-                    ticketAttchment.FilePath = newFileName;
-                    db.TicketAttachments.Add(ticketAttchment);
-                }
-
                 ticket.Created = DateTime.Now;
-
+                ticket.TicketStatusId = db.TicketStatus.FirstOrDefault(t => t.Name == "open").Id;
                 ticket.OwnerUserId = User.Identity.GetUserId();
-
+               
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = ticket.Id });
             }
 
             //ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName");
@@ -141,7 +122,9 @@ namespace BugTracker.Controllers
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
             ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", ticket.TicketStatusId);
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
-            return View(ticket);
+             return View(ticket);
+
+           
         }
 
         // GET: Tickets/Edit/5
@@ -156,7 +139,7 @@ namespace BugTracker.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName", ticket.AssignedToUserId);
+            ViewBag.AssignedToUserId = new SelectList(roleHelper.UsersInRole("Developer"), "Id", "FirstName", ticket.AssignedToUserId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", ticket.ProjectId);
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
             ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", ticket.TicketStatusId);
@@ -181,14 +164,16 @@ namespace BugTracker.Controllers
 
                 var newTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticket.Id);
                 ticketHistoryHeler.RecordHistoricalChanges(oldTicket, newTicket);
-
+                notificationHelper.CreateChangeNotification(oldTicket, newTicket);
 
 
 
                 return RedirectToAction("Index");
 
             }
-            ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName", ticket.AssignedToUserId);
+
+            ViewBag.AssignedToUserId = new SelectList(roleHelper.UsersInRole("Developer"), "Id", "FirstName", ticket.AssignedToUserId);
+            //ViewBag.AssignedToUserId = new SelectList(, "Id", "FirstName", ticket.AssignedToUserId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", ticket.ProjectId);
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
             ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", ticket.TicketStatusId);
@@ -281,10 +266,18 @@ namespace BugTracker.Controllers
         //[ValidateAntiForgeryToken]
         public int AssignTicketToUser(int ticketId,string userId )
         {
+
+           
+            var oldTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticketId);
+
             Ticket ticket = db.Tickets.Find(ticketId);
             if (userId != null && ticket != null )
             { 
                 ticket.AssignedToUserId = userId;
+
+
+                notificationHelper.ManageNotifications(oldTicket, ticket);
+
                 db.SaveChanges();
             }
 
