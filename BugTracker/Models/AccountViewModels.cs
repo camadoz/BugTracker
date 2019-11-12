@@ -8,6 +8,7 @@ namespace BugTracker.Models
        public string UserName { get; set; }
         public string RoleName { get; set; }
         public string userId { get; set; }
+        public string email  { get; set; }
         public ICollection<ApplicationUser> users { get; set; }
     }
 

@@ -6,6 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using BugTracker.ViewModels;
+using BugTracker.Helpers;
+using Newtonsoft.Json;
 
 namespace BugTracker.Controllers
 {
@@ -51,9 +54,60 @@ namespace BugTracker.Controllers
             return View();
         }
 
+        public ActionResult DataStats()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+
+            var ret = new int[10];
+            ret[0] = db.Tickets.Where(t => t.TIcketStatus.Name == "open").Count();
+            ret[1] = db.Tickets.Where(t => t.TIcketStatus.Name == "Assigned").Count(); ;
+            ret[2] = db.Tickets.Where(t => t.TIcketStatus.Name == "In Progress").Count();
+            ret[3] = db.Tickets.Where(t => t.TIcketStatus.Name == "Resolved").Count();
+            ret[4] = db.Tickets.Where(t => t.TIcketStatus.Name == "Archived").Count();
+            // return (ret);
+            return Json(ret);
+
+            //return Json(new { Name = project.Name, Description = project.Description, Created = project.Created.ToString("MMM dd,yyyy"), projectID, userId });
+        }
+
+        public ActionResult DataStatsPerUser()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            UserRolesHelper userRoleHelper = new UserRolesHelper();
+
+            var allDeveloper = userRoleHelper.UsersInRole("Developer");
+            string[,] usersTicket = new String[allDeveloper.Count(), allDeveloper.Count()];
+
+
+            for(var i = 0 ; i < allDeveloper.Count() ; i++)
+            {
+                usersTicket[0,i] = allDeveloper.ElementAt(i).FullName;
+
+                ApplicationUser developer= allDeveloper.ElementAt(i);
+
+                usersTicket[1, i] = Convert.ToString( db.Tickets.Where(t => t.AssignedToUserId == developer.Id).ToList().Count());
+               
+            }
+            string output = JsonConvert.SerializeObject(usersTicket);
+
+            return Json(output);
+            //return Json(new { Name = project.Name, Description = project.Description, Created = project.Created.ToString("MMM dd,yyyy"), projectID, userId });
+        }
+
         public ActionResult Dashboard()
         {
-            return View();
+
+            DashBoardVewModel dashboard = new DashBoardVewModel();
+            ApplicationDbContext db = new ApplicationDbContext();
+            dashboard.Notifications = db.TicketNotifications.Where(t => t.isRead == false).ToList();
+
+
+
+
+
+
+
+            return View(dashboard);
         }
 
         public ActionResult About()
@@ -86,6 +140,14 @@ namespace BugTracker.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+
+
+
+
+
+
+
+
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

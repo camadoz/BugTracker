@@ -26,7 +26,8 @@ namespace BugTracker.Controllers
                 users.Add(new ManageRolesViewModel
                 {
                     UserName = $"{ user.LastName},{ user.FirstName}",
-                    RoleName=roleHelper.ListUserRoles(user.Id).FirstOrDefault()
+                    RoleName=roleHelper.ListUserRoles(user.Id).FirstOrDefault(),
+                    email = user.Email
 
                 });
             }

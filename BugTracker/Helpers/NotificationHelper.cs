@@ -82,7 +82,7 @@ namespace BugTracker.Helpers
             foreach (var property in WebConfigurationManager.AppSettings["TrackedTicketProperties"].Split(','))
             {
                 var oldValue = Utilities.MakeReadable(property, oldTicket.GetType().GetProperty(property).GetValue(oldTicket, null)?.ToString());
-                var newValue = Utilities.MakeReadable(property, newTicket.GetType().GetProperty(property).GetValue(newTicket, null).ToString());
+                var newValue = Utilities.MakeReadable(property, newTicket.GetType().GetProperty(property).GetValue(newTicket, null)?.ToString());
 
                 if (oldValue != newValue)
                 {

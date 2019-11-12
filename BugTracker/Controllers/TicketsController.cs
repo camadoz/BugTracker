@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using BugTracker.Helpers;
@@ -29,13 +30,22 @@ namespace BugTracker.Controllers
         {
             var tickets = new List<Ticket>();
             var ticketsVM = new IndexTicketViewModel();
+
+            ViewBag.AssignedToUserId = new SelectList(roleHelper.UsersInRole("Developer"), "Id", "FirstName");
+            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
+            ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name");
+            ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name");
+            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name");
+
+
             ViewBag.AssignUsers = new SelectList(db.Users, "Id", "FullName");
             ViewBag.UsersIds = new MultiSelectList(db.Users, "Id", "FullName");
             var loggedInUser = User.Identity.GetUserId();
             
             if (User.IsInRole("Admin"))
             {
-                tickets = db.Tickets.Include(t => t.AssignedToUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TIcketStatus).Include(t => t.TicketType).ToList();
+                //tickets = db.Tickets.Include(t => t.AssignedToUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TIcketStatus).Include(t => t.TicketType).ToList();
+                tickets = db.Tickets.OrderByDescending(t => t.TicketPriorityId).ToList();
             }
             else if (User.IsInRole("Submitter"))
             {
@@ -181,6 +191,47 @@ namespace BugTracker.Controllers
             return View(ticket);
         }
 
+
+        [HttpPost]
+        public ActionResult EditTicket(int ticketID, int ticketTYpeValue,int ticketStatusValue, int ticketPriotityValue,string ticketTitleValue,string ticketDescritionValue)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+
+                var oldTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticketID);
+                //Ticket updateTicket = db.Tickets.Find(ticket.Id);
+                var ticket = db.Tickets.Find(ticketID);
+
+                ticket.Updated = DateTime.Now;
+                ticket.TicketTypeId = ticketTYpeValue;
+                ticket.TicketStatusId = ticketStatusValue;
+                ticket.TicketPriorityId = ticketPriotityValue;
+                ticket.Title = ticketTitleValue;
+                ticket.Description = ticketDescritionValue;
+
+                db.Entry(ticket).State = EntityState.Modified;
+                db.SaveChanges();
+
+                var newTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticket.Id);
+                ticketHistoryHeler.RecordHistoricalChanges(oldTicket, newTicket);
+                notificationHelper.CreateChangeNotification(oldTicket, newTicket);
+
+
+
+                return RedirectToAction("Index");
+
+            }
+
+
+            return View();
+        }
+
+
+
+
+
         // GET: Tickets/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -264,7 +315,7 @@ namespace BugTracker.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public int AssignTicketToUser(int ticketId,string userId )
+        public async Task<int> AssignTicketToUser(int ticketId,string userId )
         {
 
            
@@ -277,6 +328,23 @@ namespace BugTracker.Controllers
 
 
                 notificationHelper.ManageNotifications(oldTicket, ticket);
+                var callbackUrl = Url.Action("Details","Tickets",new{ id = ticket.Id },protocol: Request.Url.Scheme);
+
+                try
+                {
+                    EmailService ems =  new EmailService();
+                    IdentityMessage msg = new IdentityMessage();
+                    ApplicationUser user = db.Users.Find(userId);
+                    msg.Body = "You have been assigned a new Ticket."  + Environment.NewLine + "Please click the following link to view the details"+
+                        "<a href=\""+callbackUrl +"\">NEW TICKET</a>";
+                    msg.Destination = user.Email;
+                    msg.Subject = "Invite to Household";
+                    await ems.SendMailAsync(msg);
+                }
+                catch(Exception ex)
+                {
+                    await Task.FromResult(0);
+                }
 
                 db.SaveChanges();
             }

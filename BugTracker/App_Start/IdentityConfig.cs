@@ -19,28 +19,103 @@ namespace BugTracker
 {
     public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        public async Task SendAsync(IdentityMessage message)
         {
+
+           await SendMailAsync(message);
+
+
+        //    var GmailUsername = WebConfigurationManager.AppSettings["username"];
+        //    var GmailPassword = WebConfigurationManager.AppSettings["password"];
+        //    var host = WebConfigurationManager.AppSettings["host"];
+        //    int port = Convert.ToInt32(WebConfigurationManager.AppSettings["port"]);
+        //    var from = new MailAddress(WebConfigurationManager.AppSettings["emailfrom"],"BugTracker");
+
+            //    SmtpClient client = new SmtpClient();
+
+            //    client.Host = host;
+            //    client.Port = port;
+            //    client.EnableSsl = true;
+            //    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            //    client.UseDefaultCredentials = false;
+            //    client.Credentials = new NetworkCredential(GmailUsername, GmailPassword);
+
+
+            //    var email = new MailMessage(from, new MailAddress(message.Destination))
+            //    {
+            //       Subject = message.Subject,
+            //       Body = message.Body,
+            //       IsBodyHtml = true,
+            //    };
+
+            //    using (var smtp = new SmtpClient()
+            //    {
+            //        Host = host,
+            //        Port = port,
+            //        EnableSsl = true,
+            //        DeliveryMethod = SmtpDeliveryMethod.Network,
+            //        UseDefaultCredentials = false,
+            //        Credentials = new NetworkCredential(GmailUsername, GmailPassword)
+            //    })
+            //    {
+            //        try
+            //        {
+            //            await smtp.SendMailAsync(email);
+            //            return true;
+            //        }
+            //        catch
+            //        {
+            //            return false;
+            //        }
+            //    };
+
+            //return client.SendMailAsync(WebConfigurationManager.AppSettings["emailto"],
+            //message.Destination,
+            // message.Subject,
+            //message.Body);
+        }
+
+
+        public async Task<bool> SendMailAsync(IdentityMessage message)
+        {
+            //Private.config set up
             var GmailUsername = WebConfigurationManager.AppSettings["username"];
             var GmailPassword = WebConfigurationManager.AppSettings["password"];
             var host = WebConfigurationManager.AppSettings["host"];
             int port = Convert.ToInt32(WebConfigurationManager.AppSettings["port"]);
-
-            SmtpClient client = new SmtpClient();
-
-            client.Host = host;
-            client.Port = port;
-            client.EnableSsl = true;
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-            client.Credentials = new NetworkCredential(GmailUsername, GmailPassword);
-
-            return client.SendMailAsync(WebConfigurationManager.AppSettings["emailto"],
-                                        message.Destination,
-                                        message.Subject,
-                                        message.Body);
+            var from = new MailAddress(WebConfigurationManager.AppSettings["emailfrom"], "BugTracker");
+            //Email object set up
+            var email = new MailMessage(from, new MailAddress(message.Destination))
+            {
+                Subject = message.Subject,
+                Body = message.Body,
+                IsBodyHtml = true,
+            };
+            //SMTP object set up
+            using (var smtp = new SmtpClient()
+            {
+                Host = host,
+                Port = port,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(GmailUsername, GmailPassword)
+            })
+            {
+                try
+                {
+                    await smtp.SendMailAsync(email);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            };
         }
     }
+
+    
 
     public class SmsService : IIdentityMessageService
     {
