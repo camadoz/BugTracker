@@ -1,6 +1,38 @@
 ﻿@model IEnumerable<BugTracker.ViewModels.IndexUsersViewModel>
 
 
+
+
+
+
+
+
+
+
+<div class="modal fade" id="modal-danger">
+    <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h4 class="modal-title">Warning</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to unassign this user from the project select?</p>
+            </div>
+            <input id="userID_remove" type="text" style="display:none" class="hidden" />
+            <input id="projectID_remove" type="text" style="display:none" class="hidden" />
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                <button type="button" id="confirmDeleteProjectBtn" class="btn btn-outline-light">Remove User From Project</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
 <!-- MODAL FORM -->
 
 <div class="modal fade" id="assignProject" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -100,8 +132,8 @@
 
                     <img src="@userInfo.User.AvatarUrl" style="width:15%;" alt="@userInfo.User.FullName" class="img-circle" data-lock-picture="@userInfo.User.AvatarUrl" />
 
-             
-                    <button type="button"  class="ui mini orange button ml-3 btnClickable" data-email="@userInfo.User.Email" data-toggle="modal" data-target="#assignProject" data-role="@userInfo.role.First()" data-id="@userInfo.User.Id" data-name="@userInfo.User.FirstName @userInfo.User.LastName">
+
+                    <button type="button" class="ui mini orange button ml-3 btnClickable" data-email="@userInfo.User.Email" data-toggle="modal" data-target="#assignProject" data-role="@userInfo.role.First()" data-id="@userInfo.User.Id" data-name="@userInfo.User.FirstName @userInfo.User.LastName">
                         Assign Project
                     </button>
                     <p>
@@ -114,6 +146,7 @@
 
                         <thead>
                             <tr>
+                                <th style="display:none;visibility:hidden;">Project ID</th>
                                 <th style="width:5%">
                                     Name
                                 </th>
@@ -136,6 +169,10 @@
                             {
 
                                 <tr>
+                                    <td class="target_id" style="display:none;visibility:hidden;">
+                                        @Html.DisplayFor(model => project.Id)
+                                    </td>
+
                                     <td class="">
                                         @Html.DisplayFor(item => project.Name)
                                     </td>
@@ -147,7 +184,11 @@
                                         @Html.DisplayFor(item => project.Created)
                                     </td>
                                     <td class="">
-                                        @Html.ActionLink("Remove", "RemoveUser", "Admin", new { id = userInfo.User.Id, projectID = project.Id }, new { @class = "ui mini red  button" })
+                                        @*@Html.ActionLink("Remove", "RemoveUser", "Admin", new { id = userInfo.User.Id, projectID = project.Id }, new { @class = "ui mini red  button" })*@
+
+                                        <button type="button" class="btn btn-danger remove_project_user_btn" data-toggle="modal" data-target="#modal-danger" data-id="@userInfo.User.Id">
+                                            Unassign
+                                        </button>
                                     </td>
                                 </tr>
 
@@ -177,23 +218,23 @@
         let tableID;
 
         $('#ProjecstIds').change(function () {
-        selectVal = $('#ProjecstIds').val();
+            selectVal = $('#ProjecstIds').val();
 
-        if (selectVal == 0) {
-            $('#assignToProject').prop("disabled", true);
-        }
-        else {
-            $('#assignToProject').prop("disabled", false);
-        }
-    });
+            if (selectVal == 0) {
+                $('#assignToProject').prop("disabled", true);
+            }
+            else {
+                $('#assignToProject').prop("disabled", false);
+            }
+        });
 
 
         $('#assignToProject').click(function () {
 
             var projectId = $("#ProjecstIds option:selected").val()
             var userId = $("#userID").val();
-           // var lastRow = $(this).closest("tbody:last");
-           // var tableId = $(this).closest('.card-body').find('table').attr('id');
+            // var lastRow = $(this).closest("tbody:last");
+            // var tableId = $(this).closest('.card-body').find('table').attr('id');
 
             $.ajax({
                 type: "POST",
@@ -205,7 +246,7 @@
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
                 complete: function (data) {
-                    populateProjectTable(tableID,data);
+                    populateProjectTable(tableID, data);
                 },
                 error: function (xhr, status, error) {
 
@@ -217,52 +258,100 @@
 
         var arr;
 
-        $('#userTable tr').click(function (event)
-        {
+        $('#userTable tr').click(function (event) {
 
-            if (event.target.type !== 'checkbox')
-            {
+            if (event.target.type !== 'checkbox') {
                 $(':checkbox', this).trigger('click');
             }
-           
-            if ($(':checkbox', this).is(":checked"))
-            {
+
+            if ($(':checkbox', this).is(":checked")) {
                 arr = $(this).closest("tr").find("#item_Id").val();
-               
+
             }
 
-  
+
         });
 
-        var populateProjectTable = function (tableId,data)
-        {
+        var populateProjectTable = function (tableId, data) {
 
-             var table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
-             var newRow = table.insertRow();
+            var table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
 
-             var cellOne = newRow.insertCell(0);
-             var cellTwo = newRow.insertCell(1);
-             var cellThree = newRow.insertCell(2);
-             var cellFour = newRow.insertCell(3);
+            var cellOne = newRow.insertCell(0);
+            var cellTwo = newRow.insertCell(1);
+            var cellThree = newRow.insertCell(2);
+            var cellFour = newRow.insertCell(3);
 
-             cellOne.innerHTML = data.responseJSON.Name;
-             cellTwo.innerHTML = data.responseJSON.Description;
-             cellThree.innerHTML = data.responseJSON.Created;
-             cellFour.innerHTML = "<a class=\"ui mini red button\" href=\"\/Admin\/Removeruser\/" +   data.responseJSON.userId +"?projectID=" + data.responseJSON.projectID + "\"" + ">Remove</a>";
+            cellOne.innerHTML = data.responseJSON.Name;
+            cellTwo.innerHTML = data.responseJSON.Description;
+            cellThree.innerHTML = data.responseJSON.Created;
+            cellFour.innerHTML = "<a class=\"ui mini red button\" href=\"\/Admin\/Removeruser\/" + data.responseJSON.userId + "?projectID=" + data.responseJSON.projectID + "\"" + ">Remove</a>";
 
         }
 
-         $(".btnClickable").click(function () {
-                       
-              var user_id = $(this).data('id');
-              var user_name = $(this).data('name');
-              var user_role = $(this).data('role');
-              var user_email = $(this).data('email');
-              $("#user_name").text(user_name);
-              $("#role").text(user_role);
-              $("#email").text(user_email);
-              $("#userID").val(user_id);
-              tableID = $(this).closest('.card-body').find('table').attr('id');
+        $(".btnClickable").click(function () {
+
+            var user_id = $(this).data('id');
+            var user_name = $(this).data('name');
+            var user_role = $(this).data('role');
+            var user_email = $(this).data('email');
+            $("#user_name").text(user_name);
+            $("#role").text(user_role);
+            $("#email").text(user_email);
+            $("#userID").val(user_id);
+            tableID = $(this).closest('.card-body').find('table').attr('id');
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        var project_id;
+        var user_id;
+
+
+        $(".remove_project_user_btn").click(function () {
+
+            project_id = $(this).parent().prev().prev().prev().prev().text().trim();
+            user_id = $(this).data('id');
+
+            
+            $("#projectID_remove").val(project_id);
+            $("#userID_remove").val(user_id);
+        });
+
+        $('#confirmDeleteProjectBtn').click(function () {
+
+            $.ajax({
+                type: "POST",
+                url: "/Admin/RemoveUserFromProject",
+                data: JSON.stringify({
+                    userID: $("#userID_remove").val(),
+                    projectID: Number($("#projectID_remove").val()),
+                   
+                }),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                complete: function () {
+                    location.reload();
+                },
+                success: function (data) {
+                    $('.toast').toast('show');
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+
+
         });
 
     </script>

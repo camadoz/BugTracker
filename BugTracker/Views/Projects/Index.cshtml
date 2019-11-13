@@ -1,17 +1,123 @@
 ﻿@model IEnumerable<BugTracker.Models.Project>
 
 
+<div class="modal " id="editProjectModal" tabindex="-1" role="dialog" aria-labelledby="editProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-primary">
+                <h5 class="modal-title" id="editTicketModalLabel">Edit Ticket</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="form-group hidden">
+                            <input id="HiddenFieldEditTicket" type="text" style="display:none" class="hidden" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                            <div class="ui message">
+
+
+
+
+
+                                <input id="ProjectId" name="prodId" type="hidden" value="">
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="card-body">
+
+                                    <div class="form-group">
+                                        <label class="form-check-label" for="exampleCheck1">Project Name</label>
+                                        <input type="text" class="project_name form-control " id="project_name" />
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-check-label" for="exampleCheck1">Project Description</label>
+                                        <input type="text" class="project_description form-control " id="project_description" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-check-label" for="exampleCheck1">User Assigned</label>
+
+
+                                    </div>
+
+
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" id="editProjectBtn" data-dismiss="modal" class="btn btn-primary">Edit Project</button>
+                                    @*<button type="submit" class="ui blue button">Submit</button>
+                                        @Html.ActionLink("Back To List", "Index", null, new { @class = "ui  orange  button" })*@
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark" style="font-weight:bolder; font-size:3.0rem;">My Project Dashboard</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item active"></li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+
+
+
+
+
+
+
+
+
+
 
 <div class="card">
-    <h2>Index</h2>
+
     <div class="card-header">
-        <h3 class="card-title">List of all projects.</h3>
+        <h3 class="card-title"></h3>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
-        <table id="example2" class="table table-bordered table-hover table-striped">
+        <table id="projectsTable" class="table table-bordered table-hover table-striped">
             <thead>
                 <tr>
+                    <th style="display:none;visibility:hidden;">Ticket ID</th>
                     <th>Name</th>
                     <th>Description</th>
                     <th>Created</th>
@@ -23,24 +129,34 @@
 
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td> @Html.DisplayFor(model => item.Name)</td>
-                        <td> @Html.DisplayFor(model => item.Description)</td>
-                        <td> @Html.DisplayFor(model => item.Created)</td>
-                        <td> @Html.DisplayFor(model => item.Updated)</td>
-                        <td>
+                <tr>
+                    <td class="target_id" style="display:none;visibility:hidden;">
+                        @Html.DisplayFor(model => item.Id)
+                    </td>
+                    <td> @Html.DisplayFor(model => item.Name)</td>
+                    <td> @Html.DisplayFor(model => item.Description)</td>
+                    <td>
+                        @Html.Raw(item.Created.ToString("MMM dd,yyyy"))
+                    </td>
+                    <td>
 
-                            <a href="@Url.Action("Edit", "Projects",new { id = item.Id },null)"> <i class="ui mini blue button" >Edit</i></a>
-                            <a href="@Url.Action("Details", "Projects",new { id = item.Id },null)"> <i class="ui mini orange button" >Details</i></a>
-                            <a href=""> <i class="ui mini green button">Archive</i></a>
+                        @Html.Raw(item.Updated?.ToString("MMM dd,yyyy"))
+                    </td>
+                    <td>
 
-                            
-                        </td>
-                    </tr>
+                        <a href="@Url.Action("Edit", "Projects",new { id = item.Id },null)"> <i class="ui mini blue button">Edit</i></a>
+                        <a href="@Url.Action("Details", "Projects",new { id = item.Id },null)"> <i class="ui mini orange button">Details</i></a>
+                        <button class="project_edit_btn" data-toggle="modal" data-target="#editProjectModal">TEST</button>
+                        <a href=""> <i class="ui mini green button">Archive</i></a>
+
+
+                    </td>
+                </tr>
                 }
             </tbody>
             <tfoot>
                 <tr>
+                    <th style="display:none;visibility:hidden;">Ticket ID</th>
                     <th>Name</th>
                     <th>Description</th>
                     <th>Created</th>
@@ -54,3 +170,56 @@
 </div>
 <!-- /.card -->
 
+@section scripts    {
+
+    <script>
+
+           var project_id;
+            var project_description;
+        var project_name;
+
+        $(".project_edit_btn").click(function () {
+
+            project_id = $(this).parent().prev().prev().prev().prev().prev().text().trim();
+            project_description = $(this).parent().prev().prev().prev().text().trim();
+            project_name = $(this).parent().prev().prev().prev().prev().text().trim();
+            
+            $("#ProjectId").val(project_id);
+            $("#project_description").val(project_description);
+            $("#project_name").val(project_name);
+        });
+
+        $('#editProjectBtn').click(function () {
+
+            var ticketType = $("#ticket_type_edit option:selected").val()
+            var ticketStatus = $("#ticket_status_edit option:selected").val()
+            var ticketPriority = $("#ticket_priority_edit option:selected").val()
+            var ticketTitle = $("#ticket_title").val()
+            var ticketDescription = $("#ticket_description").val()
+
+            $.ajax({
+                type: "POST",
+                url: "/Projects/EditProject",
+                data: JSON.stringify({
+                    projectID: Number($("#ProjectId").val()),
+                    projectName: $("#project_name").val(),
+                    projectDescription:$("#project_description").val(),
+                }),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                complete: function () {
+                    location.reload();
+                },
+                success: function (data) {
+                    $('.toast').toast('show');
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+
+
+        });
+
+    </script>
+}

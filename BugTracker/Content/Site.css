@@ -20,11 +20,13 @@ textarea {
     max-width: 280px;
 }
 
-.modal-open {
+.modal-open .modal {
     overflow: scroll; /* KEEPS THE SCROLL BAR WHEN THE MODAL IS OPENED */
     padding-right: 0 !important;  /* PREVENT THE MODAL FORM TO SHIFT THE BODY TO THE LEFT */
 }
-
+body.modal-open {
+    overflow: hidden !important;
+}
 
 
 .dpass{

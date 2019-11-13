@@ -1,172 +1,254 @@
 ﻿@model BugTracker.Models.DetailProjectViewModel
-@using BugTracker.Helpers       
+@using BugTracker.Helpers
 
-@{ 
+@{
     var roleHelper = new UserRolesHelper();
 }
 
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark" style="font-weight:bolder; font-size:3.0rem;">Project Details</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item active"></li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
 
 
+<div class="container">
 
-    <div class="container">
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-primary">
+                <div class="card-header">
+
+                    <h3 class="card-title">Project Detail</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
 
 
-        <div class="row">
-            <div class="offset-2 col-md-6">
-                <div class="card card-primary">
-                    <div class="card-header">
-
-                        <h3 class="card-title">Project Detail</h3>
+                <div class="row mt-3 mb-3" style="font-size:1.2rem;">
+                    <div class="col-md-3 text-right bold" style="font-size:1.2rem;"><span style="font-weight:bold;">Name:</span></div>
+                    <div class="col-md-6 text-left">
+                        @Html.DisplayFor(model => model.projectDetail.Name)
                     </div>
-                    <!-- /.card-header -->
-                    <!-- form start -->
+                </div>
+                <div class="row mb-3" style="font-size:1.2rem;">
+                    <div class="col-md-3 text-right bold" style="font-size:1.2rem;"><span style="font-weight:bold;">Description:</span></div>
+                    <div class="col-md-8 text-left">
+                        @Html.DisplayFor(model => model.projectDetail.Description)
+                    </div>
+                </div>
+                <div class="row mb-3" style="font-size:1.2rem;">
+                    <div class="col-md-3 text-right bold" style="font-size:1.2rem;"><span style="font-weight:bold;">Date Creation:</span></div>
+                    <div class="col-md-6 text-left">
 
+                        @Html.Raw(Model.projectDetail.Created.ToString("MMM dd,yyyy"))
+                    </div>
+                </div>
+                <div class="row mb-4" style="font-size:1.2rem;">
+                    <div class="col-md-3 text-right bold" style="font-size:1.2rem;"><span style="font-weight:bold;">Last Update:</span></div>
+                    <div class="col-md-6 text-left">
+                        @if (Model.projectDetail.Updated == null)
+                        {
 
-                    <div class="row mt-3 mb-3" style="font-size:1.2rem;">
-                        <div class="col-md-3 text-right bold" style="font-size:1.2rem;"><span style="font-weight:bold;">Name:</span></div>
-                        <div class="col-md-6 text-left">
-                            @Html.DisplayFor(model => model.projectDetail.Name)
+                            <span>No Updates</span>
+
+                        }
+                        else
+                        {
+
+                            @Html.Raw(Model.projectDetail.Updated?.ToString("MMM dd,yyyy"))
+                        }
+                    </div>
+                </div>
+
+                <div class="card-footer">
+
+                    @Html.ActionLink("Project List", "Index", "Projects", null, new { @class = "ui  blue  button" })
+                    @*@Html.ActionLink("Edit", "Edit", new { id = Model.projectDetail.Id }, new { @class = "ui orange button" })*@
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+            <div class="card card-warning">
+                <div class="card-header">
+
+                    <h3 class="card-title">Assigned Users</h3>
+                </div>
+                <div class="card-body">
+                    @*<h3><i class="fas fa-user-tie fa-2x">&nbsp;</i>Users Assigned to project</h3>
+                        <hr />*@
+
+                    @if (Model.users.ToList().Count() == 0)
+                    {
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info"><i class="far fa-user"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">No user assigned to this project.</span>
+                                <span class="info-box-number"></span>
+                            </div>
+                            <!-- /.info-box-content -->
                         </div>
-                    </div>
-                    <div class="row mb-3" style="font-size:1.2rem;">
-                        <div class="col-md-3 text-right bold" style="font-size:1.2rem;"><span style="font-weight:bold;">Description:</span></div>
-                        <div class="col-md-8 text-left">
-                            @Html.DisplayFor(model => model.projectDetail.Description)
+
+                    }
+
+
+
+                    @foreach (var user in Model.users)
+                    {
+
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Messages</span>
+                                <span class="info-box-number">1,410</span>
+                            </div>
+                            <!-- /.info-box-content -->
                         </div>
-                    </div>
-                    <div class="row mb-3" style="font-size:1.2rem;">
-                        <div class="col-md-3 text-right bold" style="font-size:1.2rem;"><span style="font-weight:bold;">Date Creation:</span></div>
-                        <div class="col-md-6 text-left">
 
-                            @Html.Raw(Model.projectDetail.Created.ToString("MMM dd,yyyy"))
+
+                        <div class="row mb-1" style="font-size:1.2rem;">
+                            <div class="col-md-2 text-right bold" style="font-size:1.2rem;">
+
+                                <img src="@user.AvatarUrl" style="width:65%;" alt="@user.FullName" class="img-circle text-right" data-lock-picture="@user.AvatarUrl" />
+
+                            </div>
+                            <div class="col-md-8 text-left">
+                                <h3>@user.FullName</h3>
+                                @roleHelper.ListUserRoles(user.Id).FirstOrDefault()
+                            </div>
                         </div>
+
+                    }
+
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="card card-success" id="comments-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        @Model.tickets.ToList().Count() @if (Model.tickets.ToList().Count() > 1)
+                        {
+                            <span>tickets</span>
+
+                        }
+                        else
+                        {
+                            <span>ticket</span>
+                        }
+                    </h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
                     </div>
-                    <div class="row mb-4" style="font-size:1.2rem;">
-                        <div class="col-md-3 text-right bold" style="font-size:1.2rem;"><span style="font-weight:bold;">Last Update:</span></div>
-                        <div class="col-md-6 text-left">
-                            @if (Model.projectDetail.Updated == null)
-                            {
-
-                                <span>No Updates</span>
-
-                            }
-                            else
-                            {
-
-                                @Html.Raw(Model.projectDetail.Updated?.ToString("MMM dd,yyyy"))
-                            }
-                        </div>
-                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
 
 
-
-
-                    <div class="card-body">
-                        <h3><i class="fas fa-user-tie fa-2x">&nbsp;</i>Users Assigned to project</h3>
-                        <hr />
-                        <div class="callout callout-success">
-                            @foreach (var user in Model.users)
-                            {
-
-                                <div class="row mb-1" style="font-size:1.2rem;">
-                                    <div class="col-md-2 text-right bold" style="font-size:1.2rem;">
-
-                                        <img src="@user.AvatarUrl" style="width:65%;" alt="@user.FullName" class="img-circle text-right" data-lock-picture="@user.AvatarUrl" />
-
-                                    </div>
-                                    <div class="col-md-8 text-left">
-                                        <h3>@user.FullName</h3>
-                                        @roleHelper.ListUserRoles(user.Id).FirstOrDefault()
-                                    </div>
-                                </div>
-
-                            }
-
-                        </div>
-                    </div>
-
-
-                    <div class="card-footer">
-
-                        @Html.ActionLink("Project List", "Index", "Projects", null, new { @class = "ui  blue  button" })
-                        @Html.ActionLink("Edit", "Edit", new { id = Model.projectDetail.Id }, new { @class = "ui orange button" })
-                    </div>
-
-                    <hr />
-                    <div class="card-body">
-                        <h3> <i class="fas fa-ticket-alt fa-2x"></i> &nbsp;  Tickets</h3>
-                       
-                    </div>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Desscription</th>
-                                    <th>Created</th>
-                                    <th style="width: 40px">Updated</th>
-                                    <th>Priority</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var ticket in Model.tickets)
-                                {
-
-
-                                    if(ticket.TicketPriority.Name == "High")
-                                    {
-                                <tr style="background-color:#ffb2b2;">
-
-                                    <td>@ticket.Title</td>
-                                    <td>@ticket.Description</td>
-                                    <td>@Html.Raw(ticket.Created.ToString("MMM dd,yyyy"))</td>
-                                    <td>@Html.Raw(ticket.Updated?.ToString("MMM dd,yyyy"))</td>
-                                    <td>@ticket.TicketPriority.Name</td>
-                                </tr>
-
-
-
-                                    }
-                                    else
-                                    {
-                            <tr style="background-color:#90EE90;">
-                                <td>@ticket.Title</td>
-                                <td>@ticket.Description</td>
-                                <td>@Html.Raw(ticket.Created.ToString("MMM dd,yyyy"))</td>
-                                <td>@Html.Raw(ticket.Updated?.ToString("MMM dd,yyyy"))</td>
-                                <td>@ticket.TicketPriority.Name</td>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                               
+                                <th>Title</th>
+                                <th>Desscription</th>
+                                <th>Created</th>
+                                <th style="width: 40px">Updated</th>
+                                <th>Priority</th>
                             </tr>
-                                    }
+                        </thead>
+                        <tbody>
+                            @foreach (var ticket in Model.tickets)
+                            {
+
+
+                                if (ticket.TicketPriority.Name == "High")
+                                {
+                                    <tr style="background-color:#ffb2b2;">
+
+                                        <td>@ticket.Title</td>
+                                        <td>@ticket.Description</td>
+                                        <td>@Html.Raw(ticket.Created.ToString("MMM dd,yyyy"))</td>
+                                        <td>@Html.Raw(ticket.Updated?.ToString("MMM dd,yyyy"))</td>
+                                        <td>@ticket.TicketPriority.Name</td>
+                                    </tr>
 
 
 
                                 }
-                            </tbody>
-                        </table>
+                                else
+                                {
+                                    <tr style="background-color:#90EE90;">
+                                        <td>@ticket.Title</td>
+                                        <td>@ticket.Description</td>
+                                        <td>@Html.Raw(ticket.Created.ToString("MMM dd,yyyy"))</td>
+                                        <td>@Html.Raw(ticket.Updated?.ToString("MMM dd,yyyy"))</td>
+                                        <td>@ticket.TicketPriority.Name</td>
+                                    </tr>
+                                }
 
 
 
+                            }
+                        </tbody>
+                    </table>
 
-
-
-
-
-
-
-
-
-                    </div>
                 </div>
+                <!-- /.card-body -->
+            </div>
 
 
- 
+
+
+
+
+
+
+
+
+
         </div>
-
-
 
     </div>
 
 
 
+</div>
+
+
+}
 
 
 
@@ -178,29 +260,30 @@
 
 
 
-        @*@using (Html.BeginForm("ManageProjectUsers", "Admin", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                @Html.Hidden("ProjectId", Model.Id)
 
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <h2>Project Manager</h2>
-                        @Html.ListBox("ProjectManagers")
-                    </div>
-                    <div class="col-md-4 text-center">
-                        <h2>Submitters</h2>
-                        @Html.ListBox("Submitters")
-                    </div>
-                    <div class="col-md-4 text-center">
-                        <h2>Developers</h2>
-                        @Html.ListBox("Developers")
-                    </div>
-                </div>
+@*@using (Html.BeginForm("ManageProjectUsers", "Admin", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("ProjectId", Model.Id)
 
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <button type="submit" class="btn btn-primary btn-lg">ASSIGN</button>
-                    </div>
-                </div>
-            }*@
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <h2>Project Manager</h2>
+                @Html.ListBox("ProjectManagers")
+            </div>
+            <div class="col-md-4 text-center">
+                <h2>Submitters</h2>
+                @Html.ListBox("Submitters")
+            </div>
+            <div class="col-md-4 text-center">
+                <h2>Developers</h2>
+                @Html.ListBox("Developers")
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary btn-lg">ASSIGN</button>
+            </div>
+        </div>
+    }*@

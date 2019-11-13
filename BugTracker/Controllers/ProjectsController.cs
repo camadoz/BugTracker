@@ -126,6 +126,28 @@ namespace BugTracker.Controllers
             return View(project);
         }
 
+        [HttpPost]
+        public ActionResult EditProject(int projectID,string projectName, string projectDescription)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var project = db.Projects.Find(projectID);
+
+                project.Updated = DateTime.Now;
+                project.Name = projectName;
+                project.Description = projectDescription;
+
+                db.Entry(project).State = EntityState.Modified;
+                db.SaveChanges();
+
+
+                return RedirectToAction("Index");
+
+            }
+            return View();
+        }
+
         // GET: Projects/Delete/5
         public ActionResult Delete(int? id)
         {

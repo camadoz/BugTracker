@@ -159,6 +159,28 @@ namespace BugTracker.Controllers
 
          }
 
+        [HttpPost]
+        public ActionResult RemoveUserFromProject(string userID, int projectID)
+        {
+            projectHelper.RemoveUserFromProject(userID, projectID);
+            ViewBag.ProjecstIds = new MultiSelectList(db.Projects, "Id", "Name");
+
+            var usersInfo = new List<IndexUsersViewModel>();
+            var allUsers = db.Users.ToList();
+            foreach (var user in allUsers)
+            {
+                var userInfo = new IndexUsersViewModel();
+                userInfo.User = user;
+                userInfo.Projects = projectHelper.ListUserProjects(user.Id);
+                userInfo.role = roleHelper.ListUserRoles(user.Id);
+                usersInfo.Add(userInfo);
+
+            }
+            return View("ManageUsersAndProjects", usersInfo.ToList());
+
+        }
+
+
 
 
         [Authorize(Roles ="Admin")]
