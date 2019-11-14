@@ -98,17 +98,6 @@
                                     </div>
 
                                     <div class="description mb-2">
-                                        <b>Ticket assigned to :</b> @if (Model.AssignedToUser != null)
-                                        {
-                                            @Html.DisplayFor(model => model.AssignedToUser.FullName)
-                                        }
-                                        else
-                                        {
-                                            <b>Nobody Assigned</b>
-                                        }
-
-                                    </div>
-                                    <div class="description mb-2">
                                         <b>Description:</b> @Html.DisplayFor(model => model.Description)
                                     </div>
 
@@ -125,69 +114,133 @@
                                     <div class="description">
                                         <b>Ticket type:</b> @Html.DisplayFor(model => model.TicketType.Name)
                                     </div>
+
+
+
+
                                 </div>
+
+                                <div class="ui card-body">
+
+
+                                    @Html.ActionLink("Edit Ticket", "Edit", new { id = Model.Id }, new { @class = "ui  blue button desktop icon mt-3 mb-3" })
+                                    @Html.ActionLink("Back to Ticket List", "Index", null, new { @class = "ui  orange button desktop icon" })
+                                </div>
+
+
 
                             </div>
 
                         </div>
 
-                        @Html.ActionLink("Edit Ticket", "Edit", new { id = Model.Id }, new { @class = "ui  blue button desktop icon mt-3 mb-3" })
-                        @Html.ActionLink("Back to Ticket List", "Index", null, new { @class = "ui  orange button desktop icon" })
+
 
 
                     </div>
 
                     <div class="col-md-6">
-                        <div class="ui cards">
-                            <div class="card " style="width:600px;">
+                        @*<div class="ui cards">
+            <div class="card " style="width:600px;">
 
-                                <div class="content">
-                                    <h3>Project Information</h3>
-                                    <hr />
-                                    <img class="right floated mini ui image" src="~/images/business-presentation.png">
-                                    <div class="header">
-                                        @Html.DisplayFor(model => model.Title)
-                                    </div>
-                                    <div class="meta">
-                                        Created on @Html.DisplayFor(model => model.Created) for project @Html.DisplayFor(model => model.Project.Name)
-                                    </div>
+                <div class="content">
+                    <h3>Project Information</h3>
+                    <hr />
+                    <img class="right floated mini ui image" src="~/images/business-presentation.png">
+                    <div class="header">
+                        @Html.DisplayFor(model => model.Title)
+                    </div>
+                    <div class="meta">
+                        Created on @Html.DisplayFor(model => model.Created) for project @Html.DisplayFor(model => model.Project.Name)
+                    </div>
 
-                                    <div class="description mb-2">
-                                        <b>Ticket assigned to :</b> @if (Model.AssignedToUser != null)
-                                        {
-                                            @Html.DisplayFor(model => model.AssignedToUser.FullName)
-                                        }
-                                        else
-                                        {
-                                            <b>Nobody Assigned</b>
-                                        }
+                    <div class="description mb-2">
+                        <b>Ticket assigned to :</b> @if (Model.AssignedToUser != null)
+                        {
+                            @Html.DisplayFor(model => model.AssignedToUser.FullName)
+                        }
+                        else
+                        {
+                            <b>Nobody Assigned</b>
+                        }
 
-                                    </div>
-                                    <div class="description mb-2">
-                                        <b>Description:</b> @Html.DisplayFor(model => model.Description)
-                                    </div>
+                    </div>
+                    <div class="description mb-2">
+                        <b>Description:</b> @Html.DisplayFor(model => model.Description)
+                    </div>
 
-                                    <div class="description mb-2">
-                                        <b>Ticket Description:</b> @Html.DisplayFor(model => model.Description)
-                                    </div>
-                                    <div class="description mb-2">
-                                        <b>Ticket status:</b> @Html.DisplayFor(model => model.TIcketStatus.Name)
-                                    </div>
-                                    <div class="description mb-2">
-                                        <b>Ticket priority:</b> @Html.DisplayFor(model => model.TicketPriority.Name)
-                                    </div>
+                    <div class="description mb-2">
+                        <b>Ticket Description:</b> @Html.DisplayFor(model => model.Description)
+                    </div>
+                    <div class="description mb-2">
+                        <b>Ticket status:</b> @Html.DisplayFor(model => model.TIcketStatus.Name)
+                    </div>
+                    <div class="description mb-2">
+                        <b>Ticket priority:</b> @Html.DisplayFor(model => model.TicketPriority.Name)
+                    </div>
 
-                                    <div class="description">
-                                        <b>Ticket type:</b> @Html.DisplayFor(model => model.TicketType.Name)
-                                    </div>
+                    <div class="description">
+                        <b>Ticket type:</b> @Html.DisplayFor(model => model.TicketType.Name)
+                    </div>
+                </div>
+
+            </div>
+
+        </div>*@
+
+                        @if (Model.OwnerUser != null)
+                        {
+                            <div class="card card-primary" id="profile-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Submitter</h3>  <!--  THIS IS THE COUNT   -->
+                                    <!-- /.card-tools -->
                                 </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
 
+
+
+                                    <div class="card-body box-profile">
+                                        <div class="text-center">
+                                            <img class="profile-user-img img-fluid img-circle"
+                                                 src="@Model.OwnerUser.AvatarUrl"
+                                                 alt="User profile picture">
+                                        </div>
+
+                                        <h3 class="profile-username text-center">@Model.OwnerUser.FullName - @Model.OwnerUser.Email</h3>
+
+                                        <p class="text-muted text-center">@roleHelper.ListUserRoles(Model.OwnerUserId).FirstOrDefault()</p>
+
+                                        <ul class="list-group list-group-unbordered mb-3">
+                                            <li class="list-group-item">
+                                                <b>Ticket created</b> <a class="float-right">@db.Tickets.Where(t => t.OwnerUserId == Model.OwnerUserId).ToList().Count()</a>
+                                            </li>
+
+
+                                        </ul>
+
+
+                                    </div>
+
+
+
+
+
+                                </div>
+                                <!-- /.card-body -->
                             </div>
+                        }
+                        else
+                        {
+                            <div class="info-box mb-3 bg-info">
+                                <span class="info-box-icon"><i class="fas fa-exclamation-triangle"></i></span>
+                                <div class="info-box-content text-center">
+                                    <span class="info-box-text h5">This ticket has no submitter.</span>
 
-                        </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                        }
 
-                        @Html.ActionLink("Edit Ticket", "Edit", new { id = Model.Id }, new { @class = "ui  blue button desktop icon mt-3 mb-3" })
-                        @Html.ActionLink("Back to Project List", "Index", null, new { @class = "ui  orange button desktop icon" })
 
                     </div>
                 </div>
@@ -344,7 +397,7 @@
 
         <div class="card card-primary" id="profile-card">
             <div class="card-header">
-                <h3 class="card-title">User Profile</h3>  <!--  THIS IS THE COUNT   -->
+                <h3 class="card-title">Developer Assigned</h3>  <!--  THIS IS THE COUNT   -->
 
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -356,35 +409,57 @@
             <!-- /.card-header -->
             <div class="card-body">
 
+                @if (Model.AssignedToUser != null)
+                {
 
-                <div class="card-body box-profile">
-                    <div class="text-center">
-                        <img class="profile-user-img img-fluid img-circle"
-                             src="@Model.AssignedToUser.AvatarUrl"
-                             alt="User profile picture">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <img class="profile-user-img img-fluid img-circle"
+                                 src="@Model.AssignedToUser.AvatarUrl"
+                                 alt="User profile picture">
+                        </div>
+
+                        <h3 class="profile-username text-center">@Model.AssignedToUser.FullName - @Model.AssignedToUser.Email</h3>
+
+                        <p class="text-muted text-center">@roleHelper.ListUserRoles(Model.AssignedToUserId).FirstOrDefault()</p>
+
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>Current Ticket Assigned</b> <a class="float-right">@db.Tickets.Where(t => t.AssignedToUserId == Model.AssignedToUserId).ToList().Count()</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Current Projects </b> <a class="float-right">
+                                    @foreach (var project in Model.AssignedToUser.Projects)
+                                    {
+                                        <b>@project.Name</b><br />
+                                    }
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Friends</b> <a class="float-right">13,287</a>
+                            </li>
+                        </ul>
+
+                        @*<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>*@
                     </div>
 
-                    <h3 class="profile-username text-center">@Model.AssignedToUser.FullName - @Model.AssignedToUser.Email</h3>
 
-                    <p class="text-muted text-center">@roleHelper.ListUserRoles(Model.AssignedToUserId).FirstOrDefault()</p>
 
-                    <ul class="list-group list-group-unbordered mb-3">
-                        <li class="list-group-item">
-                            <b>Current Ticket Assigned</b> <a class="float-right">@db.Tickets.Where(t => t.AssignedToUserId == Model.AssignedToUserId).ToList().Count()</a>
-                        </li>
-                        <li class="list-group-item">
-                            <b>Current Projects </b> <a class="float-right">@foreach (var project in Model.AssignedToUser.Projects)
-                            {
-                               <b>@project.Name</b><br />
-                            }</a>
-                        </li>
-                        <li class="list-group-item">
-                            <b>Friends</b> <a class="float-right">13,287</a>
-                        </li>
-                    </ul>
 
-                    @*<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>*@
-                </div>
+                }
+                else
+                {
+                    <div class="info-box mb-3 bg-info">
+                        <span class="info-box-icon"><i class="fas fa-exclamation-triangle"></i></span>
+                        <div class="info-box-content text-center">
+                            <span class="info-box-text h2">This ticket is unassigned.</span>
+
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                }
+
+
 
 
             </div>

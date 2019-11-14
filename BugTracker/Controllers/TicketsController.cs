@@ -54,25 +54,25 @@ namespace BugTracker.Controllers
             }
             else if (User.IsInRole("Developer"))
             {
-                //tickets = db.Tickets.Where(t => t.AssignedToUserId == loggedInUser).ToList();
-                //tickets = db.Tickets.Where(t => t.AssignedToUserId == loggedInUser).Where(p => p.Project.Users.);
-                ////tickets = db.Tickets.Where(  t => db.Users.Find(loggedInUser).Projects.Any(p => p.Id == t.ProjectId)  ).ToList();
-                //tickets = db.Tickets.Where(t => db.Users.Find(loggedInUser).Id == t.).ToList();
-                //var user = db.Users.Find(User.Identity.GetUserId());
-                // tickets = db.Tickets.Where(x => db.Projects.Any(z => z.Id ==x.ProjectId && z.Users.Any(c=>c.Id==user.Id)) ).ToList();
                 tickets = db.Tickets.Where(t => t.AssignedToUserId == loggedInUser).ToList();
             }
             else if(User.IsInRole("Project Manager"))
             {
-                ICollection<Project> projects = projectHelper.ListUserProjects(loggedInUser);
+                var userId = User.Identity.GetUserId();
 
-                foreach (var project in projects)
-                {
-                    foreach (var tick in project.Tickets)
-                    {
-                        tickets.Add(tick);
-                    }
-                }
+                var user = db.Users.Find(userId);
+
+                tickets.AddRange(user.Projects.SelectMany(p => p.Tickets));
+
+                //ICollection<Project> projects = projectHelper.ListUserProjects(loggedInUser);
+
+                //foreach (var project in projects)
+                //{
+                //    foreach (var tick in project.Tickets)
+                //    {
+                //        tickets.Add(tick);
+                //    }
+                //}
             }
 
             ticketsVM.Tickets = tickets;

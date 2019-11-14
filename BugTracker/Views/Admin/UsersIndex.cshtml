@@ -1,4 +1,28 @@
-﻿@model IEnumerable <BugTracker.ViewModels.IndexUsersViewModel>
+﻿@model IEnumerable<BugTracker.ViewModels.IndexUsersViewModel>
+
+
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark" style="font-weight:bolder; font-size:3.0rem;">Users List</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item active"></li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+
+
+
 
 <div class="card-body">
     <table id="UsersIndex" class="table table-bordered table-hover table-striped" style="width:100%">
@@ -26,7 +50,7 @@
                 <th>
                     Actions
                 </th>
-                
+
 
             </tr>
         </thead>
@@ -40,7 +64,7 @@
                     </td>
                     <td>
                         @Html.DisplayFor(item => userInfo.User.FirstName)
-                      
+
                     </td>
                     <td class="target_project_name">
                         @Html.DisplayFor(item => userInfo.User.LastName)
@@ -54,7 +78,7 @@
                     <td class="target_ticket_title">
                         @foreach (var project in userInfo.Projects)
                         {
-                          @project.Name<br />
+                            @project.Name<br />
                         }
                     </td>
 
@@ -79,7 +103,7 @@
         </tbody>
         <thead>
             <tr>
-                
+
                 <th>
                     Avatar
                 </th>

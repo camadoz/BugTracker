@@ -33,47 +33,261 @@
     <link href="~/Content/adminlte.min.css" rel="stylesheet" />
     <!-- Google Font: Source Sans Pro -->
     <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+  <style>
+      body{
+          background-image:url(/Images/Abstract-Background-White.jpg);
+      }
+  </style>
 </head>
 <body class="hold-transition ">
     <div class="">
         <div class="login-logo mt-5">
             <a href="../../index2.html"><b>Bug</b>TRACKER</a>
         </div>
-       
+
+        <div class="row mb-5">
+            <div class="col-md-12 text-center h1">
+                Demo Logins
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+  
+
+            <div class="offset-md-2 col-md-2">
+
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Demo Administrator Login</h3>
+                    </div>
+
+                    <div class="col-md-12">
+
+                        <div class="ui message">
+                            <div class="header h5 mt-4 ml-3">
+                                <span id="user_name"><b>Privileges:</b></span>
+                            </div>
+
+                            <input type="hidden" id="userID" name="userID" value="" />
+
+                            <ul class="list">
+                                <li> Has highest privileges.</li>
+                                <li> Can do everything except create tickets.</li>
+                                <li> Automatically added to every project.</li>
+                                <li> Only one who can assign a user to a role.</li>
+                                <li> Only one who can see all notifications.</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                   
+
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+
+
+                            @using (Html.BeginForm("DemoLoginAsync", "Account", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("DemoEmail", "DemoAdminEmail")
+
+                                <button type="submit" class="btn btn-info">Login</button>
+
+                            }
+
+                        </div>
+                        <!-- /.card-footer -->
+                
+                </div>
+
+
+
+
+
+
+
+
+            </div>
+            <div class="col-md-2">
+
+
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">Demo Project Manager Login</h3>
+                    </div>
+                    <div class="col-md-12">
+
+                        <div class="ui message">
+                            <div class="header h5 mt-4 ml-3">
+                                <span id="user_name"><b>Privileges:</b></span>
+                            </div>
+
+                            <input type="hidden" id="userID" name="userID" value="" />
+
+                            <ul class="list">
+                                <li> Receives notification of a new ticket.</li>
+                                <li> Assigns tickets to Developers on his/her projects.</li>
+                                <li> Has many of the same privileges as Administrator.</li>
+                                <li> Scope of privileges limited to his/her projects.</li>
+                                <li> Archives Projects and Tickets when complete</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                   
+
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            @using (Html.BeginForm("DemoLoginAsync", "Account", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("DemoEmail", "DemoProjectManagerEmail")
+
+                                <button type="submit" class="btn btn-info" disabled>Login</button>
+
+                            }
+
+                        </div>
+                        <!-- /.card-footer -->
+                 
+                </div>
+
+
+
+
+
+
+            </div>
+            <div class="col-md-2">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Demo Developer Login</h3>
+                    </div>
+                    <div class="col-md-12">
+
+                        <div class="ui message">
+                            <div class="header h5 mt-4 ml-3">
+                                <span id="user_name"><b>Privileges:</b></span>
+                            </div>
+
+                            <input type="hidden" id="userID" name="userID" value="" />
+
+                            <ul class="list">
+                                <li> Does coding and testing on tickets.</li>
+                                <li>  Responsible for updating "% Done" on each ticket.</li>
+                                <li> Sends notification to Project Manager when ticket complete.</li>
+                                <li>  Scope of privileges limited to his/her tickets.</li>
+                                <li> Reports to the Project Manager(s) who assigned the tickets.</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                   
+
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            @using (Html.BeginForm("DemoLoginAsync", "Account", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("DemoEmail", "DemoDeveloperEmail")
+
+                                <button type="submit" class="btn btn-info">Login</button>
+
+                            }
+
+                        </div>
+                        <!-- /.card-footer -->
+                   
+                </div>
+            </div>
+
+
+            <div class="col-md-2">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">Demo Submitter Login</h3>
+                    </div>
+                    <div class="col-md-12">
+
+                        <div class="ui message">
+                            <div class="header h5 mt-4 ml-3">
+                                <span id="user_name"><b>Privileges:</b></span>
+                            </div>
+
+                            <input type="hidden" id="userID" name="userID" value="" />
+
+                            <ul class="list">
+                                <li>  Process begins with the Submitter.</li>
+                                <li>Is the only one who can create a ticket.</li>
+                                <li>Only creates tickets for projects he/she is on.</li>
+                                <li>  Is the "Owner" of every ticket he/she creates.</li>
+                                <li>Notifies Project Manager(s) of the new ticket.</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                  
+
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            @using (Html.BeginForm("DemoLoginAsync", "Account", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("DemoEmail", "DemoSubmitterEmail")
+
+                                <button type="submit" class="btn btn-info" disabled>Login</button>
+
+                            }
+
+                        </div>
+                        <!-- /.card-footer -->
+                
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
         <!-- /.login-logo -->
-        <div class="card">
-            
+        @*<div class="card">
+
             <div class="container">
                 <div class="row mb-5">
                     <div class="col-md-12 text-center h1">
-                       Demo Logins
+                        Demo Logins
 
                     </div>
-                    
+
                 </div>
                 <div class="row">
-                    <div class="col-md-3">
-                        @using (Html.BeginForm("DemoLoginAsync", "Account", FormMethod.Post))
-                        {
-                            @Html.AntiForgeryToken()
-                            @Html.Hidden("DemoEmail", "DemoAdminEmail")
-
-                            <section class="panel">
-                                <header class="panel-heading bg-white">
-                                    <div class="panel-heading-icon bg-primary mt-sm">
-                                        <i class="fa fa-user"></i>
-                                    </div>
-                                </header>
-                                <div class="panel-body">
-                                    <h3 class="text-semibold mt-none text-center">Demo Admin</h3>
-                                    <p class="text-center">Logging in as the Demo Admin gives you full access to the BugTracker's suite of functionality...</p>
-                                    <button type="submit" class="btn btn-xs btn-primary">Login</button>
-                                </div>
-                            </section>
 
 
-                        }
-                    </div>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -144,7 +358,12 @@
             </div>
 
 
-        </div>
+        </div>*@
+
+
+
+
+
     </div>
     <!-- /.login-box -->
     <!-- jQuery -->

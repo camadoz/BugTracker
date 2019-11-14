@@ -24,6 +24,7 @@ namespace BugTracker.Helpers
 
             //"Submitter" ==> SystemRole.Submitter          
             var stringRole = RoleHelper.ListUserRoles(userId).FirstOrDefault();
+            stringRole = stringRole == "Project Manager" ? "ProjectManager" : stringRole;
 
             if (!string.IsNullOrEmpty(stringRole))
                 CurrentRole = (SystemRole)Enum.Parse(typeof(SystemRole), stringRole);

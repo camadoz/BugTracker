@@ -232,7 +232,7 @@
                             {
                                 <i>Developer</i>
                             }
-                            else if (User.IsInRole("Sumitter"))
+                            else if (User.IsInRole("Submitter"))
                             {
                                 <i>Submitter</i>
                             }
@@ -326,8 +326,8 @@
 
                         @if (User.IsInRole("Submitter"))
                         {
-                            <li class="nav-item">
-                                <a href="@Url.Action("Create", "Tickets")" class="nav-link">
+                            <li class="nav-item "  >
+                                <a href="@Url.Action("Create", "Tickets")" id="leftNavCreateTicket" class="nav-link">
                                     <i class="nav-icon fas fa-book"></i>
                                     <p>Create a Ticket</p>
                                 </a>
