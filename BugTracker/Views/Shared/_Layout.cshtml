@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
 @using BugTracker.Models
 @using BugTracker.Helpers
+
 @{
     ApplicationUser user = null;
     var userId = User.Identity.GetUserId();
@@ -13,9 +14,9 @@
     NotificationHelper notificatinHelper = new NotificationHelper();
 }
 
-
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -48,7 +49,7 @@
 
     <link href="~/Content/daterangepicker.css" rel="stylesheet" />
     <!-- summernote -->
-  
+
     <link href="~/Content/summernote-bs4.css" rel="stylesheet" />
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
@@ -57,26 +58,26 @@
 
     <link href="~/Content/Site.css" rel="stylesheet" />
     <link href="~/Content/toastr.min.css" rel="stylesheet" />
-
+    @RenderSection("Styless", required: false)
 </head>
 
 <!--  Toaster for Modelas  -->
 @*<div class="toast2" style="position: absolute; top: 150px; right: 420px; z-index:25">
-    <div class="toast-header" style="background-color:dimgray">
+        <div class="toast-header" style="background-color:dimgray">
 
-        <strong class="mr-auto">Bootstrap</strong>
-        <small>11 mins ago</small>
-        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="toast-body">
-        Hello, world! This is a toast message. dfgdfgsdfgsdf dfgsdfg
-        dsfgdsfgdsfgdfgdfg
-        dfgdsfgdfgdfg
-        <p>dsfhkjhdsfljahsdfjh;kasdjfkasdjfk asdkfjkajsdfkjas;lkdjflksd</p>
-    </div>
-</div>*@
+            <strong class="mr-auto">Bootstrap</strong>
+            <small>11 mins ago</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body">
+            Hello, world! This is a toast message. dfgdfgsdfgsdf dfgsdfg
+            dsfgdsfgdsfgdfgdfg
+            dfgdsfgdfgdfg
+            <p>dsfhkjhdsfljahsdfjh;kasdjfkasdjfk asdkfjkajsdfkjas;lkdjflksd</p>
+        </div>
+    </div>*@
 
 <body class="hold-transition sidebar-mini layout-fixed">
 
@@ -108,48 +109,52 @@
                 </div>
             </form>
 
+
+
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <!-- Messages Dropdown Menu -->
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-comments"></i>
-                        <span class="badge badge-danger navbar-badge">@notificatinHelper.GetUnreadUserNotifications().Count()</span>
+                        <span class="badge badge-danger navbar-badge">@notificatinHelper.GetUnreadUserNotifications().Count() </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 
 
-                        @foreach (var notification in notificatinHelper.GetUnreadUserNotifications())
-                        {
-                            using (Html.BeginForm("Dismiss", "TicketNotifications", FormMethod.Post))
+                            @foreach (var notification in notificatinHelper.GetUnreadUserNotifications())
                             {
-                                @Html.AntiForgeryToken()
-                                @Html.Hidden("id", notification.Id)
+                                using (Html.BeginForm("Dismiss", "TicketNotifications", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("id", notification.Id)
 
 
-                                <a href="#" class="dropdown-item">
-                                    <!-- Message Start -->
-                                    <div class="media">
-                                        <img src="@notification.Sender.AvatarUrl" alt="@notification.Sender.FullName" class="img-size-50 mr-3 img-circle">
-                                        <div class="media-body">
-                                            <h3 class="dropdown-item-title">
-                                                @notification.Sender.FullName
-                                                <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                            </h3>
-                                            <p class="text-sm"> @notification.NotificationBody</p>
-                                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> @notification.Created.ToString("MMM dd, yyyy")</p>
+                                    <a href="#" class="dropdown-item">
+                                        <!-- Message Start -->
+                                        <div class="media">
+                                            <img src="@notification.Sender.AvatarUrl" alt="@notification.Sender.FullName" class="img-size-50 mr-3 img-circle">
+                                            <div class="media-body">
+                                                <h3 class="dropdown-item-title">
+                                                    @notification.Sender.FullName
+                                                    <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                                                </h3>
+                                                <p class="text-sm"> @notification.NotificationBody</p>
+                                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> @notification.Created.ToString("MMM dd, yyyy")</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <!-- Message End -->
-                                </a>
+                                        <!-- Message End -->
+                                    </a>
 
-                                <button type="submit" class="ui btn-block mb-1">Dismmiss</button>
-                                <div class="dropdown-divider"></div>
+                                    <button type="submit" class="ui btn-block mb-1">Dismmiss</button>
+                                    <div class="dropdown-divider"></div>
+
+                                }
+
 
                             }
+                       
 
-
-                        }
 
 
                         <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
@@ -202,53 +207,54 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link">
+            <a href="index3.html" class="brand-link text-center h2">
                 @*<img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-                     style="opacity: .8">*@
-                <span class="brand-text font-weight-light">BugTraker</span>
+                    style="opacity: .8">*@bug<b>Tracker</b>
+                @*<span class="brand-text font-weight-light">Bug<b>Traker</b></span>*@
             </a>
 
             <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    @*<div class="image">
-                            <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-                        </div>*@
+                    <div class="image">
+                        <img src="@user.AvatarUrl" alt="@user.FullName" class="img-circle" data-lock-picture="@user.AvatarUrl" />
+                    </div>
+
                     <div class="info">
                         <a href="#" class="d-block">
-                            <img src="@user.AvatarUrl" alt="@user.FullName" class="img-circle" data-lock-picture="@user.AvatarUrl" />
-                            @user.FirstName @user.LastName  @if (User.IsInRole("Admin"))
+
+                            <b> @user.FirstName @user.LastName</b> <br />  @if (User.IsInRole("Admin"))
                             {
-                                <b>- Admin </b>
+                                <i>Admin </i>
                             }
                             else if (User.IsInRole("Developer"))
                             {
-                                <b>- Developer</b>
+                                <i>Developer</i>
                             }
                             else if (User.IsInRole("Sumitter"))
                             {
-                                <b>Submitter</b>
+                                <i>Submitter</i>
                             }
                             else if (User.IsInRole("Project Manager"))
                             {
-                                <b>Project Manager</b>
+                                <i>Project Manager</i>
                             }
                             else if (User.IsInRole("DemoAdmin"))
                             {
-                                <b>Demo Admin</b>
+                                <i>Demo Admin</i>
                             }
-                            else if (User.IsInRole("DemoDeveloper Manager"))
-                            { 
-                            <b>Demo Developer</b>
+                            else if (User.IsInRole("DemoDeveloper"))
+                            {
+                                <i>Demo Developer</i>
                             }
                             else if (User.IsInRole("DemoPM"))
                             {
-                                <b>Demo Project Manager</b>
+                                <i>Demo Project Manager</i>
                             }
                             else if (User.IsInRole("DemoSubmitter"))
                             {
-                                <b>Demo Submitter</b>
+                                <i>Demo Submitter</i>
                             }
                         </a>
                     </div>
@@ -258,7 +264,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
-    with font-awesome or any other icon font library -->
+                        with font-awesome or any other icon font library -->
                         <li class="nav-header h3">GENERAL</li> <!--          PROJECT SECTION                   -->
                         <li class="nav-item">
                             <a href="@Url.Action("Dashboard", "Home")" class="nav-link">
@@ -339,7 +345,7 @@
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper" style="background-color:white;">
-           
+
 
 
             @RenderBody()
@@ -408,7 +414,7 @@
 
     <script src="~/Scripts/adminlte.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    
+
     <script src="~/Scripts/toastr.min.js"></script>
     <script src="~/Scripts/summernote-bs4.min.js"></script>
     <script src="~/Scripts/jquery.dataTables.js"></script>
@@ -420,8 +426,8 @@
     @*<script src="dist/js/demo.js"></script>*@
     <script src="~/Scripts/semantic.min.js"></script>
     <script src="~/Scripts/sweetalert2.min.js"></script>
-    
-   
+
+
     <script>
         $(function () {
             $("#ticketsTable, #UsersIndex,#projectsTable").DataTable();
@@ -437,7 +443,7 @@
         });
 
 
- 
+
 
     </script>
 </body>

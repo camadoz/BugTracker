@@ -11,6 +11,8 @@ using Microsoft.Owin.Security;
 using BugTracker.Models;
 using BugTracker.Helpers;
 using System.IO;
+using System.Web.Configuration;
+
 
 namespace BugTracker.Controllers
 {
@@ -54,12 +56,36 @@ namespace BugTracker.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DemoLoginAsync(string DemoEmail)
+        {
+            var email = WebConfigurationManager.AppSettings[DemoEmail];
+            var password = WebConfigurationManager.AppSettings["DemoPassword"];
+
+            var result = await SignInManager.PasswordSignInAsync(email, password, false, shouldLockout: false);
+
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToAction("Dashboard", "Home");
+                case SignInStatus.Failure:
+                default:
+                    return RedirectToAction("Login", "Home");
+            }
+        }
+
+
+
+
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
+            //ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -182,7 +208,7 @@ namespace BugTracker.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -195,7 +221,7 @@ namespace BugTracker.Controllers
                     
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking " + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Dahboard", "Home");
+                    return RedirectToAction("Dashboard", "Home");
                 }
                 AddErrors(result);
             }
@@ -486,9 +512,10 @@ namespace BugTracker.Controllers
         {
             if (Url.IsLocalUrl(returnUrl))
             {
-                return Redirect(returnUrl);
+                return RedirectToAction("Login", "Home");
+                //return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Home");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

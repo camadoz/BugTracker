@@ -15,6 +15,7 @@ using Microsoft.AspNet.Identity;
 
 namespace BugTracker.Controllers
 {
+    
     public class TicketsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

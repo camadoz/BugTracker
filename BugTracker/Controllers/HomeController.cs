@@ -12,6 +12,8 @@ using Newtonsoft.Json;
 
 namespace BugTracker.Controllers
 {
+    [Authorize]
+    [RequireHttps]
     public class HomeController : Controller
     {
 
@@ -27,6 +29,11 @@ namespace BugTracker.Controllers
             {
                 _signInManager = value;
             }
+        }
+        [AllowAnonymous]
+        public ActionResult DemoUser()
+        {
+            return View();
         }
 
 
@@ -48,7 +55,7 @@ namespace BugTracker.Controllers
         {
             return View();
         }
-
+        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
@@ -94,18 +101,13 @@ namespace BugTracker.Controllers
             //return Json(new { Name = project.Name, Description = project.Description, Created = project.Created.ToString("MMM dd,yyyy"), projectID, userId });
         }
 
+        
         public ActionResult Dashboard()
         {
 
             DashBoardVewModel dashboard = new DashBoardVewModel();
             ApplicationDbContext db = new ApplicationDbContext();
             dashboard.Notifications = db.TicketNotifications.Where(t => t.isRead == false).ToList();
-
-
-
-
-
-
 
             return View(dashboard);
         }
@@ -117,6 +119,7 @@ namespace BugTracker.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult Login()
         {
             return View();

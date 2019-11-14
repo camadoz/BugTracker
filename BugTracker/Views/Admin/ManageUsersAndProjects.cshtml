@@ -128,12 +128,12 @@
             <div class="card-body">
                 <div class="callout callout-success">
 
-                    <h5>@userInfo.User.FullName -- @userInfo.role.First()</h5>
+                    <h5>@userInfo.User.FullName -- @userInfo.role.FirstOrDefault()</h5>
 
                     <img src="@userInfo.User.AvatarUrl" style="width:15%;" alt="@userInfo.User.FullName" class="img-circle" data-lock-picture="@userInfo.User.AvatarUrl" />
 
 
-                    <button type="button" class="ui mini orange button ml-3 btnClickable" data-email="@userInfo.User.Email" data-toggle="modal" data-target="#assignProject" data-role="@userInfo.role.First()" data-id="@userInfo.User.Id" data-name="@userInfo.User.FirstName @userInfo.User.LastName">
+                    <button type="button" class="ui mini orange button ml-3 btnClickable" data-email="@userInfo.User.Email" data-toggle="modal" data-target="#assignProject" data-role="@userInfo.role.FirstOrDefault()" data-id="@userInfo.User.Id" data-name="@userInfo.User.FirstName @userInfo.User.LastName">
                         Assign Project
                     </button>
                     <p>

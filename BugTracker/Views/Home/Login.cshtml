@@ -2,7 +2,7 @@
 @model LoginViewModel
 
 @{
-    Layout = "";
+    Layout = null;
 }
 
 <!DOCTYPE html>
@@ -97,6 +97,9 @@
                 </p>
                 <p class="mb-0">
                     <a href="@Url.Action("Register","Account")" l" class="text-center">Register a new membership</a>
+                </p>
+                <p class="mb-0">
+                    <a href="@Url.Action("DemoUser","Home")" l" class="text-center">Login as a Demo User</a>
                 </p>
             </div>
             <!-- /.login-card-body -->

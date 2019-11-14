@@ -50,3 +50,11 @@ body.modal-open {
 body{
     background-color:white;
 }
+
+.urgent_ticket{
+    background-color:red;
+}
+
+td{
+    padding:1em;
+}

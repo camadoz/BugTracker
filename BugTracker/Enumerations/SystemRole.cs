@@ -11,6 +11,8 @@ namespace BugTracker.Enumerations
         ProjectManager,
         Submitter,
         Developer,
+        DemoAdmin,
+        DemoDeveloper,
         None
     }
 }

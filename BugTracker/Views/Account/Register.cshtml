@@ -44,6 +44,14 @@
 
 
                     @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <div class="input-group mb-3">
+                        <input name="DisplayName" type="text" class="form-control" placeholder="Display Name">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="input-group mb-3">
                         <input name="FirstName" type="text" class="form-control" placeholder="First name">
