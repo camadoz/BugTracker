@@ -1,12 +1,25 @@
 ﻿@model BugTracker.ViewModels.IndexTicketViewModel
 @using Microsoft.AspNet.Identity;
 
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark" style="font-weight:bolder; font-size:3.0rem;">Ticket Dashboard</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
 
+                    <li class="breadcrumb-item active"></li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
 
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 
 @section Styless
 {
@@ -207,7 +220,7 @@
                 <th class="hide" style="display:none;visibility:hidden;">TicketPriority ID</th>
                 <th class="hide" style="display:none;visibility:hidden;">TicketStatus ID</th>
                 <th class="hide" style="display:none;visibility:hidden;">TicketType ID</th>
-                <th>Summitter</th>
+                <th>Submitter</th>
                 <th width="5%">
                     User Assigned
                 </th>
@@ -245,7 +258,7 @@
                 if (item.TIcketStatus.Name == "open" && item.TicketPriority.Name == "Urgent")
                 {
 
-                    <tr style="background-color:#FCD7D7" >
+                    <tr style="background-color:#FCD7D7">
 
                         <td class="target_id" style="display:none;visibility:hidden;">
                             @Html.DisplayFor(modelItem => item.Id)
@@ -331,7 +344,7 @@
                         <td>
                             @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
                             {
-                                @Html.ActionLink("Edit", "Edit", "Tickets", new { id = item.Id }, new { @class = "ui mini orange  button ticket_edit_btn" })
+                            <button class="ticket_edit_btn ui mini orange button" data-toggle="modal" data-target="#editTicketModal">Edit</button>
                                 @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
 
 
@@ -426,13 +439,13 @@
                             @Html.Raw(item.Created.ToString("MMM dd,yyyy"))
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Updated)
+                            @Html.Raw(item.Created.ToString("MMM dd,yyyy"))
                         </td>
 
                         <td>
                             @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
                             {
-                                @Html.ActionLink("Edit", "Edit", "Tickets", new { id = item.Id }, new { @class = "ui mini orange  button" })
+                            <button class="ticket_edit_btn ui mini orange button" data-toggle="modal" data-target="#editTicketModal">Edit</button>
                                 @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
 
 
@@ -527,13 +540,13 @@
                             @Html.Raw(item.Created.ToString("MMM dd,yyyy"))
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Updated)
+                            @Html.Raw(item.Created.ToString("MMM dd,yyyy"))
                         </td>
 
                         <td>
                             @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
                             {
-                                <button class="ticket_edit_btn" data-toggle="modal" data-target="#editTicketModal">TEST</button>
+                                <button class="ticket_edit_btn ui mini orange button" data-toggle="modal" data-target="#editTicketModal">Edit</button>
                                 @*@Html.ActionLink("Edit", "Edit", "Tickets", new { id = item.Id }, new { @class = "ui mini orange  button ticket_edit_btn" })*@
 
                                 @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
@@ -566,7 +579,7 @@
                 <th class="hide" style="display:none;visibility:hidden;">TicketPriority ID</th>
                 <th class="hide" style="display:none;visibility:hidden;">TicketStatus ID</th>
                 <th class="hide" style="display:none;visibility:hidden;">TicketType ID</th>
-                <th>Summitter</th>
+                <th>Submitter</th>
                 <th width="5%">
                     User Assigned
                 </th>
@@ -818,22 +831,7 @@
 
 
 
-        $(function () {
-            var on = false;
-            window.setInterval(function () {
-
-                on = !on;
-                if (on) {
-                    $('.urgent').addClass('urgent_ticket')
-                }
-                else {
-                    $('urgent_ticket').removeClass('urgent_ticket')
-                }
-
-
-            }, 2000);
-
-        });
+        
 
 
 

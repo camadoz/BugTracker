@@ -19,18 +19,64 @@
 <!-- /.content-header -->
 <!-- Main content -->
 
-<div class="container">
-    <div class="row">
 
-        <div class="col-md-6">
+    <div class="row mt-5">
+
+
+
+        <div class="offset-1 col-md-4">
             <div class="card card-primary">
                 <div class="card-header">
 
                     
                     <h3 class="card-title">Users </h3>
                 </div>
-                <!-- /.card-header -->
+                
                 <div class="card-body">
+
+
+
+                    @*<div class="card-body">
+
+                        <table id="usersAvailable" class="h3 table table-bordered table-hover table-striped" style="cursor: pointer;">
+                            <thead>
+                                <tr>
+                                    <th>@Html.DisplayName("User Name")</th>
+                                    <th>Email</th>
+                                 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var user in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(model => user.UserName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(model => user.email)
+                                        </td>
+
+                                    </tr>
+
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>@Html.DisplayName("User Name")</th>
+                                    <th>Email</th>
+      
+                                </tr>
+                            </tfoot>
+
+                        </table>
+                    </div>*@
+
+
+
+
+
+
 
                     <div class="row">
                         <div class="col-md-12 mb-3">
@@ -53,10 +99,10 @@
                                 <img src="~/Images/icons8-number-2-48.png" /><span style="font-size:1.6rem; font-weight:bold;"> Select a role for the users selected above</span>
                             </div>
                         </div>
-                        
+
                         <div class="row mt-3">
                             <div class="col-md-12">
-                                @Html.DropDownList("Role", null, "-- Select A Role --", new { style = "font-size: 1.8rem;" })
+                                @Html.DropDownList("Role", null, "-- No Role --", new { style = "font-size: 1.8rem;" })
                             </div>
                         </div>
 
@@ -69,7 +115,7 @@
                     }
 
                 </div>
-                <!-- /.card-body -->
+               
                 
                 <div class="card-footer">
 
@@ -77,33 +123,20 @@
 
             </div>
         </div>
-        <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
-            <div class="toast" style="position: absolute; top: 0; right: 0;">
-                <div class="toast-header">
-                    <img src="..." class="rounded mr-2" alt="...">
-                    <strong class="mr-auto">Bootstrap</strong>
-                    <small>11 mins ago</small>
-                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="toast-body">
-                    Hello, world! This is a toast message.
-                </div>
-            </div>
-        </div>
 
-        <div class="col-md-6">
+
+
+        <div class="col-md-6 ">
             <div class="card card-primary">
                 <div class="card-header">
 
 
-                    <h3 class="card-title">Assign Roles To Users</h3>
+                    <h3 class="card-title">Users and Roles Information</h3>
                 </div>
-                <!-- /.card-header -->
+                 
                 <div class="card-body">
 
-                    <table class="table table-bordered table-hover table-striped">
+                    <table class="table table-bordered table-hover table-striped h4">
                         <tr>
                             <th>@Html.DisplayName("User Name")</th>
                             <th>Email</th>
@@ -128,7 +161,7 @@
 
                     </table>
                 </div>
-                <!-- /.card-body -->
+               
 
                 <div class="card-footer">
 
@@ -138,19 +171,27 @@
 
         </div>
     </div>
-</div>
-<button type="button"
-        class="btn btn-primary"
-        id="myBtn">
-    Show Toast
-</button>
+
+
 @section scripts    {
     <script>
 
-        $('#Role').change(function () {
-            selectVal = $('#Role').val();
+        //$('#Role').change(function () {
+        //    selectVal = $('#Role').val();
 
-            if (selectVal == 0) {
+        //    if (selectVal == 0) {
+        //        $('#assignRole').prop("disabled", true);
+        //    }
+        //    else {
+        //        $('#assignRole').prop("disabled", false);
+        //    }
+        //});
+
+
+        $('#UsersIds').change(function () {
+           var selectVal = $('#UsersIds').val();
+            
+            if (selectVal == "") {
                 $('#assignRole').prop("disabled", true);
             }
             else {
@@ -159,12 +200,23 @@
         });
 
 
-
         $("#myBtn").click(function () {
             $('.toast').toast('show');
         });
 
 
+
+
+            //$('#ticketsTable').DataTable({
+            //    "retrieve": true,
+            //    "paging": true,
+            //    "lengthChange": false,
+            //    "searching": true,
+            //    "ordering": true,
+            //    "info": true,
+            //    "autoWidth": false,
+            //});
+      
 
 
     </script>

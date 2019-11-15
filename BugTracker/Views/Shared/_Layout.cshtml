@@ -267,7 +267,7 @@
                         with font-awesome or any other icon font library -->
                         <li class="nav-header h3">GENERAL</li> <!--          PROJECT SECTION                   -->
                         <li class="nav-item">
-                            <a href="@Url.Action("Dashboard", "Home")" class="nav-link">
+                            <a href="@Url.Action("Dashboard", "Home")" class="nav-link" id="leftNavDashboard" >
                                 <i class="nav-icon fas fa-book"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -440,9 +440,22 @@
             //    "info": true,
             //    "autoWidth": false,
             //});
+
+           $("#usersAvailable").DataTable({
+              select: {
+              style: 'multi',
+                   autoFill: true,
+                   
+               },
+               paging: false,
+               ordering: false,
+               searching: false,
+               info: false,
+               
+          });
         });
 
-
+                
 
 
     </script>
