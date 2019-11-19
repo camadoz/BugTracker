@@ -115,26 +115,27 @@
                     {
 
                         <div class="info-box">
-                            <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
+                            <span class="info-box-icon bg-info"><i class="far fa-user"></i></span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">Messages</span>
-                                <span class="info-box-number">1,410</span>
+                                <div class="row">
+                                    <div class="col-md-2 text-right bold" style="font-size:1.2rem;">
+
+                                        <img src="@user.AvatarUrl" style="width:65%;" alt="@user.FullName" class="img-circle text-right" data-lock-picture="@user.AvatarUrl" />
+
+                                    </div>
+                                    <div class="col-md-10 text-left">
+                                        <h3>@user.FullName</h3>
+                                        @roleHelper.ListUserRoles(user.Id).FirstOrDefault()
+                                    </div>
+                                </div>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
 
 
                         <div class="row mb-1" style="font-size:1.2rem;">
-                            <div class="col-md-2 text-right bold" style="font-size:1.2rem;">
 
-                                <img src="@user.AvatarUrl" style="width:65%;" alt="@user.FullName" class="img-circle text-right" data-lock-picture="@user.AvatarUrl" />
-
-                            </div>
-                            <div class="col-md-8 text-left">
-                                <h3>@user.FullName</h3>
-                                @roleHelper.ListUserRoles(user.Id).FirstOrDefault()
-                            </div>
                         </div>
 
                     }

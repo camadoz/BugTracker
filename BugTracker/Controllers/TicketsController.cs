@@ -31,7 +31,8 @@ namespace BugTracker.Controllers
         {
             var tickets = new List<Ticket>();
             var ticketsVM = new IndexTicketViewModel();
-
+            //var users = roleHelper.UsersInRole("Developer");
+            //var userOnCurrentProject = projectHelper.UsersInProject()
             ViewBag.AssignedToUserId = new SelectList(roleHelper.UsersInRole("Developer"), "Id", "FirstName");
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name");
@@ -43,20 +44,20 @@ namespace BugTracker.Controllers
             ViewBag.UsersIds = new MultiSelectList(db.Users, "Id", "FullName");
             var loggedInUser = User.Identity.GetUserId();
             
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole("Admin") || User.IsInRole("DemoAdmin"))
             {
                 //tickets = db.Tickets.Include(t => t.AssignedToUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TIcketStatus).Include(t => t.TicketType).ToList();
                 tickets = db.Tickets.OrderByDescending(t => t.TicketPriorityId).ToList();
             }
-            else if (User.IsInRole("Submitter"))
+            else if (User.IsInRole("Submitter") || User.IsInRole("DemoSubmitter"))
             {
                 tickets = db.Tickets.Where(t => t.OwnerUserId == loggedInUser).ToList();
             }
-            else if (User.IsInRole("Developer"))
+            else if (User.IsInRole("Developer") || User.IsInRole("DemoDeveloper"))
             {
                 tickets = db.Tickets.Where(t => t.AssignedToUserId == loggedInUser).ToList();
             }
-            else if(User.IsInRole("Project Manager"))
+            else if(User.IsInRole("Project Manager") || User.IsInRole("Admin"))
             {
                 var userId = User.Identity.GetUserId();
 
@@ -84,6 +85,8 @@ namespace BugTracker.Controllers
         // GET: Tickets/Details/5
         public ActionResult Details(int? id)
         {
+
+            ViewBag.AssignedToUserId = new SelectList(roleHelper.UsersInRole("Developer"), "Id", "FirstName");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -117,6 +120,7 @@ namespace BugTracker.Controllers
 
             if (ModelState.IsValid)
             {
+               
 
                 ticket.Created = DateTime.Now;
                 ticket.TicketStatusId = db.TicketStatus.FirstOrDefault(t => t.Name == "open").Id;
@@ -326,9 +330,11 @@ namespace BugTracker.Controllers
             if (userId != null && ticket != null )
             { 
                 ticket.AssignedToUserId = userId;
-
-
+                ticket.Updated = DateTime.Now;
+                ticket.TicketStatusId =db.TicketStatus.FirstOrDefault(t => t.Name == "Assigned").Id;
+                db.SaveChanges();
                 notificationHelper.ManageNotifications(oldTicket, ticket);
+                ticketHistoryHeler.RecordHistoricalChanges(oldTicket, ticket);
                 var callbackUrl = Url.Action("Details","Tickets",new{ id = ticket.Id },protocol: Request.Url.Scheme);
 
                 try
@@ -347,7 +353,7 @@ namespace BugTracker.Controllers
                     await Task.FromResult(0);
                 }
 
-                db.SaveChanges();
+               
             }
 
             return 4;

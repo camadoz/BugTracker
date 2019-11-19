@@ -87,10 +87,14 @@
                         <!-- /.card-body -->
 
                         <div class="card-footer">
-                            <button type="submit" class="ui blue button">Update</button>
+                            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
+                            {
+                                <button type="submit" class="ui blue button">Update</button>
+                                @Html.ActionLink("Change Password", "ChangePassword", "Manage", null, new { @class = "ui  orange  button" })
+                            }
 
                             @Html.ActionLink("Back to Dashboard", "Dashboard", "Home", null, new { @class = "ui  orange  button" })
-                            @Html.ActionLink("Change Password", "ChangePassword", "Manage", null, new { @class = "ui  orange  button" })
+
                         </div>
 
                     </div>
@@ -105,10 +109,15 @@
     </div>
 </div>
 
+@section Scripts{
+
+    <script>
 
 
+        $("#leftNavProfile").addClass("active");
 
-
+</script>
+    }
 
 
 

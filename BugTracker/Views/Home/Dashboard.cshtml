@@ -3,11 +3,11 @@
 @using BugTracker.Helpers
 @using BugTracker.Models
 @using System.Data.Entity.SqlServer
-
-@{ 
+@using Microsoft.AspNet.Identity
+@{
     ApplicationDbContext db = new ApplicationDbContext();
     UserRolesHelper roleHelpser = new UserRolesHelper();
-
+    ProjectsHelper projectHelper = new ProjectsHelper();
 
 }
 <style>
@@ -66,7 +66,7 @@
     <div class="row">
         <div class="col-md-3 col-sm-6 col-12">
             <div class="info-box">
-                <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
+                <span class="info-box-icon bg-info"><i class="far fa-user"></i></span>
 
                 <div class="info-box-content">
                     <span class="info-box-text">Developers</span>
@@ -79,18 +79,86 @@
 
         <div class="col-md-3 col-sm-6 col-12">
             <div class="info-box">
-                <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
+                <span class="info-box-icon bg-info"><i class="far fa-user"></i></span>
 
                 <div class="info-box-content">
-                    <span class="info-box-text">Ticket Open/Unassigned</span>
-                    <span class="info-box-number">@db.Tickets.Where(t => t.TIcketStatus.Name == "open").ToList().Count()</span>
+                    <span class="info-box-text">Project Manager.</span>
+                    <span class="info-box-number">@roleHelpser.UsersInRole("Project Manager").ToList().Count()</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+
+
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-info"><i class="fas fa-tag"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Submitter</span>
+                    <span class="info-box-number">@roleHelpser.UsersInRole("Submitter").ToList().Count()</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-warning"><i class="fas fa-tag"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Tickets in progress.</span>
+                    @*<span class="info-box-number">@db.Tickets.Where(t => t.TIcketStatus.Name == "open").ToList().Count()</span>*@
+                    <span class="info-box-number">@db.Tickets.Where(t => t.TIcketStatus.Name == "In Progress").ToList().Count()</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
             <!-- /.info-box -->
         </div>
     </div>
+   
 
+    <div class="row">
+        <div class="col-md-2">
+            <div class="small-box bg-info">
+                <div class="inner">
+                    <h3>@projectHelper.ListUserProjects(User.Identity.GetUserId()).ToList().Count()</h3>
+
+                    <p>Projects</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <a href="@Url.Action("Index", "Projects")" class="small-box-footer">
+                    More info <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+
+        </div>
+        @if (User.IsInRole("Admin") || User.IsInRole("DemoAdmin"))
+        {
+            <div class="col-md-2">
+                <a href="@Url.Action("Create", "Projects")" class="small-box-footer">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>Create Project</h3>
+
+                            <p>Click Here</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+
+                        <a href="#" class="small-box-footer">
+                            More info <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </a>
+            </div>
+        }
+        </div>
 
 
     <div class="row">
@@ -98,40 +166,80 @@
             <!-- Display Open Tickets unsigned  -->
             <div class="row" style="background-color:white;">
                 <div class="col-md-12 ">
-                    <div class="card card-danger" id="unsignedTickets-card">
-                        <div class="card-header">
-                            <h3 class="card-title">@db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open").ToList().Count() Tickets urgent and open tickets.</h3>  <!--  THIS IS THE COUNT   -->
+                    @if (db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open").ToList().Count() == 0)
+                    {
+                        <div class="card card-danger" id="unsignedTickets-card">
+                            <div class="card-header">
+                                <h3 class="card-title">@db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open").ToList().Count() urgent and open tickets.</h3>  <!--  THIS IS THE COUNT   -->
 
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
-                                </button>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                                <!-- /.card-tools -->
                             </div>
-                            <!-- /.card-tools -->
+                            <!-- /.card-header -->
+                            <div class="card-body">
+
+
+                                @foreach (var ticket in db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open"))
+                                {
+                                    <a href="@Url.Action("Details", "Tickets" , new { id = ticket.Id })">
+                                        <div class="alert alert-primary" role="alert">
+                                            <b><u>Description:</u></b> @ticket.Description &nbsp; <b><u>Created on:</u></b> @ticket.Created &nbsp; <b><u>Title:</u></b>@ticket.Title
+
+                                        </div>
+                                    </a>
+
+
+
+                                }
+
+                            </div>
+                            <!-- /.card-body -->
                         </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-
-                            <div class="urgent">this is a test</div>
-                            @foreach (var ticket in db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open"))
-                            {
-                                <a href="@Url.Action("Details", "Tickets" , new { id = ticket.Id })">
-                                    <div class="alert alert-primary" role="alert">
-                                        <b><u>Description:</u></b> @ticket.Description &nbsp; <b><u>Created on:</u></b> @ticket.Created &nbsp; <b><u>Title:</u></b>@ticket.Title
-
-                                    </div>
-                                </a>
 
 
+                    }
+                    else
+                    {
 
-                            }
+
+                        <div class="card card-danger urgent" id="unsignedTickets-card">
+                            <div class="card-header">
+                                <h3 class="card-title">@db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open").ToList().Count() Tickets urgent and open tickets.</h3>  <!--  THIS IS THE COUNT   -->
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                                <!-- /.card-tools -->
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+
+
+                                @foreach (var ticket in db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open"))
+                                {
+                                    <a href="@Url.Action("Details", "Tickets" , new { id = ticket.Id })">
+                                        <div class="alert alert-primary" role="alert">
+                                            <b><u>Description:</u></b> @ticket.Description &nbsp; <b><u>Created on:</u></b> @ticket.Created &nbsp; <b><u>Title:</u></b>@ticket.Title
+
+                                        </div>
+                                    </a>
 
 
 
+                                }
 
+                            </div>
+                            <!-- /.card-body -->
                         </div>
-                        <!-- /.card-body -->
-                    </div>
+
+                    }
+
 
                 </div>
             </div>
@@ -183,7 +291,7 @@
         <div class="col-md-6">
             <div class="row" style="background-color:white;">
                 <div class="col-md-12 ">
-                    <div class="card card-info" id="unsignedTickets-card">
+                    <div class="card card-info" id="mostRecentTicket-card">
                         <div class="card-header">
                             <h3 class="card-title">Most recent tickets created.</h3>  <!--  THIS IS THE COUNT   -->
 
@@ -196,16 +304,16 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-     
+
 
                             @foreach (var ticket in db.Tickets.OrderByDescending(t => t.Created).Take(5).ToList())
                             {
-                            <a href="@Url.Action("Details", "Tickets" , new { id = ticket.Id })">
-                                <div class="alert alert-primary" role="alert">
-                                    <b><u>Description:</u></b> @ticket.Description &nbsp; <b><u>Created on:</u></b> @ticket.Created &nbsp; <b><u>Title:</u></b>@ticket.Title
+                                <a href="@Url.Action("Details", "Tickets" , new { id = ticket.Id })">
+                                    <div class="alert alert-primary" role="alert">
+                                        <b><u>Description:</u></b> @ticket.Description &nbsp; <b><u>Created on:</u></b> @ticket.Created &nbsp; <b><u>Title:</u></b>@ticket.Title
 
-                                </div>
-                            </a>
+                                    </div>
+                                </a>
                             }
 
                         </div>
@@ -353,8 +461,8 @@
 
                         </div>
                     </div>
-                    <div class="card-body">
-                        <canvas id="donutChart" style="height:330px; min-height:330px"></canvas>
+                    <div class="card-body" >
+                        <canvas  id="donutChart" style="height:200px; min-height:330px; margin-left:-60px"></canvas>
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -394,9 +502,9 @@
 
     <script>
 
-        
-         $("#leftNavDashboard").addClass("active");
-        $('#notification-card').CardWidget('toggle');
+
+        $("#leftNavDashboard").addClass("active");
+        $('#unsignedTickets-card,#mostRecentTicket-card , #notification-card ').CardWidget('toggle');
 
         var dataTicketStatus = [];
 
@@ -532,10 +640,10 @@
 
                 on = !on;
                 if (on) {
-                    $('.urgent').addClass('urgent_ticket')
+                    $('.urgent').addClass('urgent_tickets')
                 }
                 else {
-                    $('.urgent_ticket').removeClass('urgent_ticket')
+                    $('.urgent_tickets').removeClass('urgent_tickets')
                 }
 
 

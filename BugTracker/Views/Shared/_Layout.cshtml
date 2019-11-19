@@ -24,7 +24,7 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Font Awesome -->
-
+    <link rel="icon" type="image/png" href="~/Images/Icons/icons8-project-setup-80.png" />
     <link href="~/Content/all.min.css" rel="stylesheet" />
     <!-- Ionicons -->
     <link rel="stylesheet" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -59,6 +59,12 @@
     <link href="~/Content/Site.css" rel="stylesheet" />
     <link href="~/Content/toastr.min.css" rel="stylesheet" />
     @RenderSection("Styless", required: false)
+
+    <style>
+        .urgent_tickets {
+    background-color: #ffe6e6;
+}
+    </style>
 </head>
 
 <!--  Toaster for Modelas  -->
@@ -89,25 +95,9 @@
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
                 </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="index3.html" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Contact</a>
-                </li>
+
             </ul>
 
-            <!-- SEARCH FORM -->
-            <form class="form-inline ml-3">
-                <div class="input-group input-group-sm">
-                    <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-navbar" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
 
 
 
@@ -264,70 +254,80 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
-                        with font-awesome or any other icon font library -->
+    with font-awesome or any other icon font library -->
                         <li class="nav-header h3">GENERAL</li> <!--          PROJECT SECTION                   -->
                         <li class="nav-item">
-                            <a href="@Url.Action("Dashboard", "Home")" class="nav-link" id="leftNavDashboard" >
-                                <i class="nav-icon fas fa-book"></i>
-                                <p>Dashboard</p>
+                            <a href="@Url.Action("Dashboard", "Home")" class="nav-link" id="leftNavDashboard">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>My Dashboard</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="@Url.Action("EditProfile", "Members")" class="nav-link">
-                                <i class="nav-icon fas fa-book"></i>
-                                <p>Edit Profile</p>
-                            </a>
-                        </li>
-
-
-                        <li class="nav-header h3">PROJECTS MANAGEMENT</li> <!--          PROJECT SECTION                   -->
-                        <li class="nav-item">
-                            <a href="@Url.Action("Index", "Projects")" class="nav-link">
-                                <i class="nav-icon fas fa-book"></i>
-                                <p>View Projects</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("Create", "Projects")" class="nav-link">
-                                <i class="nav-icon fas fa-book"></i>
-                                <p>Create a Project</p>
+                            <a href="@Url.Action("EditProfile", "Members")" class="nav-link" id="leftNavProfile">
+                                <i class="nav-icon red fas fa-user"></i>
+                                <p>Edit My Profile</p>
                             </a>
                         </li>
 
+                        @if (User.IsInRole("Admin") || User.IsInRole("DemoAdmin"))
+                        {
 
-                        <li class="nav-header h3">USERS MANAGEMENT</li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("UsersIndex", "Admin")" class="nav-link">
-                                <i class="nav-icon fas fa-user-tag"></i>
-                                <p>Users Index</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("ManageRoles", "Admin")" class="nav-link">
-                                <i class="nav-icon fas fa-user-tag"></i>
-                                <p>Assign Roles to Users</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("UsersAndProjects", "Admin")" class="nav-link">
-                                <i class="nav-icon fas fa-user-cog"></i>
-                                <p>Assign Users to Projects</p>
-                            </a>
-                        </li>
+                            <li class="nav-header h3">PROJECTS MANAGEMENT</li>
+                            <!--          PROJECT SECTION                   -->
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "Projects")" class="nav-link" id="leftNavListProjects">
+                                    <i class="nav-icon fas fa-project-diagram"></i>
+                                    <p>My Projects</p>
+                                </a>
+                            </li>
 
+                            <li class="nav-item">
+                                <a href="@Url.Action("Create", "Projects")" class="nav-link" id="leftNavCreateProject">
+                                    <i class="nav-icon fas fa-plus"></i>
+                                    <p>Create a Project</p>
+                                </a>
+                            </li>
 
-                        <li class="nav-header h3">TICKETS MANAGEMENT</li> <!--          Ticket SECTION                   -->
+                            <li class="nav-header h3">USERS MANAGEMENT</li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("UsersIndex", "Admin")" class="nav-link" id="leftNavListUsers">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>User List</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="@Url.Action("ManageRoles", "Admin")" class="nav-link" id="leftNavAssignRole">
+                                    <i class="nav-icon fas fa-user-tag"></i>
+                                    <p>Assign Roles to Users</p>
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Admin") || User.IsInRole("DemoAdmin") || User.IsInRole("Project Manager") || User.IsInRole("DemoPM"))
+                        {
+                        
+                            <li class="nav-item">
+                                <a href="@Url.Action("UsersAndProjects", "Admin")" class="nav-link" id="leftNavAssignToProject">
+                                    <i class="nav-icon fas fa-user-cog"></i>
+                                    <p>Assign Users to Projects</p>
+                                </a>
+                            </li>
+                        }
+
+                        <li class="nav-header h3">TICKETS MANAGEMENT</li>
+                        <!--          Ticket SECTION                   -->
                         <li class="nav-item">
-                            <a href="@Url.Action("Index", "Tickets")" class="nav-link">
-                                <i class="nav-icon fas fa-book"></i>
+                            <a href="@Url.Action("Index", "Tickets")" class="nav-link" id="leftNavTicketList">
+                                <i class="nav-icon fas fa-ticket-alt"></i>
                                 <p>View All Tickets</p>
                             </a>
                         </li>
 
-                        @if (User.IsInRole("Submitter"))
+                        @if (User.IsInRole("Submitter") || User.IsInRole("DemoSubmitter"))
                         {
-                            <li class="nav-item "  >
-                                <a href="@Url.Action("Create", "Tickets")" id="leftNavCreateTicket" class="nav-link">
+                            <li class="nav-item ">
+                                <a href="@Url.Action("Create", "Tickets")" id="leftNavCreateTicket" class="nav-link" id="leftNavCreateTicket">
                                     <i class="nav-icon fas fa-book"></i>
                                     <p>Create a Ticket</p>
                                 </a>

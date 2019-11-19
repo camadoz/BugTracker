@@ -53,11 +53,17 @@
                     </div>
                     <!-- /.card-body -->
 
-                    <div class="card-footer">
-                        <button type="submit" class="ui blue button">Submit</button>
+            <div class="card-footer">
+                @if (User.IsInRole("Admin") )
+                {
 
-                        @Html.ActionLink("Back to Dashboard", "Dashboard", "Home", null, new { @class = "ui  orange  button" })
-                    </div>
+                    <button type="submit" class="ui blue button">Submit</button>
+
+                }
+
+
+                @Html.ActionLink("Back to Dashboard", "Dashboard", "Home", null, new { @class = "ui  orange  button" })
+            </div>
 
 
                 }
@@ -70,7 +76,15 @@
 
 </div>
 
+@section scripts    {
+
+    <script>
 
 
 
+
+        $("#leftNavCreateProject").addClass("active");
+
+</script>
+    }
 

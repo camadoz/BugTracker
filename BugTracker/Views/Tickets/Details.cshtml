@@ -2,64 +2,137 @@
 @using BugTracker.Models
 @using BugTracker.Helpers
 
-@{ 
+@{
     ApplicationDbContext db = new ApplicationDbContext();
     UserRolesHelper roleHelper = new UserRolesHelper();
 
 }
 
 
+<!-- MODAL ASSIGN TICKET TO USERS  -->
+<div class="modal fade" id="modalAssignTicket" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-primary">
+                <h5 class="modal-title" id="exampleModalLabel">Assign User To Ticket</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="form-group hidden">
+                            <input id="ticket_id" type="text" style="display:none" value="@Model.Id" class="hidden" />
 
-
-
-    <div class="row mt-3">
-        <div class="offset-md-2 col-md-8">
-          
-
-            <div class="card card-warning">
-                <div class="card-header">
-                    <h3 class="card-title">Ticket Status</h3>
-
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            
-                        </button>
+                        </div>
                     </div>
-                    <!-- /.card-tools -->
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body text-center">
-                    @if (Model.TIcketStatus.Name == "open")
-                    {
-                        <img src="~/Images/Open.gif" />
-                    }
-                    else if (Model.TIcketStatus.Name == "Assigned")
-                    {
-                         <img src="~/Images/Assigned.gif" />
-                    }
-                    else if (Model.TIcketStatus.Name == "In Progress")
-                    {
-                          <img src="~/Images/InProgress.gif" />
-                    }
-                    else if (Model.TIcketStatus.Name == "Resolved")
-                    {                      
-                         <img src="~/Images/Resolved.gif" />
-                    }
-                    else if(Model.TIcketStatus.Name == "Archived")
-                    {
-                         <img src="~/Images/Archived.gif" />
-                    }
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                            <div class="ui message">
+                                <div class="header">
+                                    Project Name: <span id="project_name"></span>
+                                </div>
+                                <hr />
+                                <p>Ticket Information</p>
+                               
+                                <ul class="list">
+                                    <li><b>Priority:</b>@Model.TicketPriority.Name  <span id="project_priority">@Model.TicketPriority.Name</span></li>
+                                    <li><b>Status:</b> <span id="project_status">@Model.TIcketStatus.Name</span></li>
+                                    <li><b>Type:</b> <span id="project_type">@Model.TicketType.Name</span></li>
+                                    <li><b> Description:</b> <span id="project_description">@Model.Description</span></li>
+                                    <li><b>Created on:</b>@Model.Created <span id="project_created"> </span></li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="row mt-4">
+
+
+
+                        <div class="col-md-3">
+                            <h4>Select a user:</h4>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.DropDownList("AssignedToUserId", null, "-- Developers Available --", new { @class = "h5" })
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 hidden" style="display:none">
+                            <input name="FirstName" type="text" class="form-control" id="FirstName" />
+                        </div>
+
+                    </div>
 
                 </div>
-                <!-- /.card-body -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="assignUser" disabled data-dismiss="modal" class="btn btn-primary">Assign User</button>
+
             </div>
         </div>
+    </div>
+</div>
 
-    </div>   
 
- 
+<!-- END OF MODAL -->
+<div class="row mt-3">
+    <div class="offset-md-2 col-md-8">
+
+
+        <div class="card card-warning">
+            <div class="card-header">
+                <h3 class="card-title">Ticket Status</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    </button>
+                </div>
+                <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body text-center">
+                @if (Model.TIcketStatus.Name == "open")
+                {
+                    <img src="~/Images/Open.gif" />
+                }
+                else if (Model.TIcketStatus.Name == "Assigned")
+                {
+                    <img src="~/Images/Assigned.gif" />
+                }
+                else if (Model.TIcketStatus.Name == "In Progress")
+                {
+                    <img src="~/Images/InProgress.gif" />
+                }
+                else if (Model.TIcketStatus.Name == "Resolved")
+                {
+                    <img src="~/Images/Resolved.gif" />
+                }
+                else if (Model.TIcketStatus.Name == "Archived")
+                {
+                    <img src="~/Images/Archived.gif" />
+                }
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+
+</div>
+
+
 <div class="row">
-        
+
     <div class="col-md-6 ml-5">
         <div class="card card-primary ">
             <div class="card-header">
@@ -140,52 +213,52 @@
 
                     <div class="col-md-6">
                         @*<div class="ui cards">
-            <div class="card " style="width:600px;">
+                                <div class="card " style="width:600px;">
 
-                <div class="content">
-                    <h3>Project Information</h3>
-                    <hr />
-                    <img class="right floated mini ui image" src="~/images/business-presentation.png">
-                    <div class="header">
-                        @Html.DisplayFor(model => model.Title)
-                    </div>
-                    <div class="meta">
-                        Created on @Html.DisplayFor(model => model.Created) for project @Html.DisplayFor(model => model.Project.Name)
-                    </div>
+                                    <div class="content">
+                                        <h3>Project Information</h3>
+                                        <hr />
+                                        <img class="right floated mini ui image" src="~/images/business-presentation.png">
+                                        <div class="header">
+                                            @Html.DisplayFor(model => model.Title)
+                                        </div>
+                                        <div class="meta">
+                                            Created on @Html.DisplayFor(model => model.Created) for project @Html.DisplayFor(model => model.Project.Name)
+                                        </div>
 
-                    <div class="description mb-2">
-                        <b>Ticket assigned to :</b> @if (Model.AssignedToUser != null)
-                        {
-                            @Html.DisplayFor(model => model.AssignedToUser.FullName)
-                        }
-                        else
-                        {
-                            <b>Nobody Assigned</b>
-                        }
+                                        <div class="description mb-2">
+                                            <b>Ticket assigned to :</b> @if (Model.AssignedToUser != null)
+                                            {
+                                                @Html.DisplayFor(model => model.AssignedToUser.FullName)
+                                            }
+                                            else
+                                            {
+                                                <b>Nobody Assigned</b>
+                                            }
 
-                    </div>
-                    <div class="description mb-2">
-                        <b>Description:</b> @Html.DisplayFor(model => model.Description)
-                    </div>
+                                        </div>
+                                        <div class="description mb-2">
+                                            <b>Description:</b> @Html.DisplayFor(model => model.Description)
+                                        </div>
 
-                    <div class="description mb-2">
-                        <b>Ticket Description:</b> @Html.DisplayFor(model => model.Description)
-                    </div>
-                    <div class="description mb-2">
-                        <b>Ticket status:</b> @Html.DisplayFor(model => model.TIcketStatus.Name)
-                    </div>
-                    <div class="description mb-2">
-                        <b>Ticket priority:</b> @Html.DisplayFor(model => model.TicketPriority.Name)
-                    </div>
+                                        <div class="description mb-2">
+                                            <b>Ticket Description:</b> @Html.DisplayFor(model => model.Description)
+                                        </div>
+                                        <div class="description mb-2">
+                                            <b>Ticket status:</b> @Html.DisplayFor(model => model.TIcketStatus.Name)
+                                        </div>
+                                        <div class="description mb-2">
+                                            <b>Ticket priority:</b> @Html.DisplayFor(model => model.TicketPriority.Name)
+                                        </div>
 
-                    <div class="description">
-                        <b>Ticket type:</b> @Html.DisplayFor(model => model.TicketType.Name)
-                    </div>
-                </div>
+                                        <div class="description">
+                                            <b>Ticket type:</b> @Html.DisplayFor(model => model.TicketType.Name)
+                                        </div>
+                                    </div>
 
-            </div>
+                                </div>
 
-        </div>*@
+                            </div>*@
 
                         @if (Model.OwnerUser != null)
                         {
@@ -269,22 +342,26 @@
 
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <div id="addComment" class="pb-2" style="border-bottom:2px solid red;">
-                        @using (Html.BeginForm("Create", "TicketComments", FormMethod.Post))
-                        {
-                            @Html.AntiForgeryToken()
-                            @Html.Hidden("TicketId", Model.Id)
+                <div id="addComment" class="pb-2" style="border-bottom:2px solid red;">
+                    @using (Html.BeginForm("Create", "TicketComments", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("TicketId", Model.Id)
 
-                            <div class="row mb-3">
-                                <div class=" col-md-12">
-                                    @Html.TextArea("CommentBody", new { rows = 10, cols = 150, placeholder = "Add Comment" })
-                                </div>
+                        <div class="row mb-3">
+                            <div class=" col-md-12">
+                                @Html.TextArea("CommentBody", new { rows = 10, cols = 150, placeholder = "Add Comment" })
                             </div>
+                        </div>
 
-
+                        if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.IsInRole("Submitter") || User.IsInRole("Developer"))
+                        {
                             <button type="submit" class="ui blue button"> <i class="icon edit"></i>Add Comment</button>
                         }
-                    </div>
+
+                    }
+                    /**/
+                </div>
                 }
 
 
@@ -370,7 +447,7 @@
                                     @Html.DisplayFor(modelItem => item.NewValue)
                                 </td>
                                 <td class="target_project_name">
-                                    @Html.Raw(item.Updated.ToString("MMM dd,yyyy"))
+                                    @Html.Raw(item.Updated?.ToString("MMM dd,yyyy"))
                                 </td>
                                 <td class="target_ticket_priority">
                                     @Html.DisplayFor(modelItem => item.User.FullName)
@@ -435,9 +512,7 @@
                                     }
                                 </a>
                             </li>
-                            <li class="list-group-item">
-                                <b>Friends</b> <a class="float-right">13,287</a>
-                            </li>
+
                         </ul>
 
                         @*<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>*@
@@ -449,14 +524,22 @@
                 }
                 else
                 {
-                    <div class="info-box mb-3 bg-info">
-                        <span class="info-box-icon"><i class="fas fa-exclamation-triangle"></i></span>
-                        <div class="info-box-content text-center">
-                            <span class="info-box-text h2">This ticket is unassigned.</span>
+            <div class="info-box mb-3 bg-info">
+                <span class="info-box-icon"><i class="fas fa-exclamation-triangle"></i></span>
+                <div class="info-box-content text-center">
+                    <span class="info-box-text h2">This ticket is unassigned.</span>
 
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
+                </div>
+                @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                {
+                    <button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#modalAssignTicket">
+                        Assign
+                    </button>
+
+                }
+
+                <!-- /.info-box-content -->
+            </div>
                 }
 
 
@@ -472,74 +555,80 @@
 
 
 
-        <!-- Attachment    -->
-        <div class="col-md-4">
+    <!-- Attachment    -->
+    <div class="col-md-4">
 
-            <div class="card card-warning">
-                <div class="card-header">
-                    <h3 class="card-title">@Model.TicketAttachments.Count() Attachments</h3>
+        <div class="card card-warning">
+            <div class="card-header">
+                <h3 class="card-title">@Model.TicketAttachments.Count() Attachments</h3>
 
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
-                    <!-- /.card-tools -->
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
                 </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    @foreach (var attachment in Model.TicketAttachments)
-                    {
-                        <a href="@Url.Content("~/uploads/" + attachment.FilePath)" download>
-                           
-                            <div class="info-box mb-3 bg-success">
-                                <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-                                <img src="@AttachmentHelper.GetIconPath(attachment.FilePath)" />
-                                <div class="info-box-content">
-                                    <span class="info-box-text">@Html.Raw(attachment.Description)</span>
-                                    <span class="info-box-number">@attachment.FilePath</span>
-                                    <span class="info-box-number">Created on @attachment.Created</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                        </a>
-                    }
-
-
-
-
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <div id="addAttachment" class="pb-2" style="border-bottom:2px solid red;">
-                            @using (Html.BeginForm("Create", "TicketAttachments", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                            {
-                                @Html.AntiForgeryToken()
-                                @Html.Hidden("TicketId", Model.Id)
-                                <span>Add a statement to the attachment</span>
-                                <div class="row mb-3">
-                                    <div class=" col-md-12">
-                                        @Html.TextArea("Description", new { rows = 10, cols = 150, placeholder = "Add Description" })
-                                    </div>
-                                </div>
-
-
-                                <div class="form-group">
-                                    <input type="file"  id="inputfile" name="inputfile">
-                                   
-                                </div>
-
-                                <button type="submit" class="ui blue button"> <i class="icon edit"></i>Add Attachement</button>
-                            }
-                        </div>
-                    }
-
-                </div>
-                <!-- /.card-body -->
+                <!-- /.card-tools -->
             </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                @foreach (var attachment in Model.TicketAttachments)
+                {
+                    <a href="@Url.Content("~/uploads/" + attachment.FilePath)" download>
 
+                        <div class="info-box mb-3 bg-success">
+                            <span class="info-box-icon"><i class="fas fa-tag"></i></span>
+                            <img src="@AttachmentHelper.GetIconPath(attachment.FilePath)" />
+                            <div class="info-box-content">
+                                <span class="info-box-text">@Html.Raw(attachment.Description)</span>
+                                <span class="info-box-number">@attachment.FilePath</span>
+                                <span class="info-box-number">Created on @attachment.Created</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </a>
+                }
+
+
+
+
+                @if (User.Identity.IsAuthenticated)
+                {
+            <div id="addAttachment" class="pb-2" style="border-bottom:2px solid red;">
+                @using (Html.BeginForm("Create", "TicketAttachments", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("TicketId", Model.Id)
+                    <span>Add a statement to the attachment</span>
+                    <div class="row mb-3">
+                        <div class=" col-md-12">
+                            @Html.TextArea("Description", new { rows = 10, cols = 150, placeholder = "Add Description" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <input type="file" id="inputfile" accept=".doc,.docx,.xml,.pdf,.zip,.7z,.rar,.txt,image/png,image/gif,image/jpeg" name="inputfile">
+
+                    </div>
+
+                    if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.IsInRole("Submitter") || User.IsInRole("Developer") )
+                    {
+
+                        <button type="submit" class="ui blue button"> <i class="icon edit"></i>Add Attachement</button>
+                    }
+
+                }
+                
+            </div>
+                }
+
+            </div>
+            <!-- /.card-body -->
         </div>
 
     </div>
+
+</div>
 
 
 
@@ -556,6 +645,73 @@
 
         $('#histories-card,#comments-card').CardWidget('toggle')
 
+
+
+
+            $(".btnClickable").click(function () {
+
+            var name = $(this).closest("tr").find("td.target_id").text();
+
+            var project_name = $(this).closest("tr").find("td.target_project_name").text();
+            var ticket_priority = $(this).closest("tr").find("td.target_ticket_priority").text();
+            var ticket_status = $(this).closest("tr").find("td.target_ticket_status").text();
+            var ticket_type = $(this).closest("tr").find("td.target_ticket_type").text();
+            var ticket_description = $(this).closest("tr").find("td.target_ticket_description").text();
+            var ticket_created = $(this).closest("tr").find("td.target_ticket_created").text();
+            $("#test").text(project_name);
+            $("#project_name").text(project_name);
+
+            $("#project_description").text(ticket_description);
+            $("#project_status").text(ticket_status);
+            $("#project_priority").text(ticket_priority);
+
+            $("#project_type").text(ticket_type);
+            $("#project_created").text(ticket_created);
+            project_name
+            name = name.replace(/ +/g, " ").trim();
+            $("#HiddenField").val(name);
+
+        });
+
+        $('#AssignedToUserId').change(function () {
+            selectVal = $('#AssignUsers').val();
+
+            if (selectVal == 0) {
+                $('#assignUser').prop("disabled", true);
+            }
+            else {
+                $('#assignUser').prop("disabled", false);
+            }
+        })
+
+
+        $('#assignUser').click(function () {
+
+            var userID = $("#AssignedToUserId option:selected").val()
+            var test = Number($("#ticket_id").val());
+
+            $.ajax({
+                type: "POST",
+                url: "/Tickets/AssignTicketToUser",
+                data: JSON.stringify({
+                    ticketId: Number($("#ticket_id").val()),
+                    userId: userID
+                }),
+                dataType: "json",
+                complete: function () {
+                    location.reload();
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    $('.toast').toast('show');
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+
+
+        });
 
     </script>
 }

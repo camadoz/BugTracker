@@ -51,8 +51,8 @@ body{
     background-color:white;
 }
 
-.urgent_ticket{
-    background-color:red;
+.urgent_tickets {
+    background-color: #ffe6e6;
 }
 
 td{

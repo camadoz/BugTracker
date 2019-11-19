@@ -108,7 +108,12 @@
 
                         <div class="row mt-3">
                             <div class="col-md-12">
-                                <button type="submit" id="assignRole" disabled class="btn btn-primary">Assign To Role</button>
+                                @if (User.IsInRole("Admin") )
+                                {
+
+                                    <button type="submit" id="assignRole" disabled class="btn btn-primary">Assign To Role</button>
+                                }
+
                             </div>
                         </div>
 
@@ -175,6 +180,14 @@
 
 @section scripts    {
     <script>
+
+
+
+
+
+        $("#leftNavAssignRole").addClass("active");
+
+
 
         //$('#Role').change(function () {
         //    selectVal = $('#Role').val();

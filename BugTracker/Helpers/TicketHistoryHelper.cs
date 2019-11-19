@@ -20,7 +20,7 @@ namespace BugTracker.Helpers
               PropertyName = "TicketStatusId",
               OldValue = oldTicket.TIcketStatus.Name,
               NewValue = newTicket.TIcketStatus.Name,
-              Updated = (DateTime)newTicket.Updated,
+              Updated = (DateTime)newTicket?.Updated,
               UserId=HttpContext.Current.User.Identity.GetUserId(),
                  TicketId = newTicket.Id
 
@@ -105,7 +105,7 @@ namespace BugTracker.Helpers
                     PropertyName = "AssignedToUserId",
                     OldValue = oldTicket.AssignedToUser?.FullName == null ? "UnAssigned" : oldTicket.AssignedToUser.FullName,
                     NewValue = newTicket.AssignedToUser?.FullName == null ? "UnAssigned" : newTicket.AssignedToUser.FullName,
-                    Updated = (DateTime)newTicket.Updated,
+                    Updated = (DateTime)newTicket?.Updated,
                     UserId = HttpContext.Current.User.Identity.GetUserId(),
                     TicketId = newTicket.Id
                     

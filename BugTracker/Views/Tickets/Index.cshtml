@@ -26,12 +26,22 @@
     <style>
 
         tr.urgent_ticket {
-            background-color: red;
+            background-color: #ffe6e6;
         }
 
         #test {
-            background-color: red;
+            background-color: #ffe6e6;
         }
+
+
+
+        .modal-open .modal {
+    overflow: scroll; /* KEEPS THE SCROLL BAR WHEN THE MODAL IS OPENED */
+    padding-right: 0 !important;  /* PREVENT THE MODAL FORM TO SHIFT THE BODY TO THE LEFT */
+}
+body.modal-open {
+    overflow: hidden !important;
+}
     </style>
 }
 
@@ -196,7 +206,12 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="assignUser" disabled data-dismiss="modal" class="btn btn-primary">Assign User</button>
+                @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                {
+
+                    <button type="button" id="assignUser" disabled data-dismiss="modal" class="btn btn-primary">Assign User</button>
+                }
+
 
             </div>
         </div>
@@ -342,21 +357,24 @@
                         </td>
 
                         <td>
-                            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                            @if (User.IsInRole("Sumitter") || User.IsInRole("Developer") || User.IsInRole("DemoSumitter") || User.IsInRole("DemoDeveloper"))
                             {
-                            <button class="ticket_edit_btn ui mini orange button" data-toggle="modal" data-target="#editTicketModal">Edit</button>
-                                @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
+                                <button class="ticket_edit_btn ui mini orange button" data-toggle="modal" data-target="#editTicketModal">Edit</button>
+                            }
 
+                            @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
 
+                       
                                 <button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#exampleModal">
                                     Assign
                                 </button>
 
-                            }
-                            else
-                            {
-                                @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
-                            }
+                            
+
+
+
+
+
 
                         </td>
                     </tr>
@@ -443,21 +461,20 @@
                         </td>
 
                         <td>
-                            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                            @if (User.IsInRole("Sumitter") || User.IsInRole("Developer") || User.IsInRole("DemoSumitter") || User.IsInRole("DemoDeveloper"))
                             {
-                            <button class="ticket_edit_btn ui mini orange button" data-toggle="modal" data-target="#editTicketModal">Edit</button>
+                                <button class="ticket_edit_btn ui mini orange button" data-toggle="modal" data-target="#editTicketModal">Edit</button>
+                            }
                                 @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
-
+                            
 
                                 @*<button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#exampleModal">
-                                        Assign
-                                    </button>*@
+                Assign
+            </button>*@
 
-                            }
-                            else
-                            {
-                                @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
-                            }
+
+                            
+                     
 
                         </td>
                     </tr>
@@ -540,26 +557,29 @@
                             @Html.Raw(item.Created.ToString("MMM dd,yyyy"))
                         </td>
                         <td>
-                            @Html.Raw(item.Created.ToString("MMM dd,yyyy"))
+                            @Html.Raw(item.Updated?.ToString("MMM dd,yyyy"))
                         </td>
 
                         <td>
-                            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                            @if (User.IsInRole("Sumitter") || User.IsInRole("Developer") || User.IsInRole("DemoSumitter") || User.IsInRole("DemoDeveloper"))
                             {
                                 <button class="ticket_edit_btn ui mini orange button" data-toggle="modal" data-target="#editTicketModal">Edit</button>
-                                @*@Html.ActionLink("Edit", "Edit", "Tickets", new { id = item.Id }, new { @class = "ui mini orange  button ticket_edit_btn" })*@
+                            }
+                            @*@Html.ActionLink("Edit", "Edit", "Tickets", new { id = item.Id }, new { @class = "ui mini orange  button ticket_edit_btn" })*@
 
-                                @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
+                            @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
 
+
+                            @if (User.IsInRole("Admin") || User.IsInRole("Program Manager") )
+                            {
+                                
                                 <button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#exampleModal">
                                     Assign
                                 </button>
 
+
                             }
-                            else
-                            {
-                                @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
-                            }
+
 
 
                         </td>
@@ -617,6 +637,10 @@
 @section scripts    {
 
     <script>
+
+
+
+         $("#leftNavTicketList").addClass("active");
         //$('td:nth-child(2)').hide();
 
         var ticket_id;
@@ -679,7 +703,7 @@
             var ticket_type = $(this).closest("tr").find("td.target_ticket_type").text();
             var ticket_description = $(this).closest("tr").find("td.target_ticket_description").text();
             var ticket_created = $(this).closest("tr").find("td.target_ticket_created").text();
-            $("#test").text(project_name);
+           
             $("#project_name").text(project_name);
 
             $("#project_description").text(ticket_description);
@@ -739,6 +763,9 @@
                     userId: userID
                 }),
                 dataType: "json",
+                complete: function () {
+                    location.reload();
+                },
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
                     $('.toast').toast('show');

@@ -83,7 +83,7 @@ namespace BugTracker.Controllers
             UserRolesHelper userRoleHelper = new UserRolesHelper();
 
             var allDeveloper = userRoleHelper.UsersInRole("Developer");
-            string[,] usersTicket = new String[allDeveloper.Count(), allDeveloper.Count()];
+            string[,] usersTicket = new String[2, allDeveloper.Count()];
 
 
             for(var i = 0 ; i < allDeveloper.Count() ; i++)

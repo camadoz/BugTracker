@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using BugTracker.Helpers;
 using BugTracker.Models;
+using Microsoft.AspNet.Identity;
 
 namespace BugTracker.Controllers
 {
@@ -20,7 +21,8 @@ namespace BugTracker.Controllers
         // GET: Projects
         public ActionResult Index()
         {
-            return View(db.Projects.ToList());
+           return View(projectHelper.ListUserProjects(User.Identity.GetUserId()));
+           // return View(db.Projects.ToList());
         }
 
         // GET: Projects/Details/5
@@ -73,6 +75,9 @@ namespace BugTracker.Controllers
                 project.Created = DateTime.Now;
                 db.Projects.Add(project);
                 db.SaveChanges();
+                
+                projectHelper.AddUserToProject(User.Identity.GetUserId(), project.Id);
+
                 return RedirectToAction("Index");
             }
 

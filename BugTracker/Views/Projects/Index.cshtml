@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BugTracker.Models.Project>
+﻿@model ICollection<BugTracker.Models.Project>
 
 
 <div class="modal " id="editProjectModal" tabindex="-1" role="dialog" aria-labelledby="editProjectModalLabel" aria-hidden="true">
@@ -125,29 +125,33 @@
 
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td class="target_id" style="display:none;visibility:hidden;">
-                        @Html.DisplayFor(model => item.Id)
-                    </td>
-                    <td> @Html.DisplayFor(model => item.Name)</td>
-                    <td> @Html.DisplayFor(model => item.Description)</td>
-                    <td>
-                        @Html.Raw(item.Created.ToString("MMM dd,yyyy"))
-                    </td>
-                    <td>
+                    <tr>
+                        <td class="target_id" style="display:none;visibility:hidden;">
+                            @Html.DisplayFor(model => item.Id)
+                        </td>
+                        <td> @Html.DisplayFor(model => item.Name)</td>
+                        <td> @Html.DisplayFor(model => item.Description)</td>
+                        <td>
+                            @Html.Raw(item.Created.ToString("MMM dd,yyyy"))
+                        </td>
+                        <td>
 
-                        @Html.Raw(item.Updated?.ToString("MMM dd,yyyy"))
-                    </td>
-                    <td>
+                            @Html.Raw(item.Updated?.ToString("MMM dd,yyyy"))
+                        </td>
+                        <td>
 
-                        <a href="@Url.Action("Edit", "Projects",new { id = item.Id },null)"> <i class="ui mini blue button">Edit</i></a>
-                        <a href="@Url.Action("Details", "Projects",new { id = item.Id },null)"> <i class="ui mini orange button">Details</i></a>
-                        <button class="project_edit_btn" data-toggle="modal" data-target="#editProjectModal">TEST</button>
-                        <a href=""> <i class="ui mini green button">Archive</i></a>
+                            @*<a href="@Url.Action("Edit", "Projects",new { id = item.Id },null)"> <i class="ui mini blue button">Edit</i></a>*@
+                            <a href="@Url.Action("Details", "Projects",new { id = item.Id },null)"> <i class="ui mini orange button">Details</i></a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <button class="project_edit ui mini blue button " data-toggle="modal" data-target="#editProjectModal">Edit</button>
+                            }
+
+                            @*<a href=""> <i class="ui mini green button">Archive</i></a>*@
 
 
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
                 }
             </tbody>
             <tfoot>
@@ -170,6 +174,16 @@
 
     <script>
 
+
+
+
+        $("#leftNavListProjects").addClass("active");
+
+
+
+
+
+
            var project_id;
             var project_description;
         var project_name;
@@ -179,7 +193,7 @@
             project_id = $(this).parent().prev().prev().prev().prev().prev().text().trim();
             project_description = $(this).parent().prev().prev().prev().text().trim();
             project_name = $(this).parent().prev().prev().prev().prev().text().trim();
-            
+
             $("#ProjectId").val(project_id);
             $("#project_description").val(project_description);
             $("#project_name").val(project_name);

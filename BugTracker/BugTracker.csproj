@@ -267,6 +267,7 @@
     <Content Include="Images\Icons\dxf.png" />
     <Content Include="Images\Icons\eps.png" />
     <Content Include="Images\Icons\gif.png" />
+    <Content Include="Images\Icons\icons8-project-setup-80.png" />
     <Content Include="Images\Icons\jpg.png" />
     <Content Include="Images\Icons\key.png" />
     <Content Include="Images\Icons\odp.png" />
@@ -462,6 +463,7 @@
     <Content Include="webfonts\fa-regular-400.svg" />
     <Content Include="webfonts\fa-solid-900.svg" />
     <Content Include="private.config" />
+    <None Include="Properties\PublishProfiles\MCBugTracker - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
