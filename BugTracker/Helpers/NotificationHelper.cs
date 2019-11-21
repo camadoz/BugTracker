@@ -89,7 +89,7 @@ namespace BugTracker.Helpers
                     messageBody.AppendLine(new String('-', 45));
                     messageBody.AppendLine($"A change was made to Property: {property}.");
                     messageBody.AppendLine($"The old value was: {oldValue?.ToString()}");
-                    messageBody.AppendLine($"The new value is: {newValue.ToString()}");
+                    messageBody.AppendLine($"The new value is: {newValue?.ToString()}");
                 }
             }
 

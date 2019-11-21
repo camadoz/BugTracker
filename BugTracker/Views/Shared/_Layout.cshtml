@@ -64,6 +64,7 @@
         .urgent_tickets {
     background-color: #ffe6e6;
 }
+
     </style>
 </head>
 
@@ -258,7 +259,7 @@
                         <li class="nav-header h3">GENERAL</li> <!--          PROJECT SECTION                   -->
                         <li class="nav-item">
                             <a href="@Url.Action("Dashboard", "Home")" class="nav-link" id="leftNavDashboard">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <i class="nav-icon fas fa-tachometer-alt" style="color:forestgreen"></i>
                                 <p>My Dashboard</p>
                             </a>
                         </li>
@@ -269,17 +270,20 @@
                             </a>
                         </li>
 
+
+
+                        <li class="nav-header h3">PROJECTS MANAGEMENT</li>
+                        <!--          PROJECT SECTION                   -->
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index", "Projects")" class="nav-link" id="leftNavListProjects">
+                                <i class="nav-icon fas fa-project-diagram" style="color:red;"></i>
+                                <p>My Projects</p>
+                            </a>
+                        </li>
+
                         @if (User.IsInRole("Admin") || User.IsInRole("DemoAdmin"))
                         {
 
-                            <li class="nav-header h3">PROJECTS MANAGEMENT</li>
-                            <!--          PROJECT SECTION                   -->
-                            <li class="nav-item">
-                                <a href="@Url.Action("Index", "Projects")" class="nav-link" id="leftNavListProjects">
-                                    <i class="nav-icon fas fa-project-diagram"></i>
-                                    <p>My Projects</p>
-                                </a>
-                            </li>
 
                             <li class="nav-item">
                                 <a href="@Url.Action("Create", "Projects")" class="nav-link" id="leftNavCreateProject">
@@ -306,7 +310,7 @@
 
                         @if (User.IsInRole("Admin") || User.IsInRole("DemoAdmin") || User.IsInRole("Project Manager") || User.IsInRole("DemoPM"))
                         {
-                        
+
                             <li class="nav-item">
                                 <a href="@Url.Action("UsersAndProjects", "Admin")" class="nav-link" id="leftNavAssignToProject">
                                     <i class="nav-icon fas fa-user-cog"></i>

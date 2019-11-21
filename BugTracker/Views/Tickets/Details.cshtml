@@ -8,9 +8,18 @@
 
 }
 
+<style>
+    .modal {
+ overflow-y: auto;
+}
+
+.modal-open {
+ overflow: auto;
+}
+</style>
 
 <!-- MODAL ASSIGN TICKET TO USERS  -->
-<div class="modal fade" id="modalAssignTicket" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="modalAssignTicket" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header alert-primary">
@@ -433,7 +442,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.TicketHistories)
+                        @foreach (var item in Model.TicketHistories.OrderByDescending(t => t.Updated))
                         {
 
                             <tr>
@@ -524,28 +533,39 @@
                 }
                 else
                 {
-            <div class="info-box mb-3 bg-info">
-                <span class="info-box-icon"><i class="fas fa-exclamation-triangle"></i></span>
-                <div class="info-box-content text-center">
-                    <span class="info-box-text h2">This ticket is unassigned.</span>
+                    <span class="h5 mb-4 b">This ticket has not been assigned yet.</span>
+
+
+
+                    @*<div class="info-box-content text-center">
+                <span class="info-box-text h4">This ticket is unassigned.</span>
+
+            </div>*@
+                    if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                    {
+
+                        <hr />
+                        <div class="info-box mb-3 bg-info mb-2">
+
+
+                            @*<button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#modalAssignTicket">
+            Assign a Developer
+        </button>*@
+                            <button type="button" class="btn btn-block btn-warning btn-lg" data-toggle="modal" data-target="#modalAssignTicket">Assign a Developer</button>
+
+                        </div>
+
+
+                            }
+
+                            <!-- /.info-box-content -->
+                       
+                    }
+
+
+
 
                 </div>
-                @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
-                {
-                    <button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#modalAssignTicket">
-                        Assign
-                    </button>
-
-                }
-
-                <!-- /.info-box-content -->
-            </div>
-                }
-
-
-
-
-            </div>
             <!-- /.card-body -->
         </div>
 

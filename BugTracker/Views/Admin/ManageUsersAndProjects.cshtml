@@ -9,7 +9,7 @@
 
 
 
-<div class="modal fade" id="modal-danger">
+<div class="modal" id="modal-danger">
     <div class="modal-dialog">
         <div class="modal-content bg-danger">
             <div class="modal-header">
@@ -39,7 +39,7 @@
 
 <!-- MODAL FORM -->
 
-<div class="modal fade" id="assignProject" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="assignProject" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -303,7 +303,7 @@
             cellOne.innerHTML = data.responseJSON.Name;
             cellTwo.innerHTML = data.responseJSON.Description;
             cellThree.innerHTML = data.responseJSON.Created;
-            cellFour.innerHTML = "<a class=\"ui mini red button\" href=\"\/Admin\/Removeruser\/" + data.responseJSON.userId + "?projectID=" + data.responseJSON.projectID + "\"" + ">Remove</a>";
+            cellFour.innerHTML = "<a class=\"tn btn-danger\" href=\"\/Admin\/Removeruser\/" + data.responseJSON.userId + "?projectID=" + data.responseJSON.projectID + "\"" + ">Unassign</a>";
 
         }
 

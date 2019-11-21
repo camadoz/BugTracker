@@ -15,7 +15,7 @@ using Microsoft.AspNet.Identity;
 
 namespace BugTracker.Controllers
 {
-    
+     [Authorize]
     public class TicketsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -26,7 +26,7 @@ namespace BugTracker.Controllers
 
 
         // GET: Tickets
-        [Authorize]
+       
         public ActionResult Index()
         {
             var tickets = new List<Ticket>();
@@ -103,7 +103,8 @@ namespace BugTracker.Controllers
         public ActionResult Create()
         {
             ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName");
-            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
+            //ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
+            ViewBag.ProjectId = new SelectList(projectHelper.ListUserProjects(User.Identity.GetUserId()), "Id", "Name");
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name");
             ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name");
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name");
@@ -319,6 +320,44 @@ namespace BugTracker.Controllers
         }
 
         [HttpPost]
+        [Authorize]
+        public async Task<bool> UnassignTickerFromUser(int ticketId, string userId)
+        {
+            var oldTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticketId);
+
+            Ticket ticket = db.Tickets.Find(ticketId);
+            if (userId != null && ticket != null)
+            {
+                ticket.AssignedToUserId = null;
+                ticket.Updated = DateTime.Now;
+                ticket.TicketStatusId = db.TicketStatus.FirstOrDefault(t => t.Name == "open").Id;
+                db.SaveChanges();
+                notificationHelper.ManageNotifications(oldTicket, ticket);
+                ticketHistoryHeler.RecordHistoricalChanges(oldTicket, ticket);
+                var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Url.Scheme);
+
+                try
+                {
+                    EmailService ems = new EmailService();
+                    IdentityMessage msg = new IdentityMessage();
+                    ApplicationUser user = db.Users.Find(userId);
+                    msg.Body = "You have been assigned a new Ticket." + Environment.NewLine + "Please click the following link to view the details" +
+                        "<a href=\"" + callbackUrl + "\">NEW TICKET</a>";
+                    msg.Destination = user.Email;
+                    msg.Subject = "Invite to Household";
+                    await ems.SendMailAsync(msg);
+                }
+                catch (Exception ex)
+                {
+                    await Task.FromResult(0);
+                }
+
+                
+            }
+            return true;
+        }
+
+        [HttpPost]
         //[ValidateAntiForgeryToken]
         public async Task<int> AssignTicketToUser(int ticketId,string userId )
         {
@@ -345,7 +384,7 @@ namespace BugTracker.Controllers
                     msg.Body = "You have been assigned a new Ticket."  + Environment.NewLine + "Please click the following link to view the details"+
                         "<a href=\""+callbackUrl +"\">NEW TICKET</a>";
                     msg.Destination = user.Email;
-                    msg.Subject = "Invite to Household";
+                    msg.Subject = "Ticket Assign Notice";
                     await ems.SendMailAsync(msg);
                 }
                 catch(Exception ex)

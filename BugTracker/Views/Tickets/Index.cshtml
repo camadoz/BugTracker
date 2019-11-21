@@ -45,7 +45,37 @@ body.modal-open {
     </style>
 }
 
+<!-- Unassign User from Ticket -->
 
+<div class="modal" id="modal-danger">
+    <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h4 class="modal-title">Warning</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to unassign this user from this ticket?</p>
+            </div>
+            <input id="userID_unassign" type="text" style="display:none" class="hidden" />
+            <input id="ticketID_unassign" type="text" style="display:none" class="hidden" />
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                @if (User.IsInRole("Admin"))
+                {
+                    <button type="button" id="confirmUnassignUserFromTicketBtn" class="btn btn-outline-light">Unassign</button>
+                }
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<!-- -->
 
 <div class="modal fade" id="editTicketModal" tabindex="-1" role="dialog" aria-labelledby="editTicketModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -77,36 +107,44 @@ body.modal-open {
                                 <input id="TicketId" name="prodId" type="hidden" value="">
                                 @Html.AntiForgeryToken()
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1">Ticket Type</label>
-                                        @Html.DropDownList("TicketTypeId", null, htmlAttributes: new { id = "ticket_type_edit", @class = "form-control" })
-                                    </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Ticket Type</label>
+                                    @Html.DropDownList("TicketTypeId", null, htmlAttributes: new { id = "ticket_type_edit", @class = "form-control" })
+                                </div>
+                                @if (User.IsInRole("Admin") || User.IsInRole("Program Manager"))
+                                {
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">Ticket Status</label>
                                         @Html.DropDownList("TicketStatusId", null, htmlAttributes: new { id = "ticket_status_edit", @class = "form-control" })
                                     </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">Ticket Priority</label>
-                                        @Html.DropDownList("TicketPriorityId", null, htmlAttributes: new { id = "ticket_priority_edit", @class = "form-control" })
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-check-label" for="exampleCheck1">Ticket Title</label>
-                                        <input type="text" class="ticket_title form-control " id="ticket_title" />
 
-                                    </div>
 
-                                    <div class="form-group">
-                                        <label class="form-check-label" for="exampleCheck1">Ticket Description</label>
-                                        <input type="text" class="ticket_description form-control " id="ticket_description" />
-                                    </div>
+                                }
 
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Ticket Priority</label>
+                                    @Html.DropDownList("TicketPriorityId", null, htmlAttributes: new { id = "ticket_priority_edit", @class = "form-control" })
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-check-label" for="exampleCheck1">Ticket Title</label>
+                                    <input type="text" class="ticket_title form-control " id="ticket_title" />
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-check-label" for="exampleCheck1">Ticket Description</label>
+                                    <input type="text" class="ticket_description form-control " id="ticket_description" />
+                                </div>
+
+                                @if (User.IsInRole("Admin") || User.IsInRole("Program Manager"))
+                                {
                                     <div class="form-group">
                                         <label class="form-check-label" for="exampleCheck1">User Assigned</label>
                                         @Html.DropDownList("AssignedToUserId", null, "-- Select A Developer --", htmlAttributes: new { id = "ticket_assignedToUser_edit", @class = "form-control" })
 
                                     </div>
-
+                                }
 
                                 </div>
                                 <!-- /.card-body -->
@@ -570,12 +608,22 @@ body.modal-open {
                             @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
 
 
-                            @if (User.IsInRole("Admin") || User.IsInRole("Program Manager") )
+                            @if (User.IsInRole("Admin") || User.IsInRole("Program Manager"))
                             {
-                                
-                                <button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#exampleModal">
-                                    Assign
-                                </button>
+                                if (item.AssignedToUserId != null)
+                                {
+
+                                    <button type="button" class="ui mini red button unassign_user_from_ticket_btn" data-toggle="modal" data-target="#modal-danger" data-id="@item.Id" data-user="@item.AssignedToUserId">
+                                        Unassign
+                                    </button> }
+                                else
+                                {
+                                    <button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#exampleModal">
+                                        Assign
+                                    </button>
+                                }
+
+
 
 
                             }
@@ -777,6 +825,55 @@ body.modal-open {
 
 
         });
+
+        $('#confirmUnassignUserFromTicketBtn').click(function () {
+
+            var userID = $("#userID_unassign").val()
+            var ticketID = Number($("#ticketID_unassign").val());
+
+            $.ajax({
+                type: "POST",
+                url: "/Tickets/UnassignTickerFromUser",
+                data: JSON.stringify({
+                    ticketId: ticketID,
+                    userId: userID
+                }),
+                dataType: "json",
+                complete: function () {
+                    location.reload();
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    $('.toast').toast('show');
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+
+
+        });
+
+
+
+        var ticket_id;
+        var user_id;
+
+
+        $(".unassign_user_from_ticket_btn").click(function () {
+
+            //ticket_id = $(this).parent().prev().prev().prev().prev().text().trim();
+            //user_id = $(this).data('id');
+
+            ticket_id = $(this).data('id');
+            user_id = $(this).data('user');
+
+            
+            $("#ticketID_unassign").val(ticket_id);
+            $("#userID_unassign").val(user_id);
+        });
+
+
 
 
 
