@@ -159,7 +159,8 @@
             </div>
         }
 
-
+    </div>
+    <div class="row">
         <div class="col-md-4">
             <div class="card card-danger">
                 <div class="card-header">
@@ -173,7 +174,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <canvas id="donutChart" style="height:200px; min-height:330px; margin-left:-70px"></canvas>
+                    <canvas id="donutChart" style="height:150px; min-height:235px; margin-left:0px"></canvas>
                 </div>
                 <!-- /.card-body -->
             </div>
@@ -203,17 +204,38 @@
             </div>
         </div>
 
+        <div class="col-md-4">
+            <div class="card card-success">
+                <div class="card-header">
+                    <h3 class="card-title">Tickets Per Project</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="chart">
+                        <canvas id="barChartTicketPerProject" style="height:200px; min-height:230px"></canvas>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
 
 
-
-
-
-
-
-
-
-     
     </div>
+
+
+
+
+
+
+
+    
     
 
 
@@ -523,7 +545,7 @@
         $('#unsignedTickets-card,#mostRecentTicket-card , #notification-card ').CardWidget('toggle');
 
         var dataTicketStatus = [];
-
+ //============================== BONUT   ====================================================
         $.ajax({
             type: "POST",
             url: "/Home/DataStats",
@@ -573,11 +595,11 @@
         }
 
 
+//============================================================================= END DONUT =======================
 
 
 
-
-
+//============================================================================= BAR CHART =======================
         $.ajax({
             type: "POST",
             url: "/Home/DataStatsPerUser",
@@ -646,6 +668,81 @@
 
         }
 
+
+//============================================================================= END CHART =======================
+        $.ajax({
+            type: "POST",
+            url: "/Home/GetTicketsPerProjectData",
+            data: {},
+            complete: function (data) {
+
+                drawBarChartTicektsPerProject(data)
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        });
+
+
+        var barChartTicketsPerProjectCanvas = $('#barChartTicketPerProject').get(0).getContext('2d')
+        var drawBarChartTicektsPerProject = function (dataTicketPerProject) {
+            var population = dataTicketPerProject;
+
+          
+            var labels = [];
+            var values = [];
+
+            for (var i = 0; i < population.responseJSON.length; i++) {
+                labels[i] = population.responseJSON[i].Label;
+                values[i] = population.responseJSON[i].Value
+            }
+
+            var areaChartData = {
+                labels:labels,
+                datasets: [
+                    {
+                        label: 'Ticket Count',
+                        backgroundColor: 'rgba(60,141,188,0.9)',
+                        borderColor: 'rgba(60,141,188,0.8)',
+                        pointRadius: false,
+                        pointColor: '#3b8bba',
+                        pointStrokeColor: 'rgba(60,141,188,1)',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(60,141,188,1)',
+                        data: values
+                    },
+                ]
+            }
+
+
+
+          
+            var barChartTicketPerPRojectData = jQuery.extend(true, {}, areaChartData)
+            var temp0 = areaChartData.datasets[0]
+
+            barChartTicketPerPRojectData.datasets[0] = temp0
+
+
+            var barChartOptions = {
+                responsive: false,
+                maintainAspectRatio: false,
+                datasetFill: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+
+            var barChart = new Chart(barChartTicketsPerProjectCanvas, {
+                type: 'bar',
+                data: barChartTicketPerPRojectData,
+                options: barChartOptions
+            })
+
+        }
 
 
 

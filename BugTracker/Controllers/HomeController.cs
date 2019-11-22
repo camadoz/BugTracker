@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using BugTracker.ViewModels;
 using BugTracker.Helpers;
 using Newtonsoft.Json;
+using Microsoft.AspNet.Identity;
 
 namespace BugTracker.Controllers
 {
@@ -99,6 +100,21 @@ namespace BugTracker.Controllers
 
             return Json(output);
             //return Json(new { Name = project.Name, Description = project.Description, Created = project.Created.ToString("MMM dd,yyyy"), projectID, userId });
+        }
+
+        public JsonResult GetTicketsPerProjectData()
+        {
+            ProjectsHelper projectsHelper = new ProjectsHelper();
+            var dataSet = new List<TicketPerProjectData>();
+            var projects = projectsHelper.ListUserProjects(User.Identity.GetUserId());
+            foreach (var project in projects)
+            { 
+                dataSet.Add(new TicketPerProjectData { Label = project.Name, Value = project.Tickets.Count() });
+            
+            }
+           
+
+            return Json(dataSet);
         }
 
         
