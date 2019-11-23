@@ -583,6 +583,7 @@
     <Content Include="Views\Admin\ManageUsersAndProjects.cshtml" />
     <Content Include="Views\Shared\UsersRoles.cshtml" />
     <Content Include="Views\Home\DemoUser.cshtml" />
+    <Content Include="Views\Projects\All.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

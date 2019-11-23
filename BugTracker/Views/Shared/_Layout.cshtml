@@ -200,7 +200,7 @@
             <!-- Brand Logo -->
             <a href="index3.html" class="brand-link text-center h2">
                 @*<img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-                    style="opacity: .8">*@bug<b>Tracker</b>
+                    style="opacity: .8">*@Bug<b>Tracker</b>
                 @*<span class="brand-text font-weight-light">Bug<b>Traker</b></span>*@
             </a>
 
@@ -284,6 +284,14 @@
                         @if (User.IsInRole("Admin") || User.IsInRole("DemoAdmin"))
                         {
 
+                            <li class="nav-item">
+                                <a href="@Url.Action("All", "Projects")" class="nav-link" id="leftNavAllListProjects">
+                                    <i class="nav-icon fas fa-project-diagram" style="color:red;"></i>
+                                    <p>All Projects</p>
+                                </a>
+                            </li>
+
+
 
                             <li class="nav-item">
                                 <a href="@Url.Action("Create", "Projects")" class="nav-link" id="leftNavCreateProject">
@@ -331,7 +339,7 @@
                         @if (User.IsInRole("Submitter") || User.IsInRole("DemoSubmitter"))
                         {
                             <li class="nav-item ">
-                                <a href="@Url.Action("Create", "Tickets")" id="leftNavCreateTicket" class="nav-link" >
+                                <a href="@Url.Action("Create", "Tickets")" id="leftNavCreateTicket" class="nav-link">
                                     <i class="nav-icon fas fa-book"></i>
                                     <p>Create a Ticket</p>
                                 </a>

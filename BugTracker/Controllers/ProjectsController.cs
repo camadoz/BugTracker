@@ -25,6 +25,13 @@ namespace BugTracker.Controllers
            // return View(db.Projects.ToList());
         }
 
+        public ActionResult All()
+        {
+            //return View(projectHelper.ListUserProjects(User.Identity.GetUserId()));
+            return  View(db.Projects.OrderByDescending(p => p.Created).ToList());
+            // return View(db.Projects.ToList());
+        }
+
         // GET: Projects/Details/5
         public ActionResult Details(int? id)
         {
