@@ -254,6 +254,7 @@
     <Content Include="Images\business-presentation.png" />
     <Content Include="Images\checked-checkbox-32.png" />
     <Content Include="Images\checked-checkbox-64.png" />
+    <Content Include="Images\Files-View-File-icon.png" />
     <Content Include="Images\icons8-1st-50.png" />
     <Content Include="Images\icons8-circled-2-c-52.png" />
     <Content Include="Images\icons8-number-1-48.png" />
@@ -465,6 +466,8 @@
     <Content Include="webfonts\fa-regular-400.svg" />
     <Content Include="webfonts\fa-solid-900.svg" />
     <Content Include="private.config" />
+    <Content Include="Content\themes\default\assets\fonts\icons.ttf" />
+    <Content Include="Content\themes\default\assets\fonts\icons.woff2" />
     <None Include="Properties\PublishProfiles\MCBugTracker - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />

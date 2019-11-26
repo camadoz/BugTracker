@@ -118,7 +118,7 @@
             <!-- /.info-box -->
         </div>
     </div>
-   
+
 
     <div class="row">
         <div class="col-md-2">
@@ -154,6 +154,27 @@
                         <a href="#" class="small-box-footer">
                             More info <i class="fas fa-arrow-circle-right"></i>
                         </a>
+                    </div>
+                </a>
+            </div>
+        }
+        else if (User.IsInRole("Submitter") || User.IsInRole("DemoSubmitter"))
+        {
+            <div class="col-md-4">
+                <a href="@Url.Action("Create", "Tickets")" class="small-box-footer" style="min-height:100%">
+                    <div class="small-box bg-info pb-4">
+                        <div class="inner">
+                            <h3>Create New Ticket</h3>
+
+                            <p>Click Here</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+
+                        @*<a href="#" class="small-box-footer">
+                                More info <i class="fas fa-arrow-circle-right"></i>
+                            </a>*@
                     </div>
                 </a>
             </div>
@@ -235,534 +256,581 @@
 
 
 
-    
-    
 
 
-    <div class="row">
-        <div class="col-md-6">
-            <!-- Display Open Tickets unsigned  -->
-            <div class="row" style="background-color:white;">
-                <div class="col-md-12 ">
-                    @if (db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open").ToList().Count() == 0)
-                    {
-                        <div class="card card-danger" id="unsignedTickets-card">
-                            <div class="card-header">
-                                <h3 class="card-title">@db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open").ToList().Count() urgent and open tickets.</h3>  <!--  THIS IS THE COUNT   -->
+    @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.IsInRole("DemoAdmin") || User.IsInRole("DemoPM"))
+    {
 
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                                <!-- /.card-tools -->
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body">
 
-
-                                @foreach (var ticket in db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open"))
-                                {
-                                    <a href="@Url.Action("Details", "Tickets" , new { id = ticket.Id })">
-                                        <div class="alert alert-primary" role="alert">
-                                            <b><u>Description:</u></b> @ticket.Description &nbsp; <b><u>Created on:</u></b> @ticket.Created &nbsp; <b><u>Title:</u></b>@ticket.Title
-
-                                        </div>
-                                    </a>
-
-
-
-                                }
-
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-
-
-                    }
-                    else
-                    {
-
-
-                        <div class="card card-danger urgent" id="unsignedTickets-card">
-                            <div class="card-header">
-                                <h3 class="card-title">@db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open").ToList().Count() Tickets urgent and open tickets.</h3>  <!--  THIS IS THE COUNT   -->
-
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                                <!-- /.card-tools -->
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body">
-
-
-                                @foreach (var ticket in db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open"))
-                                {
-                                    <a href="@Url.Action("Details", "Tickets" , new { id = ticket.Id })">
-                                        <div class="alert alert-primary" role="alert">
-                                            <b><u>Description:</u></b> @ticket.Description &nbsp; <b><u>Created on:</u></b> @ticket.Created &nbsp; <b><u>Title:</u></b>@ticket.Title
-
-                                        </div>
-                                    </a>
-
-
-
-                                }
-
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-
-                    }
-
-
-                </div>
-            </div>
-
-            <!-- Display Open Tickets unsigned  -->
-            <div class="row" style="background-color:white;">
-                <div class="col-md-12 ">
-                    <div class="card card-warning" id="unsignedTickets-card">
-                        <div class="card-header">
-                            <h3 class="card-title">@db.Tickets.Where(t => t.AssignedToUser == null).ToList().Count() Tickets unsigned.</h3>  <!--  THIS IS THE COUNT   -->
-
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                            </div>
-                            <!-- /.card-tools -->
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            @foreach (var ticket in db.Tickets.Where(t => t.AssignedToUser == null))
-                            {
-                                <a href="@Url.Action("Details", "Tickets" , new { id = ticket.Id })">
-                                    <div class="alert alert-primary" role="alert">
-                                        <b><u>Description:</u></b> @ticket.Description &nbsp; <b><u>Created on:</u></b> @ticket.Created &nbsp; <b><u>Title:</u></b>@ticket.Title
-
-                                    </div>
-                                </a>
-
-
-
-                            }
-
-
-
-
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-
-                </div>
-            </div>
-
-
-
-
-
-        </div>
-        <div class="col-md-6">
-            <div class="row" style="background-color:white;">
-                <div class="col-md-12 ">
-                    <div class="card card-info" id="mostRecentTicket-card">
-                        <div class="card-header">
-                            <h3 class="card-title">Most recent tickets created.</h3>  <!--  THIS IS THE COUNT   -->
-
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                            </div>
-                            <!-- /.card-tools -->
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-
-
-                            @foreach (var ticket in db.Tickets.OrderByDescending(t => t.Created).Take(5).ToList())
-                            {
-                                <a href="@Url.Action("Details", "Tickets" , new { id = ticket.Id })">
-                                    <div class="alert alert-primary" role="alert">
-                                        <b><u>Description:</u></b> @ticket.Description &nbsp; <b><u>Created on:</u></b> @ticket.Created &nbsp; <b><u>Title:</u></b>@ticket.Title
-
-                                    </div>
-                                </a>
-                            }
-
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Display all notifiaction not read -->
-
-    <div class="row" style="background-color:white;">
-        <div class="col-md-12 ">
-            <div class="card card-success" id="notification-card">
-                <div class="card-header">
-                    <h3 class="card-title">@Model.Notifications.Count() Unread Notification(s)</h3>  <!--  THIS IS THE COUNT   -->
-
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
-                    <!-- /.card-tools -->
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-
-
-
-                    <table id="not" class="table table-bordered table-hover table-striped" style="width:100%">
-
-                        <thead>
-                            <tr>
-                                <th>Avatar </th>
-                                <th>Recicipient </th>
-                                <th>Sender</th>
-                                <th>Created</th>
-                                <th>Subject</th>
-
-                                <th>Notification Detail</th>
-                                <th>Is Read</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var notification in Model.Notifications.OrderByDescending(t => t.Created))
-                            {
-                                if (notification.isRead)
-                                {
-                                    <tr style="background-color:lightgreen;">
-                                        <td class="target_id">
-                                            <img style="width:60%" src=" @Html.DisplayFor(modelItem => notification.Recipient.AvatarUrl)" />
-
-                                        </td>
-                                        <td class="target_id">
-                                            @Html.DisplayFor(modelItem => notification.Recipient.FullName)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => notification.Sender.FullName)
-                                        </td>
-                                        <td>
-                                            @Html.Raw(notification.Created.ToString("MMM dd,yyyy"))
-                                        </td>
-                                        <td class="target_project_name" style="width:30%;">
-                                            @Html.DisplayFor(modelItem => notification.Subject)
-                                        </td>
-                                        <td class="target_ticket_priority">
-                                            @Html.DisplayFor(modelItem => notification.NotificationBody)
-                                        </td>
-                                        <td class="target_ticket_priority">
-                                            @Html.DisplayFor(modelItem => notification.isRead)
-                                        </td>
-                                    </tr>
-
-                                }
-                                else
-                                {
-                                    <tr>
-                                        <td class="target_id">
-                                            <img style="width:60%" src=" @Html.DisplayFor(modelItem => notification.Recipient.AvatarUrl)" />
-
-                                        </td>
-                                        <td class="target_id">
-                                            @Html.DisplayFor(modelItem => notification.Recipient.FullName)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => notification.Sender.FullName)
-                                        </td>
-                                        <td>
-                                            @Html.Raw(notification.Created.ToString("MMM dd,yyyy"))
-                                        </td>
-                                        <td class="target_project_name" style="width:30%;">
-                                            @Html.DisplayFor(modelItem => notification.Subject)
-                                        </td>
-                                        <td class="target_ticket_priority">
-                                            @Html.DisplayFor(modelItem => notification.NotificationBody)
-                                        </td>
-                                        <td class="target_ticket_priority">
-                                            @Html.DisplayFor(modelItem => notification.isRead)
-                                        </td>
-                                    </tr>
-                                }
-
-
-
-                            }
-                        </tbody>
-                        <thead>
-                            <tr>
-                                <th>Avatar </th>
-                                <th>Recicipient </th>
-                                <th>Sender</th>
-                                <th>Created</th>
-                                <th>Subject</th>
-
-                                <th>Notification Detail</th>
-                                <th>Is Read</th>
-                            </tr>
-                        </thead>
-                    </table>
-
-                </div>
-                <!-- /.card-body -->
-            </div>
-
-        </div>
-    </div>
-
-
-
-
-    <div class="container">
         <div class="row">
+            <div class="col-md-6">
+                <!-- Display Open Tickets unsigned  -->
+                <div class="row" style="background-color:white;">
+                    <div class="col-md-12 ">
+                        @if (db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open").ToList().Count() == 0)
+                        {
+                            <div class="card card-danger" id="unsignedTickets-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">@db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open").ToList().Count() urgent and open tickets.</h3>  <!--  THIS IS THE COUNT   -->
 
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <!-- /.card-tools -->
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+
+
+                                    @foreach (var ticket in db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open"))
+                                    {
+                                        <a href="@Url.Action("Details", "Tickets", new { id = ticket.Id })">
+                                            <div class="alert alert-primary" role="alert">
+                                                <b><u>Description:</u></b> @ticket.Description &nbsp; <b><u>Created on:</u></b> @ticket.Created &nbsp; <b><u>Title:</u></b>@ticket.Title
+
+                                            </div>
+                                        </a>
+
+
+
+                                    }
+
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+
+
+                        }
+                        else
+                        {
+
+
+                            <div class="card card-danger urgent" id="unsignedTickets-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">@db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open").ToList().Count() Tickets urgent and open tickets.</h3>  <!--  THIS IS THE COUNT   -->
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <!-- /.card-tools -->
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+
+
+                                    @foreach (var ticket in db.Tickets.Where(t => t.TicketPriority.Name == "Urgent" && t.TIcketStatus.Name == "open"))
+                                    {
+                                        <a href="@Url.Action("Details", "Tickets", new { id = ticket.Id })">
+                                            <div class="alert alert-primary" role="alert">
+                                                <b><u>Description:</u></b> @ticket.Description &nbsp; <b><u>Created on:</u></b> @ticket.Created &nbsp; <b><u>Title:</u></b>@ticket.Title
+
+                                            </div>
+                                        </a>
+
+
+
+                                    }
+
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+
+                        }
+
+
+                    </div>
+                </div>
+
+                <!-- Display Open Tickets unsigned  -->
+                <div class="row" style="background-color:white;">
+                    <div class="col-md-12 ">
+                        <div class="card card-warning" id="unsignedTickets-card">
+                            <div class="card-header">
+                                <h3 class="card-title">@db.Tickets.Where(t => t.AssignedToUser == null).ToList().Count() Tickets unsigned.</h3>  <!--  THIS IS THE COUNT   -->
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                                <!-- /.card-tools -->
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                @foreach (var ticket in db.Tickets.Where(t => t.AssignedToUser == null))
+                                {
+                                    <a href="@Url.Action("Details", "Tickets", new { id = ticket.Id })">
+                                        <div class="alert alert-primary" role="alert">
+                                            <b><u>Description:</u></b> @ticket.Description &nbsp; <b><u>Created on:</u></b> @ticket.Created &nbsp; <b><u>Title:</u></b>@ticket.Title
+
+                                        </div>
+                                    </a>
+
+
+
+                                }
+
+
+
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+            <div class="col-md-6">
+                <div class="row" style="background-color:white;">
+                    <div class="col-md-12 ">
+                        <div class="card card-info" id="mostRecentTicket-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Most recent tickets created.</h3>  <!--  THIS IS THE COUNT   -->
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                                <!-- /.card-tools -->
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+
+
+                                @foreach (var ticket in db.Tickets.OrderByDescending(t => t.Created).Take(5).ToList())
+                                {
+                                    <a href="@Url.Action("Details", "Tickets", new { id = ticket.Id })">
+                                        <div class="alert alert-primary" role="alert">
+                                            <b><u>Description:</u></b> @ticket.Description &nbsp; <b><u>Created on:</u></b> @ticket.Created &nbsp; <b><u>Title:</u></b>@ticket.Title
+
+                                        </div>
+                                    </a>
+                                }
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </div>
 
-</div>
+        <!-- Display all notifiaction not read -->
 
+        <div class="row" style="background-color:white;">
+            <div class="col-md-12 ">
+                <div class="card card-success" id="notification-card">
+                    <div class="card-header">
+                        <h3 class="card-title">@Model.Notifications.Count() Unread Notification(s)</h3>  <!--  THIS IS THE COUNT   -->
 
-
-
-@section Scripts{
-
-    <script>
-
-
-        $("#leftNavDashboard").addClass("active");
-        $('#unsignedTickets-card,#mostRecentTicket-card , #notification-card ').CardWidget('toggle');
-
-        var dataTicketStatus = [];
- //============================== BONUT   ====================================================
-        $.ajax({
-            type: "POST",
-            url: "/Home/DataStats",
-            data: {},
-            complete: function (data) {
-
-                drawDonut(data.responseJSON)
-            },
-            error: function (xhr, status, error) {
-            }
-        });
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                        <!-- /.card-tools -->
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
 
 
 
-        var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
-        var drawDonut = function (dataTicketStatus) {
+                        <table id="not" class="table table-bordered table-hover table-striped" style="width:100%">
 
-            var donutData = {
-                labels: [
-                    'Open',
-                    'Assigned',
-                    'In Progress',
-                    'Resolved',
-                    'Archved',
+                            <thead>
+                                <tr>
+                                    <th>Avatar </th>
+                                    <th>Recicipient </th>
+                                    <th>Sender</th>
+                                    <th>Created</th>
+                                    <th>Subject</th>
 
-                ],
-                datasets: [
-                    {
-                        data: dataTicketStatus,
-                        backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+                                    <th>Notification Detail</th>
+                                    <th>Is Read</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var notification in Model.Notifications.OrderByDescending(t => t.Created))
+                                {
+                                    if (notification.isRead)
+                                    {
+                                        <tr style="background-color:lightgreen;">
+                                            <td class="target_id">
+                                                <img style="width:60%" src=" @Html.DisplayFor(modelItem => notification.Recipient.AvatarUrl)" />
+
+                                            </td>
+                                            <td class="target_id">
+                                                @Html.DisplayFor(modelItem => notification.Recipient.FullName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => notification.Sender.FullName)
+                                            </td>
+                                            <td>
+                                                @Html.Raw(notification.Created.ToString("MMM dd,yyyy"))
+                                            </td>
+                                            <td class="target_project_name" style="width:30%;">
+                                                @Html.DisplayFor(modelItem => notification.Subject)
+                                            </td>
+                                            <td class="target_ticket_priority">
+                                                @Html.DisplayFor(modelItem => notification.NotificationBody)
+                                            </td>
+                                            <td class="target_ticket_priority">
+                                                @Html.DisplayFor(modelItem => notification.isRead)
+                                            </td>
+                                        </tr>
+
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td class="target_id">
+                                                <img style="width:60%" src=" @Html.DisplayFor(modelItem => notification.Recipient.AvatarUrl)" />
+
+                                            </td>
+                                            <td class="target_id">
+                                                @Html.DisplayFor(modelItem => notification.Recipient.FullName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => notification.Sender.FullName)
+                                            </td>
+                                            <td>
+                                                @Html.Raw(notification.Created.ToString("MMM dd,yyyy"))
+                                            </td>
+                                            <td class="target_project_name" style="width:30%;">
+                                                @Html.DisplayFor(modelItem => notification.Subject)
+                                            </td>
+                                            <td class="target_ticket_priority">
+                                                @Html.DisplayFor(modelItem => notification.NotificationBody)
+                                            </td>
+                                            <td class="target_ticket_priority">
+                                                @Html.DisplayFor(modelItem => notification.isRead)
+                                            </td>
+                                        </tr>
+                                    }
+
+
+
+                                }
+                            </tbody>
+                            <thead>
+                                <tr>
+                                    <th>Avatar </th>
+                                    <th>Recicipient </th>
+                                    <th>Sender</th>
+                                    <th>Created</th>
+                                    <th>Subject</th>
+
+                                    <th>Notification Detail</th>
+                                    <th>Is Read</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+            </div>
+        </div>
+
+
+
+    }
+    else if (User.IsInRole("Submitter") || User.IsInRole("DemoSubmitter"))
+    {
+        <div class="row" style="background-color:white;">
+            <div class="col-md-12 ">
+
+                <div class="card card-info" id="unsignedTickets-card">
+                    <div class="card-header">
+                        <h3 class="card-title">My most recent tickets</h3>  <!--  THIS IS THE COUNT   -->
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                        <!-- /.card-tools -->
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+
+                        @{
+                            var cutOffDate = DateTime.Now.AddDays(-7);
+                            var userId = User.Identity.GetUserId();
+                        }
+                        
+                        @foreach (var ticket in db.Tickets.Where(t => t.OwnerUserId == userId && t.Created > cutOffDate).ToList())
+                        {
+                            <a href="@Url.Action("Details", "Tickets", new { id = ticket.Id })">
+                                <div class="callout callout-success" style="color:dimgrey;">
+                                    <b>Description:</b> @ticket.Description &nbsp; <b>Created on:</b>  @Html.Raw(ticket.Created.ToString("MMM dd,yyyy")) &nbsp; <b>Title:&nbsp;</b>@ticket.Title
+                                </div>
+                            </a>
+
+                        }
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+            </div>
+         </div>
+
+    }
+
+
+
+                <div class="container">
+                    <div class="row">
+
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+            @section Scripts{
+
+                <script>
+
+
+                    $("#leftNavDashboard").addClass("active");
+                    $('#unsignedTickets-card,#mostRecentTicket-card , #notification-card ').CardWidget('toggle');
+
+                    var dataTicketStatus = [];
+                    //============================== BONUT   ====================================================
+                    $.ajax({
+                        type: "POST",
+                        url: "/Home/DataStats",
+                        data: {},
+                        complete: function (data) {
+
+                            drawDonut(data.responseJSON)
+                        },
+                        error: function (xhr, status, error) {
+                        }
+                    });
+
+
+
+                    var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+                    var drawDonut = function (dataTicketStatus) {
+
+                        var donutData = {
+                            labels: [
+                                'Open',
+                                'Assigned',
+                                'In Progress',
+                                'Resolved',
+                                'Archved',
+
+                            ],
+                            datasets: [
+                                {
+                                    data: dataTicketStatus,
+                                    backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+                                }
+                            ]
+                        }
+
+                        var donutOptions = {
+                            maintainAspectRatio: false,
+                            responsive: false,
+                        }
+                        //Create pie or douhnut chart
+                        // You can switch between pie and douhnut using the method below.
+                        var donutChart = new Chart(donutChartCanvas, {
+                            type: 'doughnut',
+                            data: donutData,
+                            options: donutOptions
+                        })
+
                     }
-                ]
-            }
-
-            var donutOptions = {
-                maintainAspectRatio: false,
-                responsive: false,
-            }
-            //Create pie or douhnut chart
-            // You can switch between pie and douhnut using the method below.
-            var donutChart = new Chart(donutChartCanvas, {
-                type: 'doughnut',
-                data: donutData,
-                options: donutOptions
-            })
-
-        }
 
 
-//============================================================================= END DONUT =======================
+                    //============================================================================= END DONUT =======================
 
 
 
-//============================================================================= BAR CHART =======================
-        $.ajax({
-            type: "POST",
-            url: "/Home/DataStatsPerUser",
-            data: {},
-            complete: function (data) {
+                    //============================================================================= BAR CHART =======================
+                    $.ajax({
+                        type: "POST",
+                        url: "/Home/DataStatsPerUser",
+                        data: {},
+                        complete: function (data) {
 
-                drawBarChart(data.responseJSON)
-            },
-            error: function (xhr, status, error) {
-                console.log(error);
-            }
-        });
-
-
-
-        var barChartCanvas = $('#barChart').get(0).getContext('2d')
-        var drawBarChart = function (dataTicketAssignedTo) {
-            var population = JSON.parse(dataTicketAssignedTo);
-
-
-
-            var areaChartData = {
-                labels: population[0],
-                datasets: [
-                    {
-                        label: 'Ticket Count',
-                        backgroundColor: 'rgba(60,141,188,0.9)',
-                        borderColor: 'rgba(60,141,188,0.8)',
-                        pointRadius: false,
-                        pointColor: '#3b8bba',
-                        pointStrokeColor: 'rgba(60,141,188,1)',
-                        pointHighlightFill: '#fff',
-                        pointHighlightStroke: 'rgba(60,141,188,1)',
-                        data: population[1]
-                    },
-                ]
-            }
-
-
-
-            var barChartCanvas = $('#barChart').get(0).getContext('2d')
-            var barChartData = jQuery.extend(true, {}, areaChartData)
-            var temp0 = areaChartData.datasets[0]
-
-            barChartData.datasets[0] = temp0
-
-
-            var barChartOptions = {
-                responsive: false,
-                maintainAspectRatio: false,
-                datasetFill: false,
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
+                            drawBarChart(data.responseJSON)
+                        },
+                        error: function (xhr, status, error) {
+                            console.log(error);
                         }
-                    }]
-                }
-            }
-
-            var barChart = new Chart(barChartCanvas, {
-                type: 'bar',
-                data: barChartData,
-                options: barChartOptions
-            })
-
-        }
-
-
-//============================================================================= END CHART =======================
-        $.ajax({
-            type: "POST",
-            url: "/Home/GetTicketsPerProjectData",
-            data: {},
-            complete: function (data) {
-
-                drawBarChartTicektsPerProject(data)
-            },
-            error: function (xhr, status, error) {
-                console.log(error);
-            }
-        });
-
-
-        var barChartTicketsPerProjectCanvas = $('#barChartTicketPerProject').get(0).getContext('2d')
-        var drawBarChartTicektsPerProject = function (dataTicketPerProject) {
-            var population = dataTicketPerProject;
-
-          
-            var labels = [];
-            var values = [];
-
-            for (var i = 0; i < population.responseJSON.length; i++) {
-                labels[i] = population.responseJSON[i].Label;
-                values[i] = population.responseJSON[i].Value
-            }
-
-            var areaChartData = {
-                labels:labels,
-                datasets: [
-                    {
-                        label: 'Ticket Count',
-                        backgroundColor: 'rgba(60,141,188,0.9)',
-                        borderColor: 'rgba(60,141,188,0.8)',
-                        pointRadius: false,
-                        pointColor: '#3b8bba',
-                        pointStrokeColor: 'rgba(60,141,188,1)',
-                        pointHighlightFill: '#fff',
-                        pointHighlightStroke: 'rgba(60,141,188,1)',
-                        data: values
-                    },
-                ]
-            }
+                    });
 
 
 
-          
-            var barChartTicketPerPRojectData = jQuery.extend(true, {}, areaChartData)
-            var temp0 = areaChartData.datasets[0]
-
-            barChartTicketPerPRojectData.datasets[0] = temp0
+                    var barChartCanvas = $('#barChart').get(0).getContext('2d')
+                    var drawBarChart = function (dataTicketAssignedTo) {
+                        var population = JSON.parse(dataTicketAssignedTo);
 
 
-            var barChartOptions = {
-                responsive: false,
-                maintainAspectRatio: false,
-                datasetFill: false,
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
+
+                        var areaChartData = {
+                            labels: population[0],
+                            datasets: [
+                                {
+                                    label: 'Ticket Count',
+                                    backgroundColor: 'rgba(60,141,188,0.9)',
+                                    borderColor: 'rgba(60,141,188,0.8)',
+                                    pointRadius: false,
+                                    pointColor: '#3b8bba',
+                                    pointStrokeColor: 'rgba(60,141,188,1)',
+                                    pointHighlightFill: '#fff',
+                                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                                    data: population[1]
+                                },
+                            ]
                         }
-                    }]
-                }
+
+
+
+                        var barChartCanvas = $('#barChart').get(0).getContext('2d')
+                        var barChartData = jQuery.extend(true, {}, areaChartData)
+                        var temp0 = areaChartData.datasets[0]
+
+                        barChartData.datasets[0] = temp0
+
+
+                        var barChartOptions = {
+                            responsive: false,
+                            maintainAspectRatio: false,
+                            datasetFill: false,
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        }
+
+                        var barChart = new Chart(barChartCanvas, {
+                            type: 'bar',
+                            data: barChartData,
+                            options: barChartOptions
+                        })
+
+                    }
+
+
+                    //============================================================================= END CHART =======================
+                    $.ajax({
+                        type: "POST",
+                        url: "/Home/GetTicketsPerProjectData",
+                        data: {},
+                        complete: function (data) {
+
+                            drawBarChartTicektsPerProject(data)
+                        },
+                        error: function (xhr, status, error) {
+                            console.log(error);
+                        }
+                    });
+
+
+                    var barChartTicketsPerProjectCanvas = $('#barChartTicketPerProject').get(0).getContext('2d')
+                    var drawBarChartTicektsPerProject = function (dataTicketPerProject) {
+                        var population = dataTicketPerProject;
+
+
+                        var labels = [];
+                        var values = [];
+
+                        for (var i = 0; i < population.responseJSON.length; i++) {
+                            labels[i] = population.responseJSON[i].Label;
+                            values[i] = population.responseJSON[i].Value
+                        }
+
+                        var areaChartData = {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Ticket Count',
+                                    backgroundColor: 'rgba(60,141,188,0.9)',
+                                    borderColor: 'rgba(60,141,188,0.8)',
+                                    pointRadius: false,
+                                    pointColor: '#3b8bba',
+                                    pointStrokeColor: 'rgba(60,141,188,1)',
+                                    pointHighlightFill: '#fff',
+                                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                                    data: values
+                                },
+                            ]
+                        }
+
+
+
+
+                        var barChartTicketPerPRojectData = jQuery.extend(true, {}, areaChartData)
+                        var temp0 = areaChartData.datasets[0]
+
+                        barChartTicketPerPRojectData.datasets[0] = temp0
+
+
+                        var barChartOptions = {
+                            responsive: false,
+                            maintainAspectRatio: false,
+                            datasetFill: false,
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        }
+
+                        var barChart = new Chart(barChartTicketsPerProjectCanvas, {
+                            type: 'bar',
+                            data: barChartTicketPerPRojectData,
+                            options: barChartOptions
+                        })
+
+                    }
+
+
+
+
+                    $(function () {
+                        var on = false;
+                        window.setInterval(function () {
+
+                            on = !on;
+                            if (on) {
+                                $('.urgent').addClass('urgent_tickets')
+                            }
+                            else {
+                                $('.urgent_tickets').removeClass('urgent_tickets')
+                            }
+
+
+                        }, 2000);
+
+                    });
+
+                </script>
             }
-
-            var barChart = new Chart(barChartTicketsPerProjectCanvas, {
-                type: 'bar',
-                data: barChartTicketPerPRojectData,
-                options: barChartOptions
-            })
-
-        }
-
-
-
-
-        $(function () {
-            var on = false;
-            window.setInterval(function () {
-
-                on = !on;
-                if (on) {
-                    $('.urgent').addClass('urgent_tickets')
-                }
-                else {
-                    $('.urgent_tickets').removeClass('urgent_tickets')
-                }
-
-
-            }, 2000);
-
-        });
-
-    </script>
-}

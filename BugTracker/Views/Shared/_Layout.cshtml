@@ -265,14 +265,14 @@
                         </li>
                         <li class="nav-item">
                             <a href="@Url.Action("EditProfile", "Members")" class="nav-link" id="leftNavProfile">
-                                <i class="nav-icon red fas fa-user"></i>
+                                <i class="nav-icon red fas fa-user" style="color:dodgerblue"></i>
                                 <p>Edit My Profile</p>
                             </a>
                         </li>
 
 
 
-                        <li class="nav-header h3">PROJECTS MANAGEMENT</li>
+                        <li class="nav-header h3">PROJECT MANAGEMENT</li>
                         <!--          PROJECT SECTION                   -->
                         <li class="nav-item">
                             <a href="@Url.Action("Index", "Projects")" class="nav-link" id="leftNavListProjects">
@@ -281,7 +281,7 @@
                             </a>
                         </li>
 
-                        @if (User.IsInRole("Admin") || User.IsInRole("DemoAdmin"))
+                        @if (User.IsInRole("Admin") || User.IsInRole("DemoAdmin") || User.IsInRole("Project Manager") || User.IsInRole("DemoPM") )
                         {
 
                             <li class="nav-item">
@@ -300,10 +300,10 @@
                                 </a>
                             </li>
 
-                            <li class="nav-header h3">USERS MANAGEMENT</li>
+                            <li class="nav-header h3">USER MANAGEMENT</li>
                             <li class="nav-item">
                                 <a href="@Url.Action("UsersIndex", "Admin")" class="nav-link" id="leftNavListUsers">
-                                    <i class="nav-icon fas fa-users"></i>
+                                    <i class="nav-icon fas fa-users" style="color:dodgerblue"></i>
                                     <p>User List</p>
                                 </a>
                             </li>
@@ -327,11 +327,11 @@
                             </li>
                         }
 
-                        <li class="nav-header h3">TICKETS MANAGEMENT</li>
+                        <li class="nav-header h3">TICKET MANAGEMENT</li>
                         <!--          Ticket SECTION                   -->
                         <li class="nav-item">
                             <a href="@Url.Action("Index", "Tickets")" class="nav-link" id="leftNavTicketList">
-                                <i class="nav-icon fas fa-ticket-alt"></i>
+                                <i class="nav-icon fas fa-ticket-alt" style="color:greenyellow"></i>
                                 <p>View All Tickets</p>
                             </a>
                         </li>

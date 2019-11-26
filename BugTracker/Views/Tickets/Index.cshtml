@@ -63,7 +63,7 @@ body.modal-open {
             <input id="ticketID_unassign" type="text" style="display:none" class="hidden" />
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
                 {
                     <button type="button" id="confirmUnassignUserFromTicketBtn" class="btn btn-outline-light">Unassign</button>
                 }
@@ -608,7 +608,7 @@ body.modal-open {
                             @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
 
 
-                            @if (User.IsInRole("Admin") || User.IsInRole("Program Manager"))
+                            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.IsInRole("DemoAdmin") || User.IsInRole("DemoPM"))
                             {
                                 if (item.AssignedToUserId != null)
                                 {

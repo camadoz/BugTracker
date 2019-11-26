@@ -169,45 +169,60 @@
                             <div class="card " style="width:600px;">
 
                                 <div class="content">
-                                    <h3>Ticket Information</h3>
-                                    <hr />
-                                    <img class="right floated mini ui image" src="~/images/ticket.png">
-                                    <div class="header">
-                                        @Html.DisplayFor(model => model.Title)
-                                    </div>
-                                    <div class="meta">
-                                        Created on @Html.DisplayFor(model => model.Created) for project @Html.DisplayFor(model => model.Project.Name)
-                                    </div>
 
-                                    <div class="description mb-2">
-                                        <b>Description:</b> @Html.DisplayFor(model => model.Description)
+
+                                    <div class="header mb-3">Ticket Information</div>
+
+
+
+                                    <div class="row ">
+                                        <div class="col-md-4 text-right mb-1" style="text-align:right;"><b>Project:</b></div>
+                                        <div class="col-md-6 text-left"><b>@Html.DisplayFor(model => model.Project.Name)</b></div>
                                     </div>
 
-                                    <div class="description mb-2">
-                                        <b>Ticket Description:</b> @Html.DisplayFor(model => model.Description)
-                                    </div>
-                                    <div class="description mb-2">
-                                        <b>Ticket status:</b> @Html.DisplayFor(model => model.TIcketStatus.Name)
-                                    </div>
-                                    <div class="description mb-2">
-                                        <b>Ticket priority:</b> @Html.DisplayFor(model => model.TicketPriority.Name)
+                                    <div class="row">
+                                        <div class="col-md-4 text-right mb-1"><b>Ticket title:</b></div>
+                                        <div class="col-md-6">@Html.DisplayFor(model => model.Title)</div>
                                     </div>
 
-                                    <div class="description">
-                                        <b>Ticket type:</b> @Html.DisplayFor(model => model.TicketType.Name)
+                                    <div class="row">
+                                        <div class="col-md-4 text-right mb-1"><b>Created on:</b></div>
+                                        <div class="col-md-6">@Html.Raw(Model.Created.ToString("MMM dd,yyyy"))</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 text-right mb-1"><b>Description</b>:</div>
+                                        <div class="col-md-6">@Html.DisplayFor(model => model.Description)</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 text-right mb-1"><b>Status:</b></div>
+                                        <div class="col-md-6">@Html.DisplayFor(model => model.TIcketStatus.Name)</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 text-right mb-1"><b>Priority:</b></div>
+                                        <div class="col-md-6">@Html.DisplayFor(model => model.TicketPriority.Name)</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 text-right"><b>Type:</b></div>
+                                        <div class="col-md-6">@Html.DisplayFor(model => model.TicketType.Name)</div>
                                     </div>
 
 
-
-
-                                </div>
-
-                                <div class="ui card-body">
 
 
                                     @Html.ActionLink("Edit Ticket", "Edit", new { id = Model.Id }, new { @class = "ui  blue button desktop icon mt-3 mb-3" })
                                     @Html.ActionLink("Back to Ticket List", "Index", null, new { @class = "ui  orange button desktop icon" })
+
+
+
+
+
                                 </div>
+
+
 
 
 
@@ -593,19 +608,24 @@
             <div class="card-body">
                 @foreach (var attachment in Model.TicketAttachments)
                 {
-                    <a href="@Url.Content("~/uploads/" + attachment.FilePath)" download>
 
-                        <div class="info-box mb-3 bg-success">
-                            <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-                            <img src="@AttachmentHelper.GetIconPath(attachment.FilePath)" />
-                            <div class="info-box-content">
-                                <span class="info-box-text">@Html.Raw(attachment.Description)</span>
-                                <span class="info-box-number">@attachment.FilePath</span>
-                                <span class="info-box-number">Created on @attachment.Created</span>
+                    <div class="callout callout-success">
+                        <div class="row" >
+                            <div class="col-md-6">
+                               <span class="info-box-text">Description: @Html.Raw(attachment.Description)</span>
+                                @*<span class="info-box-number">@attachment.FilePath</span>*@
+                                <span class="info-box-number">Uploaded on @Html.Raw(attachment.Created.ToString("MMM dd,yyyy"))</span>
+
                             </div>
-                            <!-- /.info-box-content -->
+                            <div class="col-md-6 border-left">
+                                <a href="@Url.Content("~/uploads/" + attachment.FilePath)" class="ui orange mini button" target="_blank"><i class="eye icon"></i>View File</a>
+                                <a href="@Url.Content("~/uploads/" + attachment.FilePath)" class="ui blue mini button" download><i class="download icon"></i>Download</a>
+                            </div>
                         </div>
-                    </a>
+                    </div>
+
+
+
                 }
 
 
@@ -613,33 +633,33 @@
 
                 @if (User.Identity.IsAuthenticated)
                 {
-            <div id="addAttachment" class="pb-2" style="border-bottom:2px solid red;">
-                @using (Html.BeginForm("Create", "TicketAttachments", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
-                    @Html.AntiForgeryToken()
-                    @Html.Hidden("TicketId", Model.Id)
-                    <span>Add a statement to the attachment</span>
-                    <div class="row mb-3">
-                        <div class=" col-md-12">
-                            @Html.TextArea("Description", new { rows = 10, cols = 150, placeholder = "Add Description" })
-                        </div>
+                    <div id="addAttachment" class="pb-2" style="border-bottom:2px solid red;">
+                        @using (Html.BeginForm("Create", "TicketAttachments", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("TicketId", Model.Id)
+                            <span>Add a statement to the attachment</span>
+                            <div class="row mb-3">
+                                <div class=" col-md-12">
+                                    @Html.TextArea("Description", new { rows = 10, cols = 150, placeholder = "Add Description" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <input type="file" id="inputfile" accept=".doc,.docx,.xml,.pdf,.zip,.7z,.rar,.txt,image/png,image/gif,image/jpeg" name="inputfile">
+
+                            </div>
+
+                            if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.IsInRole("Submitter") || User.IsInRole("Developer"))
+                            {
+
+                                <button type="submit" id="ticketAttachment" class="ui blue button" disabled> <i class="icon edit"></i>Add Attachement</button>
+                            }
+
+                        }
+
                     </div>
-
-
-                    <div class="form-group">
-                        <input type="file" id="inputfile" accept=".doc,.docx,.xml,.pdf,.zip,.7z,.rar,.txt,image/png,image/gif,image/jpeg" name="inputfile">
-
-                    </div>
-
-                    if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.IsInRole("Submitter") || User.IsInRole("Developer") )
-                    {
-
-                        <button type="submit" class="ui blue button"> <i class="icon edit"></i>Add Attachement</button>
-                    }
-
-                }
-                
-            </div>
                 }
 
             </div>
@@ -658,6 +678,23 @@
     <script src="~/Scripts/tinymce/tinymce.min.js"></script>
     <script src="~/Scripts/tinymce/jquery.tinymce.min.j"></script>
     <script type="text/javascript">
+
+
+        $('#inputfile').change(function () {
+           
+            if ($(this).val())
+            {
+               $('#ticketAttachment').prop("disabled", false);
+            }
+            else
+            {
+               $('#ticketAttachment').prop("disabled", true);
+            }
+        });
+
+
+
+
         $(function () {
             tinymce.init({ selector: 'textarea' });
         });
