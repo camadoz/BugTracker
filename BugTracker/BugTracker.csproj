@@ -214,6 +214,7 @@
     <Compile Include="Models\TicketNotification.cs" />
     <Compile Include="Models\TicketPerProjectData.cs" />
     <Compile Include="Models\TicketPriority.cs" />
+    <Compile Include="Models\TicketsPerDay.cs" />
     <Compile Include="Models\TicketStatus.cs" />
     <Compile Include="Models\TicketType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -326,6 +327,8 @@
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.flot.js" />
+    <Content Include="Scripts\jquery.flot.time.js" />
     <Content Include="Scripts\jquery.knob.min.js" />
     <Content Include="Scripts\jquery.overlayScrollbars.min.js" />
     <Content Include="Scripts\jquery.vmap.min.js" />
