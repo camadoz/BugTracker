@@ -18,16 +18,16 @@ namespace BugTracker.Helpers
 
         protected CommonHelper()
         {
-            var userId = HttpContext.Current.User.Identity.GetUserId();
-            if (userId != null)
-                CurrentUser = db.Users.Find(userId);
+            //var userId = HttpContext.Current.User.Identity.GetUserId();
+            //if (userId != null)
+            //    CurrentUser = db.Users.Find(userId);
 
-            //"Submitter" ==> SystemRole.Submitter          
-            var stringRole = RoleHelper.ListUserRoles(userId).FirstOrDefault();
-            stringRole = stringRole == "Project Manager" ? "ProjectManager" : stringRole;
+                
+            //var stringRole = RoleHelper.ListUserRoles(userId).FirstOrDefault();
+            //stringRole = stringRole == "Project Manager" ? "ProjectManager" : stringRole;
 
-            if (!string.IsNullOrEmpty(stringRole))
-                CurrentRole = (SystemRole)Enum.Parse(typeof(SystemRole), stringRole);
+            //if (!string.IsNullOrEmpty(stringRole))
+            //    CurrentRole = (SystemRole)Enum.Parse(typeof(SystemRole), stringRole);
         }
     }
 }

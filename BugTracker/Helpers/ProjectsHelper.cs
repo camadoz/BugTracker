@@ -7,6 +7,7 @@ using System.Web;
 
 namespace BugTracker.Helpers
 {
+    
     public class ProjectsHelper
     {
         private ApplicationDbContext db = new ApplicationDbContext();

@@ -72,7 +72,7 @@
                             <div class="form-group">
                                 <label class="control-label col-md-2">Avatar</label>
                                 <div class="col-md-10">
-                                    <input type="file" name="Avatar" />
+                                    <input type="file" name="Avatar" id="Avatar" />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -89,7 +89,7 @@
                         <div class="card-footer">
                             @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
                             {
-                                <button type="submit" class="ui blue button">Update</button>
+                                <button type="submit" id="submitUpdate" class="ui blue button">Update</button>
                                 @Html.ActionLink("Change Password", "ChangePassword", "Manage", null, new { @class = "ui  orange  button" })
                             }
 
@@ -115,6 +115,55 @@
 
 
         $("#leftNavProfile").addClass("active");
+         $('#submitUpdate').prop("disabled", true);
+
+        let initialFirstName = $("#FirstName").val();
+        let initialLastName = $("#LastName").val()
+        let initialDisplayName = $("#DisplayName").val()
+        let initialPhoneNumber= $("#PhoneNumber").val()
+        let initialEmail= $("#Email").val()
+        let initialAvatar = $("#Avatar").val()
+
+
+        $("#FirstName,#LastName,#DisplayName,#PhoneNumber,#Email,#Avatar").keyup(function () {
+            if (wasChanged(initialFirstName,initialLastName,initialDisplayName,initialEmail,initialPhoneNumber,initialAvatar) == true) {
+                $('#submitUpdate').prop("disabled", false);
+            }
+            else {
+                $('#submitUpdate').prop("disabled", true);
+            }
+        });
+
+
+       
+
+
+      
+
+
+        var wasChanged = function (firsName, lastName, displayName, email, phoneNumber, avatar) {
+
+        var currentFirstName = $("#FirstName").val();
+        var currentLastName = $("#LastName").val()
+        var currentDisplayName = $("#DisplayName").val()
+        var currentPhoneNumber= $("#PhoneNumber").val()
+        var currentEmail= $("#Email").val()
+            var currentAvatar = $("#Avatar").val()
+
+
+            if (currentFirstName != firsName ||
+                currentLastName != lastName ||
+                currentDisplayName != displayName ||
+                currentPhoneNumber != phoneNumber ||
+                currentEmail != email ||
+                currentAvatar != avatar) {
+                return true;
+            }
+
+            return false;
+        }
+
+
 
 </script>
     }

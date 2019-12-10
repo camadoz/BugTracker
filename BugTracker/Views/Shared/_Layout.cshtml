@@ -3,6 +3,16 @@
 @using BugTracker.Helpers
 
 @{
+    if(User.Identity.GetUserId() == null)
+    {
+
+
+        @Html.Action("Login","Home")
+
+
+    }
+
+
     ApplicationUser user = null;
     var userId = User.Identity.GetUserId();
     var db = new ApplicationDbContext();
@@ -113,38 +123,38 @@
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 
 
-                            @foreach (var notification in notificatinHelper.GetUnreadUserNotifications())
+                        @foreach (var notification in notificatinHelper.GetUnreadUserNotifications())
+                        {
+                            using (Html.BeginForm("Dismiss", "TicketNotifications", FormMethod.Post))
                             {
-                                using (Html.BeginForm("Dismiss", "TicketNotifications", FormMethod.Post))
-                                {
-                                    @Html.AntiForgeryToken()
-                                    @Html.Hidden("id", notification.Id)
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("id", notification.Id)
 
 
-                                    <a href="#" class="dropdown-item">
-                                        <!-- Message Start -->
-                                        <div class="media">
-                                            <img src="@notification.Sender.AvatarUrl" alt="@notification.Sender.FullName" class="img-size-50 mr-3 img-circle">
-                                            <div class="media-body">
-                                                <h3 class="dropdown-item-title">
-                                                    @notification.Sender.FullName
-                                                    <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                                </h3>
-                                                <p class="text-sm"> @notification.NotificationBody</p>
-                                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> @notification.Created.ToString("MMM dd, yyyy")</p>
-                                            </div>
+                                <a href="#" class="dropdown-item">
+                                    <!-- Message Start -->
+                                    <div class="media">
+                                        <img src="@notification.Sender.AvatarUrl" alt="@notification.Sender.FullName" class="img-size-50 mr-3 img-circle">
+                                        <div class="media-body">
+                                            <h3 class="dropdown-item-title">
+                                                @notification.Sender.FullName
+                                                <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                                            </h3>
+                                            <p class="text-sm"> @notification.NotificationBody</p>
+                                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> @notification.Created.ToString("MMM dd, yyyy")</p>
                                         </div>
-                                        <!-- Message End -->
-                                    </a>
+                                    </div>
+                                    <!-- Message End -->
+                                </a>
 
-                                    <button type="submit" class="ui btn-block mb-1">Dismmiss</button>
-                                    <div class="dropdown-divider"></div>
-
-                                }
-
+                                <button type="submit" class="ui btn-block mb-1">Dismmiss</button>
+                                <div class="dropdown-divider"></div>
 
                             }
-                       
+
+
+                        }
+
 
 
 
@@ -193,6 +203,11 @@
                     </a>
                 </li>
             </ul>
+
+
+            
+
+
         </nav>
         <!-- /.navbar -->
         <!-- Main Sidebar Container -->
@@ -255,7 +270,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
-    with font-awesome or any other icon font library -->
+        with font-awesome or any other icon font library -->
                         <li class="nav-header h3">GENERAL</li> <!--          PROJECT SECTION                   -->
                         <li class="nav-item">
                             <a href="@Url.Action("Dashboard", "Home")" class="nav-link" id="leftNavDashboard">
@@ -281,7 +296,7 @@
                             </a>
                         </li>
 
-                        @if (User.IsInRole("Admin") || User.IsInRole("DemoAdmin") || User.IsInRole("Project Manager") || User.IsInRole("DemoPM") )
+                        @if (User.IsInRole("Admin") || User.IsInRole("DemoAdmin") || User.IsInRole("Project Manager") || User.IsInRole("DemoPM"))
                         {
 
                             <li class="nav-item">
@@ -348,6 +363,12 @@
 
 
 
+                    </ul>
+
+                    <ul class="nav nav-pills nav-sidebar flex-column mt-5" data-widget="treeview" role="menu" data-accordion="false" style="background-color:royalblue;">
+                        <li class="nav-item">
+                            <a class="nav-link text-center"  href="@Url.Action("LogOff", "Account")"><i class="nav-icon fas fa-door-open"></i>Log Out</a>
+                        </li>
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

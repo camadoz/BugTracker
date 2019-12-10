@@ -21,7 +21,11 @@ namespace BugTracker.Controllers
         // GET: Projects
         public ActionResult Index()
         {
-           return View(projectHelper.ListUserProjects(User.Identity.GetUserId()));
+            string userId = User.Identity.GetUserId();
+            if(userId == null)  return RedirectToAction("Index","Home");
+
+
+            return View(projectHelper.ListUserProjects(User.Identity.GetUserId()));
            // return View(db.Projects.ToList());
         }
 

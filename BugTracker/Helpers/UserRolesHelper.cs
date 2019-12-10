@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace BugTracker.Helpers
 {
-    
+    [Authorize(Roles ="Admin")]
     public class UserRolesHelper
     {
         private UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(
@@ -25,6 +25,8 @@ namespace BugTracker.Helpers
 
         public ICollection<string> ListUserRoles(string userId)
         {
+            if (userId == null) return null;
+           
             return userManager.GetRoles(userId);
         }
 
@@ -52,6 +54,8 @@ namespace BugTracker.Helpers
 
             return resultList;
         }
+
+        
 
         public ICollection<ApplicationUser> UsersNotInRole(string roleName)
         {

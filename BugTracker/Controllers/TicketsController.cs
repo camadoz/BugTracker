@@ -29,6 +29,9 @@ namespace BugTracker.Controllers
        
         public ActionResult Index()
         {
+            
+            if (User.Identity.GetUserId() == null) return RedirectToAction("Index", "Home");
+
             var tickets = new List<Ticket>();
             var ticketsVM = new IndexTicketViewModel();
             //var users = roleHelper.UsersInRole("Developer");

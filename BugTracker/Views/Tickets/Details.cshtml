@@ -1,8 +1,9 @@
 ﻿@model BugTracker.Models.Ticket
 @using BugTracker.Models
 @using BugTracker.Helpers
-
+@using Microsoft.AspNet.Identity();
 @{
+  
     ApplicationDbContext db = new ApplicationDbContext();
     UserRolesHelper roleHelper = new UserRolesHelper();
 
@@ -567,13 +568,14 @@
 
                     <div class="callout callout-success">
                         <div class="row" >
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                <span class="info-box-text">Description: @Html.Raw(attachment.Description)</span>
                                 @*<span class="info-box-number">@attachment.FilePath</span>*@
                                 <span class="info-box-number">Uploaded on @Html.Raw(attachment.Created.ToString("MMM dd,yyyy"))</span>
 
                             </div>
-                            <div class="col-md-6 border-left">
+
+                            <div class="col-md-7 border-left">
                                 <a href="@Url.Content("~/uploads/" + attachment.FilePath)" class="ui orange mini button" target="_blank"><i class="eye icon"></i>View File</a>
                                 <a href="@Url.Content("~/uploads/" + attachment.FilePath)" class="ui blue mini button" download><i class="download icon"></i>Download</a>
                             </div>

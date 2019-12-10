@@ -4,6 +4,8 @@
 @using BugTracker.Models
 @using System.Data.Entity.SqlServer
 @using Microsoft.AspNet.Identity
+
+
 @{
     ApplicationDbContext db = new ApplicationDbContext();
     UserRolesHelper roleHelpser = new UserRolesHelper();
@@ -188,7 +190,12 @@
             <div class="card card-danger">
                 <div class="card-header">
                     <h3 class="card-title">Tickets Generated for the past 30 days.</h3>
-
+                    <select id="ticketsHistory" name="ticketsHistory" class="ml-5">
+                        <option value="365">12 Months</option>
+                        <option value="183">6 months</option>
+                        <option value="30">30 Days</option>
+                        <option value="7">7 Days</option>
+                    </select>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
@@ -197,7 +204,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    @*<canvas id="line-chart" style="height:150px; min-height:135px; margin-left:0px;border:1px solid red;"></canvas>*@
+                    @*<canvas id="placeholder" style="height:150px; max-height:235px; margin-left:0px;"></canvas>*@
 
                     <div id="placeholder" style="width:100%;height:200px"></div>
                 </div>
@@ -852,7 +859,6 @@
                     $(function () {
                         var on = false;
                         window.setInterval(function () {
-
                             on = !on;
                             if (on) {
                                 $('.urgent').addClass('urgent_tickets')
@@ -860,8 +866,6 @@
                             else {
                                 $('.urgent_tickets').removeClass('urgent_tickets')
                             }
-
-
                         }, 2000);
 
                     });
@@ -870,109 +874,207 @@
                     //================================== Line Graph =======================================
 
 
-var options = {
-  grid  : {
-        hoverable  : true,
-        borderColor: '#f3f3f3',
-        borderWidth: 1,
-        tickColor  : '#f3f3f3'
-    },
+                    var options = {
+                        grid: {
+                            hoverable: true,
+                            borderColor: '#f3f3f3',
+                            borderWidth: 1,
+                            tickColor: '#f3f3f3'
+                        },
 
-  series: {
-        shadowSize: 0,
-        lines  : {
-          show: true
-        },
-      points: {
-                 radius: 3,
-          show: true
-        }
-    },
+                        series: {
+                            shadowSize: 0,
+                            lines: {
+                                show: true
+                            },
+                            points: {
+                                radius: 3,
+                                show: true
+                            }
+                        },
 
-  lines : {
-        fill : false,
-        color: ['#3c8dbc', '#f56954']
-      },
+                        lines: {
 
-  yaxis: {
-        show: true
-    },
-
-  xaxis: {
-          show: true,
-          mode: "time",
-          timeBase: "milliseconds",
-          timeformat: "%Y/%m/%d"
-      }
-  }
+                            show: true,
+                            fill: true,
+                            fillColor: { colors: [{ opacity: 0.7 }, { opacity: 0.1 }] }
 
 
-   let ticketValues = [];
-   $.ajax({
-     type: "POST",
-     url: "/Home/GetTicketsPerDay",
-     data: {},
-       complete: function (rawData) {
+                        },
 
-          for (var i = 0; i < rawData.responseJSON.length; i++)
-          {
-             ticketValues.push(Object.values(rawData.responseJSON[i]))
-          }
+                        yaxis: {
+                            show: true
+                        },
 
-         $.plot($("#placeholder"),[
-         {                    
-             data:ticketValues 
-         }
-        ], 
-        options);
-      },
-    error: function (xhr, status, error) {
-        console.log(error);
-    }
- });
+                        xaxis: {
+                            show: true,
+                            mode: "time",
+                            timeBase: "milliseconds",
+                            timeformat: "%Y/%m/%d"
+                        },
+                        colors: ["#0022FF", "#0022FF"],
 
- 
-   
+                    }
+
+                    let ticketValues = [];
+                    $.ajax({
+                        type: "POST",
+                        url: "/Home/GetTicketsPerDay",
+                        data: {},
+                        complete: function (rawData) {
+
+                            for (var i = 0; i < rawData.responseJSON.length; i++) {
+                                ticketValues.push(Object.values(rawData.responseJSON[i]))
+                            }
+
+                            $.plot($("#placeholder"), [
+                                {
+                                    data: ticketValues
+                                }
+                            ],
+                                options);
+
+                        },
+                        error: function (xhr, status, error) {
+                            console.log(error);
+                        }
+                    });
 
 
+                    function drawLineChart(data) {
+
+                        var areaChartData = {
+                            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                            datasets: [
+                                {
+                                    label: 'Digital Goods',
+                                    backgroundColor: 'rgba(60,141,188,0.9)',
+                                    borderColor: 'rgba(60,141,188,0.8)',
+                                    pointRadius: false,
+                                    pointColor: '#3b8bba',
+                                    pointStrokeColor: 'rgba(60,141,188,1)',
+                                    pointHighlightFill: '#fff',
+                                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                                    data: [28, 48, 40, 19, 86, 27, 90]
+                                }
+                            ]
+                        }
+
+                        var areaChartOptions = {
+                            maintainAspectRatio: false,
+                            responsive: true,
+                            legend: {
+                                display: false
+                            },
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        display: false,
+                                    }
+                                }],
+                                yAxes: [{
+                                    gridLines: {
+                                        display: false,
+                                    }
+                                }]
+                            }
+                        }
+
+
+                  
+                         var lineChartCanvas = $('#placeholder').get(0).getContext('2d')
+                         var lineChartOptions = jQuery.extend(true, {}, areaChartOptions)
+                         var lineChartData = jQuery.extend(true, {}, areaChartData)
+                        lineChartData.datasets[0].fill = false;
+                       
+                        lineChartOptions.datasetFill = false
+
+                        var lineChart = new Chart(lineChartCanvas, { 
+                        type: 'line',
+                        data: lineChartData, 
+                        options: lineChartOptions
+                     })
+
+
+
+                    }
 
 
 
 
 
     //Initialize tooltip on hover
-    $('<div class="tooltip-inner" id="line-chart-tooltip"></div>').css({
-      position: 'absolute',
-      display : 'none',
-      opacity : 0.8
-    }).appendTo('body')
-    $('#line-chart').bind('plothover', function (event, pos, item) {
+                    $('<div class="tooltip-inner" id="line-chart-tooltip"></div>').css({
+                        position: 'absolute',
+                        display: 'none',
+                        opacity: 0.8
+                    }).appendTo('body')
+                    $('#line-chart').bind('plothover', function (event, pos, item) {
 
-      if (item) {
-        var x = item.datapoint[0].toFixed(2),
-            y = item.datapoint[1].toFixed(2)
+                        if (item) {
+                            var x = item.datapoint[0].toFixed(2),
+                                y = item.datapoint[1].toFixed(2)
 
-        $('#line-chart-tooltip').html(item.series.label + ' of ' + x + ' = ' + y)
-          .css({
-            top : item.pageY + 5,
-            left: item.pageX + 5
-          })
-          .fadeIn(200)
-      } else {
-        $('#line-chart-tooltip').hide()
-      }
+                            $('#line-chart-tooltip').html(item.series.label + ' of ' + x + ' = ' + y)
+                                .css({
+                                    top: item.pageY + 5,
+                                    left: item.pageX + 5
+                                })
+                                .fadeIn(200)
+                        } else {
+                            $('#line-chart-tooltip').hide()
+                        }
 
-    })
+                    })
                     
 
                    
 
 
-
-
+                    
                     //======================================End of line graph
 
+                    //=============================================
 
+
+               
+
+
+
+
+
+
+                    
+                    $("#ticketsHistory").change(function(){
+                      
+                        ticketValues = [];
+                        $('#placeholder').empty();
+
+                        $.ajax({
+                        type: "POST",
+                        url: "/GraphCreate/GetTicketsPerDays",
+                        data: { days: Number($("#ticketsHistory").val()) },
+                        complete: function (rawData) {
+
+                            for (var i = 0; i < rawData.responseJSON.length; i++)
+                            {
+                                ticketValues.push(Object.values(rawData.responseJSON[i]))
+                            }
+
+                            $.plot($("#placeholder"), [
+                                {
+                                    data: ticketValues
+                                }
+                            ],
+                            options);
+                        },
+                        error: function (xhr, status, error) {
+                            console.log(error);
+                        }
+                    });
+
+
+                    })
 
 
 

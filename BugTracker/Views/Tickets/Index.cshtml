@@ -1,6 +1,13 @@
 ﻿@model BugTracker.ViewModels.IndexTicketViewModel
 @using Microsoft.AspNet.Identity;
+    @if(User.Identity.GetUserId() == null)
+    {
 
+
+@Html.Action("Login", "Home")
+
+
+    }
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -36,12 +43,13 @@
 
 
         .modal-open .modal {
-    overflow: scroll; /* KEEPS THE SCROLL BAR WHEN THE MODAL IS OPENED */
-    padding-right: 0 !important;  /* PREVENT THE MODAL FORM TO SHIFT THE BODY TO THE LEFT */
-}
-body.modal-open {
-    overflow: hidden !important;
-}
+            overflow: scroll; /* KEEPS THE SCROLL BAR WHEN THE MODAL IS OPENED */
+            padding-right: 0 !important; /* PREVENT THE MODAL FORM TO SHIFT THE BODY TO THE LEFT */
+        }
+
+        body.modal-open {
+            overflow: hidden !important;
+        }
     </style>
 }
 
@@ -107,44 +115,44 @@ body.modal-open {
                                 <input id="TicketId" name="prodId" type="hidden" value="">
                                 @Html.AntiForgeryToken()
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Ticket Type</label>
-                                    @Html.DropDownList("TicketTypeId", null, htmlAttributes: new { id = "ticket_type_edit", @class = "form-control" })
-                                </div>
-                                @if (User.IsInRole("Admin") || User.IsInRole("Program Manager"))
-                                {
+                                <div class="card-body">
                                     <div class="form-group">
-                                        <label for="exampleInputPassword1">Ticket Status</label>
-                                        @Html.DropDownList("TicketStatusId", null, htmlAttributes: new { id = "ticket_status_edit", @class = "form-control" })
+                                        <label for="exampleInputEmail1">Ticket Type</label>
+                                        @Html.DropDownList("TicketTypeId", null, htmlAttributes: new { id = "ticket_type_edit", @class = "form-control" })
+                                    </div>
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Program Manager"))
+                                    {
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword1">Ticket Status</label>
+                                            @Html.DropDownList("TicketStatusId", null, htmlAttributes: new { id = "ticket_status_edit", @class = "form-control" })
+                                        </div>
+
+
+                                    }
+
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">Ticket Priority</label>
+                                        @Html.DropDownList("TicketPriorityId", null, htmlAttributes: new { id = "ticket_priority_edit", @class = "form-control" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-check-label" for="exampleCheck1">Ticket Title</label>
+                                        <input type="text" class="ticket_title form-control " id="ticket_title" />
+
                                     </div>
 
-
-                                }
-
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">Ticket Priority</label>
-                                    @Html.DropDownList("TicketPriorityId", null, htmlAttributes: new { id = "ticket_priority_edit", @class = "form-control" })
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-check-label" for="exampleCheck1">Ticket Title</label>
-                                    <input type="text" class="ticket_title form-control " id="ticket_title" />
-
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-check-label" for="exampleCheck1">Ticket Description</label>
-                                    <input type="text" class="ticket_description form-control " id="ticket_description" />
-                                </div>
-
-                                @if (User.IsInRole("Admin") || User.IsInRole("Program Manager"))
-                                {
                                     <div class="form-group">
-                                        <label class="form-check-label" for="exampleCheck1">User Assigned</label>
-                                        @Html.DropDownList("AssignedToUserId", null, "-- Select A Developer --", htmlAttributes: new { id = "ticket_assignedToUser_edit", @class = "form-control" })
-
+                                        <label class="form-check-label" for="exampleCheck1">Ticket Description</label>
+                                        <input type="text" class="ticket_description form-control " id="ticket_description" />
                                     </div>
-                                }
+
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Program Manager"))
+                                    {
+                                        <div class="form-group">
+                                            <label class="form-check-label" for="exampleCheck1">User Assigned</label>
+                                            @Html.DropDownList("AssignedToUserId", null, "-- Select A Developer --", htmlAttributes: new { id = "ticket_assignedToUser_edit", @class = "form-control" })
+
+                                        </div>
+                                    }
 
                                 </div>
                                 <!-- /.card-body -->
@@ -402,12 +410,12 @@ body.modal-open {
 
                             @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
 
-                       
-                                <button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#exampleModal">
-                                    Assign
-                                </button>
 
-                            
+                            <button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#exampleModal">
+                                Assign
+                            </button>
+
+
 
 
 
@@ -503,16 +511,16 @@ body.modal-open {
                             {
                                 <button class="ticket_edit_btn ui mini orange button" data-toggle="modal" data-target="#editTicketModal">Edit</button>
                             }
-                                @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
-                            
-
-                                @*<button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#exampleModal">
-                Assign
-            </button>*@
+                            @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, new { @class = "ui mini blue button" })
 
 
-                            
-                     
+                            @*<button type="button" class="ui mini green button btnClickable" data-toggle="modal" data-target="#exampleModal">
+                                    Assign
+                                </button>*@
+
+
+
+
 
                         </td>
                     </tr>
@@ -688,7 +696,7 @@ body.modal-open {
 
 
 
-         $("#leftNavTicketList").addClass("active");
+        $("#leftNavTicketList").addClass("active");
         //$('td:nth-child(2)').hide();
 
         var ticket_id;
@@ -751,7 +759,7 @@ body.modal-open {
             var ticket_type = $(this).closest("tr").find("td.target_ticket_type").text();
             var ticket_description = $(this).closest("tr").find("td.target_ticket_description").text();
             var ticket_created = $(this).closest("tr").find("td.target_ticket_created").text();
-           
+
             $("#project_name").text(project_name);
 
             $("#project_description").text(ticket_description);
@@ -868,7 +876,7 @@ body.modal-open {
             ticket_id = $(this).data('id');
             user_id = $(this).data('user');
 
-            
+
             $("#ticketID_unassign").val(ticket_id);
             $("#userID_unassign").val(user_id);
         });
@@ -955,7 +963,7 @@ body.modal-open {
 
 
 
-        
+
 
 
 
